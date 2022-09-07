@@ -24,7 +24,6 @@ const StyledUserBar = styled(Link)`
     display: flex;
     align-items: center;
     gap: 8px;
-    border: 1px solid white;
     border-radius: 10px;
     padding-left: 8px;
 
