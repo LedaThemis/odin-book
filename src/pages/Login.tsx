@@ -1,0 +1,57 @@
+import { Navigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import LoginForm from '../components/LoginForm';
+import { useUser } from '../context/UserProvider';
+
+const LoginPage = () => {
+    const user = useUser();
+
+    if (user) {
+        return <Navigate to="/" />;
+    }
+
+    return (
+        <StyledContainer>
+            <TextContentContainer>
+                <StyledFacebookHeader>facebook</StyledFacebookHeader>
+                <StyledH2>
+                    Connect with friends and the world around you on Facebook.
+                </StyledH2>
+            </TextContentContainer>
+            <LoginForm />
+        </StyledContainer>
+    );
+};
+
+const StyledContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    background-color: #f0f2f5;
+    height: 100vh;
+    padding: 0 40px;
+    padding-top: 152px;
+    box-sizing: border-box;
+`;
+
+const TextContentContainer = styled.div`
+    margin-right: 50px;
+`;
+
+const StyledFacebookHeader = styled.h1`
+    color: var(--primary-color);
+    font-family: Roboto, 'sans-serif';
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 20px;
+`;
+
+const StyledH2 = styled.h2`
+    font-family: Roboto, 'sans-serif';
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    width: auto;
+`;
+
+export default LoginPage;
