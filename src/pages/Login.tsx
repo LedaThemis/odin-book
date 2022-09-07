@@ -27,7 +27,7 @@ const LoginPage = () => {
 const StyledContainer = styled.div`
     display: flex;
     justify-content: center;
-    background-color: #f0f2f5;
+    background-color: var(--background-color);
     height: 100vh;
     padding: 0 40px;
     padding-top: 152px;
