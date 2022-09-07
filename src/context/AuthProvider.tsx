@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { MoonLoader } from 'react-spinners';
+import styled from 'styled-components';
 
 import getCurrentUser from '../lib/getCurrentUser';
 import { IUser } from '../lib/interfaces/User';
@@ -40,7 +41,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     if (isFetching) {
-        return <MoonLoader />;
+        return (
+            <StyledLoaderContainer>
+                <MoonLoader />
+            </StyledLoaderContainer>
+        );
     }
 
     return (
@@ -51,5 +56,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 const useAuth = () => useContext(AuthContext);
+
+const StyledLoaderContainer = styled.div`
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+`;
 
 export { AuthProvider, useAuth };
