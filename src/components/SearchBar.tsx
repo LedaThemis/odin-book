@@ -30,6 +30,7 @@ const StyledInput = styled.input`
     border: none;
     font-family: Roboto, sans-serif;
     background-color: inherit;
+    color: var(--form-text-color);
 
     &:focus {
         outline: none;
