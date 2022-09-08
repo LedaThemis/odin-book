@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useUser } from '../context/UserProvider';
+import getCurrentUserURL from '../lib/getCurrentUserURL';
 import UserIcon from './icons/UserIcon';
 
 const UserBar = () => {
@@ -9,7 +10,7 @@ const UserBar = () => {
 
     return (
         <StyledContainer>
-            <StyledUserBar to={`/users/${user?._id}`}>
+            <StyledUserBar to={getCurrentUserURL()}>
                 <UserIcon />
                 <StyledUsername>{user?.displayName}</StyledUsername>
             </StyledUserBar>
