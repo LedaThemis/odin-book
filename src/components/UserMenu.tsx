@@ -19,6 +19,7 @@ const UserMenu = ({ className }: { className?: string }) => {
 };
 
 const StyledUserMenu = styled.div`
+    background-color: white;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
