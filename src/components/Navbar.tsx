@@ -64,7 +64,7 @@ const Navbar = () => {
 };
 
 const StyledNavbar = styled.div`
-    height: 56px;
+    height: fit-content;
 `;
 
 const StyledList = styled.ul`
@@ -93,9 +93,13 @@ const StyledNavbarIcon = styled.div<{ isSelected: boolean }>`
     align-items: center;
     justify-content: center;
     width: 120px;
-    height: 40px;
+    // This is 54px (height of navbar in facebook) - 2*4px (padding-top and padding-bottom of 4px from parent container)
+    height: 46px;
+
+    // border-bottom paired with margin-bottom of negative to negate the effect of border
     border-bottom: ${(props) =>
-        props.isSelected ? '3px solid var(--primary-color)' : ''};
+        props.isSelected ? '4px solid var(--primary-color)' : ''};
+    margin-bottom: ${(props) => (props.isSelected ? '-4px' : '')};
 
     &:hover {
         background-color: ${(props) =>
