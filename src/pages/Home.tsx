@@ -1,9 +1,38 @@
+import { useEffect, useState } from 'react';
+import { MoonLoader } from 'react-spinners';
 import styled from 'styled-components';
 
+import Errors from '../components/Errors';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
+import PostsRender from '../components/PostsRender';
+import getTimeline from '../lib/getTimeline';
+import { ErrorType } from '../lib/interfaces/Error';
+import { IPost } from '../lib/interfaces/Post';
 
 const HomePage = () => {
+    const [isFetchingPosts, setIsFetchingPosts] = useState(true);
+    const [posts, setPosts] = useState<IPost[]>([]);
+    const [errors, setErrors] = useState<ErrorType[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            setIsFetchingPosts(true);
+            const res = await getTimeline();
+            setIsFetchingPosts(false);
+
+            switch (res.state) {
+                case 'success':
+                    setErrors([]);
+                    setPosts(res.posts);
+                    break;
+                case 'failed':
+                    setErrors(res.errors);
+                    break;
+            }
+        })();
+    }, []);
+
     return (
         <div>
             <Navbar />
@@ -11,6 +40,14 @@ const HomePage = () => {
                 <StyledLeftHomeContainer></StyledLeftHomeContainer>
                 <StyledMiddleHomeContainer>
                     <PostCreatePrompt />
+                    {errors && <Errors errors={errors} />}
+                    {isFetchingPosts && (
+                        <StyledLoadingContainer>
+                            <MoonLoader />
+                            <p>Loading Timeline...</p>
+                        </StyledLoadingContainer>
+                    )}
+                    <PostsRender posts={posts} />
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>
             </StyledHomeContainer>
@@ -30,10 +67,18 @@ const StyledLeftHomeContainer = styled.div``;
 const StyledMiddleHomeContainer = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding-top: 16px;
     gap: 10px;
 `;
 
 const StyledRightHomeContainer = styled.div``;
+
+const StyledLoadingContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+`;
 
 export default HomePage;
