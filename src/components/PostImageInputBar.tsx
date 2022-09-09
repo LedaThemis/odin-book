@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface IPostImageInputBar {
     currentValue: string;
-    handleImageInputChange: (e: any) => void;
+    handleImageInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleImageInputRemove: () => void;
 }
 

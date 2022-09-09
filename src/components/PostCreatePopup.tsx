@@ -3,9 +3,7 @@ import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
 import { useUser } from '../context/UserProvider';
-import constructError from '../lib/constructError';
 import createPost from '../lib/createPost';
-import handleError from '../lib/handleError';
 import { ErrorType } from '../lib/interfaces/Error';
 import Errors from './Errors';
 import PostAddMediaBar from './PostAddMediaBar';
@@ -27,7 +25,7 @@ const PostCreatePopup = ({ setIsPopupShown }: IPostCreatePopup) => {
         setPhotos(photos.concat(['']));
     };
 
-    const handleImageInputChange = (e: any, id: number) => {
+    const handleImageInputChange = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
         setPhotos((prevPhotos) =>
             prevPhotos
                 .slice(0, id)
