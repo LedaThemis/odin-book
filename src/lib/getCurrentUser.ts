@@ -1,4 +1,5 @@
 import axios from './axiosInstance';
+import handleError from './handleError';
 import { IUser } from './interfaces/User';
 
 interface IResponse {
@@ -13,7 +14,7 @@ const getCurrentUser = async (): Promise<IResponse> => {
 
         return data;
     } catch (err) {
-        console.error(err);
+        console.error(handleError(err));
 
         return {};
     }
