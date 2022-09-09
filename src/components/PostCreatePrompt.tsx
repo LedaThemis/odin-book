@@ -34,6 +34,9 @@ const StyledContainer = styled.div`
     display: flex;
     align-items: center;
 
+    width: 100%;
+    box-sizing: border-box;
+
     padding: 12px 16px;
     gap: 8px;
 
