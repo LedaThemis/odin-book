@@ -39,7 +39,12 @@ const GoogleIcon = ({ active }: { active: boolean }) => (
     </div>
 );
 
-const ButtonContent = ({ children, icon }: any) => (
+interface IButtonContent {
+    children: React.ReactNode;
+    icon: boolean;
+}
+
+const ButtonContent = ({ children, icon }: IButtonContent) => (
     <span
         style={{
             paddingRight: 20,
