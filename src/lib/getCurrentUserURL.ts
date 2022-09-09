@@ -1,9 +1,11 @@
 import { useUser } from '../context/UserProvider';
+import getUserURL from './getUserURL';
+import { IUser } from './interfaces/User';
 
 const getCurrentUserURL = () => {
-    const user = useUser();
+    const user = useUser() as IUser;
 
-    return `/users/${user?._id}`;
+    return getUserURL(user);
 };
 
 export default getCurrentUserURL;

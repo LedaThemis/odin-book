@@ -1,17 +1,7 @@
 import axios from './axiosInstance';
 import handleError from './handleError';
 import { ErrorResponse } from './interfaces/Error';
-
-interface IPost {
-    _id: string;
-    content: string;
-    photos: string[];
-    author: string;
-    comments: string[];
-    likes: string[];
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { IPost } from './interfaces/Post';
 
 interface ICreatePost {
     content: string;

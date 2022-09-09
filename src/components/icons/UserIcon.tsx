@@ -1,21 +1,38 @@
 import styled from 'styled-components';
 
 import { useUser } from '../../context/UserProvider';
+import { IUser } from '../../lib/interfaces/User';
 
 interface IUserIcon {
+    user?: IUser;
+    size?: string;
     className?: string;
     onClick?: () => void;
 }
 
-const UserIcon = ({ className, onClick }: IUserIcon) => {
-    const user = useUser();
+const UserIcon = ({ user, size, className, onClick }: IUserIcon) => {
+    let selectedUser: IUser;
+    let selectedSize: string;
+
+    if (user) {
+        selectedUser = user;
+    } else {
+        selectedUser = useUser() as IUser;
+    }
+
+    if (size) {
+        selectedSize = size;
+    } else {
+        selectedSize = '40px';
+    }
 
     return (
         <StyledImg
             className={className}
             onClick={onClick}
-            src={user?.photoURL}
+            src={selectedUser.photoURL}
             referrerPolicy="no-referrer"
+            style={{ width: selectedSize, height: selectedSize }}
         />
     );
 };
