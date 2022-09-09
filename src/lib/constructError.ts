@@ -1,17 +1,9 @@
 import { ErrorType } from './interfaces/Error';
 
-const constructError = (e: any): ErrorType => {
-    let msg;
-
-    if (e.message) {
-        msg = e.message;
-    } else {
-        msg = e;
-    }
-
+const constructError = (errorMessage: string): ErrorType => {
     return {
         value: '',
-        msg,
+        msg: errorMessage,
         param: '',
         location: '',
     };

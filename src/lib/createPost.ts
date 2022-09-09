@@ -27,7 +27,7 @@ const createPost = async ({
         );
 
         return data;
-    } catch (e: any) {
+    } catch (e: unknown) {
         return handleError(e);
     }
 };
