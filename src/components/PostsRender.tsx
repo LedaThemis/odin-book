@@ -96,6 +96,8 @@ interface IPostRender {
 }
 
 const PostRender = ({ post }: IPostRender) => {
+    const [clickedCommentButton, setClickedCommentButton] = useState(false);
+
     return (
         <StyledPostContainer>
             <PostHeader post={post} />
@@ -105,10 +107,14 @@ const PostRender = ({ post }: IPostRender) => {
                 <StyledLineContainer />
                 <StyledActionButtonsContainer>
                     <LikeButton />
-                    <CommentButton />
+                    <CommentButton
+                        onClick={() => {
+                            setClickedCommentButton(true);
+                        }}
+                    />
                 </StyledActionButtonsContainer>
-                <StyledLineContainer />
-                <StyledCommentCreatePrompt />
+                {clickedCommentButton && <StyledLineContainer />}
+                {clickedCommentButton && <StyledCommentCreatePrompt />}
             </StyledActionButtonsWrapper>
         </StyledPostContainer>
     );

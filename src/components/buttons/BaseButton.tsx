@@ -4,11 +4,12 @@ import styled from 'styled-components';
 interface IBaseButton {
     Icon: IconType;
     text: string;
+    onClick?: () => void;
 }
 
-const BaseButton = ({ Icon, text }: IBaseButton) => {
+const BaseButton = ({ Icon, text, onClick }: IBaseButton) => {
     return (
-        <StyledButton>
+        <StyledButton onClick={onClick}>
             <Icon size={'18px'} />
             <StyledP>{text}</StyledP>
         </StyledButton>
