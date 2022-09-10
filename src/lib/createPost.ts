@@ -13,7 +13,7 @@ interface ICreatePostSuccessResponse {
     post: IPost;
 }
 
-type ICreatePostResponse = ErrorResponse | ICreatePostSuccessResponse;
+export type ICreatePostResponse = ErrorResponse | ICreatePostSuccessResponse;
 
 const createPost = async ({
     content,
