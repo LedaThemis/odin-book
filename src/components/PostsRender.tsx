@@ -7,6 +7,7 @@ import { useUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
 import getUserURL from '../lib/getUserURL';
+import { IComment } from '../lib/interfaces/Comment';
 import { IPost } from '../lib/interfaces/Post';
 import { IUser } from '../lib/interfaces/User';
 import CommentCreatePrompt from './CommentCreatePrompt';
@@ -91,6 +92,52 @@ const PostPhotos = ({ photos }: IPostPhotos) => {
     );
 };
 
+interface IPostComment {
+    comment: IComment;
+}
+
+const PostComment = ({ comment }: IPostComment) => {
+    return (
+        <StyledPostCommentContainer>
+            <StyledLinkBase to={getUserURL(comment.author)}>
+                <UserIcon user={comment.author} size={'32px'} />
+            </StyledLinkBase>
+            <StyledFlexColumnWrapper>
+                <StyledCommentWrapper>
+                    <StyledCommentAuthorLink to={getUserURL(comment.author)}>
+                        <StyledCommentAuthorName>
+                            {comment.author.displayName}
+                        </StyledCommentAuthorName>
+                    </StyledCommentAuthorLink>
+                    <StyledCommentContent>
+                        {comment.content}
+                    </StyledCommentContent>
+                </StyledCommentWrapper>
+                <StyledCommentDate>
+                    {getFormattedTime(comment.createdAt)}
+                </StyledCommentDate>
+            </StyledFlexColumnWrapper>
+        </StyledPostCommentContainer>
+    );
+};
+
+interface IPostComments {
+    comments: IComment[];
+}
+
+const PostComments = ({ comments }: IPostComments) => {
+    return (
+        <StyledCommentsContainer>
+            {comments.map((comment) => (
+                <PostComment
+                    key={`post-comment-${comment.author.displayName}-${comment.content}`}
+                    comment={comment}
+                />
+            ))}
+        </StyledCommentsContainer>
+    );
+};
+
 interface IPostRender {
     post: IPost;
 }
@@ -118,6 +165,9 @@ const PostRender = ({ post }: IPostRender) => {
                     <StyledCommentCreatePrompt post={post} />
                 )}
             </StyledActionButtonsWrapper>
+            {clickedCommentButton && post.comments.length > 0 && (
+                <PostComments comments={post.comments} />
+            )}
         </StyledPostContainer>
     );
 };
@@ -268,6 +318,55 @@ const StyledImageContainer = styled.div`
 const StyledImage = styled.img`
     width: 100%;
     object-fit: cover;
+`;
+
+const StyledCommentsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    padding: 0 12px;
+`;
+
+const StyledPostCommentContainer = styled.div`
+    display: flex;
+    gap: 8px;
+`;
+
+const StyledCommentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: var(--comment-background-color);
+    padding: 8px 12px;
+
+    border-radius: 18px;
+`;
+
+const StyledCommentAuthorLink = styled(StyledLinkBase)`
+    text-decoration: none;
+`;
+
+const StyledCommentAuthorName = styled(StyledParagraphBase)`
+    font-weight: bold;
+    font-size: 13px;
+    color: var(--primary-text-color);
+`;
+
+const StyledCommentContent = styled(StyledParagraphBase)`
+    font-size: 15px;
+`;
+
+const StyledCommentDate = styled(StyledParagraphBase)`
+    color: var(--secondary-text-color);
+    font-size: 13px;
+    padding: 0 12px;
+    box-sizing: border-box;
+`;
+
+const StyledFlexColumnWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 `;
 
 export default PostsRender;

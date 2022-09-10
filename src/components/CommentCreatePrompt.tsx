@@ -46,7 +46,7 @@ const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
                     />
                 </StyledForm>
                 <StyledP>Press Enter to post.</StyledP>
-                {errors && <Errors errors={errors} />}
+                {errors.length > 0 && <Errors errors={errors} />}
             </StyledWrapper>
         </StyledContainer>
     );

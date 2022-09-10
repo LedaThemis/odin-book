@@ -1,3 +1,4 @@
+import { IComment } from './Comment';
 import { IUser } from './User';
 
 export interface IPost {
@@ -5,7 +6,7 @@ export interface IPost {
     content: string;
     photos: string[];
     author: IUser;
-    comments: string[];
+    comments: IComment[];
     likes: string[];
     createdAt: string;
     updatedAt: string;

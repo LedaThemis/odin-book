@@ -1,8 +1,8 @@
 :root {
     --primary-color: #1877f2;
 
+    --comment-background-color: rgb(240, 242, 245);
     --hover-background-color: rgba(141, 141, 141, 0.178);
-
     --overlay-background-color: rgba(244, 244, 244, 0.8);
     --disabled-button-background-color: rgb(228, 230, 235);
 
