@@ -180,7 +180,7 @@ const PostManagePopupBase = ({
                         }}
                         onClick={handleSubmit}
                         disabled={
-                            content.length < 32 ||
+                            content.length < 1 ||
                             isSubmitDisabled ||
                             isSameAsInitialState(content, photos, initialState)
                         }
