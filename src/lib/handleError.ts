@@ -14,7 +14,7 @@ const handleError = (e: unknown): ErrorResponse => {
     if (e instanceof AxiosError) {
         if (e.response) {
             if (e.response.data) {
-                return e.response.data;
+                return constructErrorResponse(e.response.data);
             } else {
                 return constructErrorResponse(
                     `${e.message} | Server responded with status code ${e.response.status}`,
