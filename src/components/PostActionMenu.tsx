@@ -20,9 +20,13 @@ const PostActionMenuBar = ({ Icon, text, onClick }: IPostActionMenuBar) => {
 
 interface IPostActionMenu {
     handleEditPost: () => void;
+    handleDeletePost: () => void;
 }
 
-const PostActionMenu = ({ handleEditPost }: IPostActionMenu) => {
+const PostActionMenu = ({
+    handleEditPost,
+    handleDeletePost,
+}: IPostActionMenu) => {
     return (
         <StyledActionMenu>
             <PostActionMenuBar
@@ -31,9 +35,11 @@ const PostActionMenu = ({ handleEditPost }: IPostActionMenu) => {
                 onClick={handleEditPost}
             />
             <StyledLineContainer />
-            <PostActionMenuBar Icon={IoTrashOutline} text="Move to trash" onClick={() => {
-                return
-            }} />
+            <PostActionMenuBar
+                Icon={IoTrashOutline}
+                text="Move to trash"
+                onClick={handleDeletePost}
+            />
         </StyledActionMenu>
     );
 };

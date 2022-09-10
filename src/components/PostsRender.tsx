@@ -11,6 +11,7 @@ import { IPost } from '../lib/interfaces/Post';
 import { IUser } from '../lib/interfaces/User';
 import CommentCreatePrompt from './CommentCreatePrompt';
 import PostActionMenu from './PostActionMenu';
+import PostDeletePopup from './PostDeletePopup';
 import PostUpdatePopup from './PostUpdatePopup';
 import CommentButton from './buttons/CommentButton';
 import LikeButton from './buttons/LikeButton';
@@ -22,6 +23,7 @@ const PostHeader = ({ post }: IPostHeader) => {
     const user = useUser() as IUser;
     const [isActionMenuShown, setIsActionMenuShown] = useState(false);
     const [isPostUpdatePopupShown, setIsPostUpdatePopupShown] = useState(false);
+    const [isPostDeletePopupShown, setIsPostDeletePopupShown] = useState(false);
 
     return (
         <StyledPostHeaderWrapper>
@@ -48,10 +50,12 @@ const PostHeader = ({ post }: IPostHeader) => {
             {areSameUser(user, post.author) && isActionMenuShown && (
                 <PostActionMenu
                     handleEditPost={() => {
-                        // Hide action menu
                         setIsActionMenuShown(false);
-                        // Display PostUpdatePopup
                         setIsPostUpdatePopupShown(true);
+                    }}
+                    handleDeletePost={() => {
+                        setIsActionMenuShown(false);
+                        setIsPostDeletePopupShown(true);
                     }}
                 />
             )}
@@ -59,6 +63,12 @@ const PostHeader = ({ post }: IPostHeader) => {
                 <PostUpdatePopup
                     originalPost={post}
                     setIsPopupShown={setIsPostUpdatePopupShown}
+                />
+            )}
+            {isPostDeletePopupShown && (
+                <PostDeletePopup
+                    post={post}
+                    hidePopup={() => setIsPostDeletePopupShown(false)}
                 />
             )}
         </StyledPostHeaderWrapper>
