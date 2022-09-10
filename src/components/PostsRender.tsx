@@ -103,6 +103,10 @@ const StyledPostAuthorName = styled(StyledParagraphBase)`
     font-weight: bold;
     font-size: 15px;
     color: var(--primary-text-color);
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 const StyledPostCreatedDate = styled(StyledParagraphBase)`
