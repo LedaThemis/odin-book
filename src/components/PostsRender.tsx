@@ -65,6 +65,22 @@ const PostHeader = ({ post }: IPostHeader) => {
     );
 };
 
+interface IPostPhotos {
+    photos: string[];
+}
+
+const PostPhotos = ({ photos }: IPostPhotos) => {
+    return (
+        <StyledImagesContainer>
+            {photos.map((photo, id) => (
+                <StyledImageContainer key={`post-photo-${id}-${photo}`}>
+                    <StyledImage src={photo} referrerPolicy="no-referrer" />
+                </StyledImageContainer>
+            ))}
+        </StyledImagesContainer>
+    );
+};
+
 interface IPostRender {
     post: IPost;
 }
@@ -74,6 +90,7 @@ const PostRender = ({ post }: IPostRender) => {
         <StyledPostContainer>
             <PostHeader post={post} />
             <StyledPostContent>{post.content}</StyledPostContent>
+            <PostPhotos photos={post.photos} />
             <StyledActionButtonsWrapper>
                 <StyledLineContainer />
                 <StyledActionButtonsContainer>
@@ -213,6 +230,26 @@ const StyledPostsContainer = styled.div`
 
 const StyledCommentCreatePrompt = styled(CommentCreatePrompt)`
     padding: 0 12px;
+`;
+
+const StyledImagesContainer = styled.div`
+    display: grid;
+    grid-gap: 2px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+    max-height: 500px;
+    overflow-y: scroll;
+`;
+
+const StyledImageContainer = styled.div`
+    display: flex;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+`;
+
+const StyledImage = styled.img`
+    width: 100%;
+    object-fit: cover;
 `;
 
 export default PostsRender;
