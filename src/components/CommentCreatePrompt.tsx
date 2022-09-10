@@ -1,18 +1,52 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
+import createPostComment from '../lib/createPostComment';
+import { ErrorType } from '../lib/interfaces/Error';
+import { IPost } from '../lib/interfaces/Post';
+import Errors from './Errors';
 import UserIcon from './icons/UserIcon';
 
 interface ICommentCreatePrompt {
+    post: IPost;
     className?: string;
 }
 
-const CommentCreatePrompt = ({ className }: ICommentCreatePrompt) => {
+const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
+    const [content, setContent] = useState('');
+    const [errors, setErrors] = useState<ErrorType[]>([]);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (content.length < 1) return;
+
+        const res = await createPostComment({ postId: post._id, content });
+
+        switch (res.state) {
+            case 'success':
+                setContent('');
+                break;
+            case 'failed':
+                setErrors(res.errors);
+                break;
+        }
+    };
+
     return (
         <StyledContainer className={className}>
             <UserIcon size="34px" />
             <StyledWrapper>
-                <StyledInput type="text" placeholder="Write a comment..." />
+                <StyledForm onSubmit={handleSubmit}>
+                    <StyledInput
+                        type="text"
+                        value={content}
+                        placeholder="Write a comment..."
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+                </StyledForm>
                 <StyledP>Press Enter to post.</StyledP>
+                {errors && <Errors errors={errors} />}
             </StyledWrapper>
         </StyledContainer>
     );
@@ -30,6 +64,8 @@ const StyledWrapper = styled.div`
     width: 100%;
 `;
 
+const StyledForm = styled.form``;
+
 const StyledInput = styled.input`
     border: none;
 
@@ -40,7 +76,9 @@ const StyledInput = styled.input`
     background-color: var(--background-color);
     border-radius: 9999px;
 
+    box-sizing: border-box;
     padding: 8px 12px;
+    width: 100%;
 
     &:focus {
         outline: none;

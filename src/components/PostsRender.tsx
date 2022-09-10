@@ -114,7 +114,9 @@ const PostRender = ({ post }: IPostRender) => {
                     />
                 </StyledActionButtonsContainer>
                 {clickedCommentButton && <StyledLineContainer />}
-                {clickedCommentButton && <StyledCommentCreatePrompt />}
+                {clickedCommentButton && (
+                    <StyledCommentCreatePrompt post={post} />
+                )}
             </StyledActionButtonsWrapper>
         </StyledPostContainer>
     );
