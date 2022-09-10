@@ -90,7 +90,7 @@ const PostRender = ({ post }: IPostRender) => {
         <StyledPostContainer>
             <PostHeader post={post} />
             <StyledPostContent>{post.content}</StyledPostContent>
-            <PostPhotos photos={post.photos} />
+            {post.photos.length > 0 && <PostPhotos photos={post.photos} />}
             <StyledActionButtonsWrapper>
                 <StyledLineContainer />
                 <StyledActionButtonsContainer>
