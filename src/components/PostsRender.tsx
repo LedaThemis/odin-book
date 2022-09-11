@@ -15,6 +15,7 @@ import { IComment } from '../lib/interfaces/Comment';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import { IUser } from '../lib/interfaces/User';
+import isPostLiked from '../lib/isPostLiked';
 import likePost from '../lib/likePost';
 import unlikePost from '../lib/unlikePost';
 import CommentCreatePrompt from './CommentCreatePrompt';
@@ -159,7 +160,7 @@ const PostRender = ({ post }: IPostRender) => {
     const { updatePostInState } = useManagePost();
 
     const handleLikeButton = async () => {
-        const fn = post.likes.includes(user._id) ? unlikePost : likePost;
+        const fn = isPostLiked(post, user) ? unlikePost : likePost;
 
         const res = await fn({ postId: post._id });
 
@@ -182,7 +183,10 @@ const PostRender = ({ post }: IPostRender) => {
             <StyledActionButtonsWrapper>
                 <StyledLineContainer />
                 <StyledActionButtonsContainer>
-                    <LikeButton onClick={handleLikeButton} />
+                    <LikeButton
+                        isLiked={isPostLiked(post, user)}
+                        onClick={handleLikeButton}
+                    />
                     <CommentButton
                         onClick={() => {
                             setClickedCommentButton(true);

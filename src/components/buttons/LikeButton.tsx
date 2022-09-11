@@ -4,10 +4,18 @@ import BaseButton from './BaseButton';
 
 interface ILikeButton {
     onClick: () => void;
+    isLiked: boolean;
 }
 
-const LikeButton = ({ onClick }: ILikeButton) => {
-    return <BaseButton Icon={FaRegThumbsUp} text="Like" onClick={onClick} />;
+const LikeButton = ({ onClick, isLiked }: ILikeButton) => {
+    return (
+        <BaseButton
+            color={isLiked ? 'var(--primary-color)' : undefined}
+            Icon={FaRegThumbsUp}
+            text="Like"
+            onClick={onClick}
+        />
+    );
 };
 
 export default LikeButton;

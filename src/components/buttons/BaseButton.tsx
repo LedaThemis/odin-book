@@ -4,20 +4,22 @@ import styled from 'styled-components';
 interface IBaseButton {
     Icon: IconType;
     text: string;
+    color?: string;
     onClick?: () => void;
 }
 
-const BaseButton = ({ Icon, text, onClick }: IBaseButton) => {
+const BaseButton = ({ Icon, text, color, onClick }: IBaseButton) => {
     return (
-        <StyledButton onClick={onClick}>
+        <StyledButton color={color} onClick={onClick}>
             <Icon size={'18px'} />
             <StyledP>{text}</StyledP>
         </StyledButton>
     );
 };
 
-const StyledButton = styled.button`
-    color: var(--secondary-text-color);
+const StyledButton = styled.button<{ color?: string }>`
+    color: ${(props) =>
+        props.color ? props.color : 'var(--secondary-text-color)'};
     border: none;
     background-color: transparent;
     cursor: pointer;
