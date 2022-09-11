@@ -8,9 +8,13 @@ import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
 import getUserURL from '../lib/getUserURL';
 import { IComment } from '../lib/interfaces/Comment';
+import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import { IUser } from '../lib/interfaces/User';
+import likePost from '../lib/likePost';
+import unlikePost from '../lib/unlikePost';
 import CommentCreatePrompt from './CommentCreatePrompt';
+import Errors from './Errors';
 import PostActionMenu from './PostActionMenu';
 import PostDeletePopup from './PostDeletePopup';
 import PostUpdatePopup from './PostUpdatePopup';
@@ -143,7 +147,33 @@ interface IPostRender {
 }
 
 const PostRender = ({ post }: IPostRender) => {
+    const user = useUser() as IUser;
     const [clickedCommentButton, setClickedCommentButton] = useState(false);
+    const [errors, setErrors] = useState<ErrorType[]>([]);
+
+    const handleLikeButton = async () => {
+        if (!post.likes.includes(user._id)) {
+            const res = await likePost({ postId: post._id });
+
+            switch (res.state) {
+                case 'success':
+                    break;
+                case 'failed':
+                    setErrors(res.errors);
+                    break;
+            }
+        } else {
+            const res = await unlikePost({ postId: post._id });
+
+            switch (res.state) {
+                case 'success':
+                    break;
+                case 'failed':
+                    setErrors(res.errors);
+                    break;
+            }
+        }
+    };
 
     return (
         <StyledPostContainer>
@@ -153,7 +183,7 @@ const PostRender = ({ post }: IPostRender) => {
             <StyledActionButtonsWrapper>
                 <StyledLineContainer />
                 <StyledActionButtonsContainer>
-                    <LikeButton />
+                    <LikeButton onClick={handleLikeButton} />
                     <CommentButton
                         onClick={() => {
                             setClickedCommentButton(true);
@@ -161,6 +191,7 @@ const PostRender = ({ post }: IPostRender) => {
                     />
                 </StyledActionButtonsContainer>
                 {clickedCommentButton && <StyledLineContainer />}
+                {errors.length > 0 && <Errors errors={errors} />}
                 {clickedCommentButton && (
                     <StyledCommentCreatePrompt post={post} />
                 )}

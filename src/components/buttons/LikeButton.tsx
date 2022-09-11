@@ -2,8 +2,12 @@ import { FaRegThumbsUp } from 'react-icons/fa';
 
 import BaseButton from './BaseButton';
 
-const LikeButton = () => {
-    return <BaseButton Icon={FaRegThumbsUp} text="Like" />;
+interface ILikeButton {
+    onClick: () => void;
+}
+
+const LikeButton = ({ onClick }: ILikeButton) => {
+    return <BaseButton Icon={FaRegThumbsUp} text="Like" onClick={onClick} />;
 };
 
 export default LikeButton;
