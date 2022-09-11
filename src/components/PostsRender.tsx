@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -18,7 +18,10 @@ import { IUser } from '../lib/interfaces/User';
 import isPostLiked from '../lib/isPostLiked';
 import likePost from '../lib/likePost';
 import unlikePost from '../lib/unlikePost';
+import CommentActionMenu from './CommentActionMenu';
 import CommentCreatePrompt from './CommentCreatePrompt';
+import CommentDeletePopup from './CommentDeletePopup';
+import CommentUpdatePrompt from './CommentUpdatePrompt';
 import Errors from './Errors';
 import PostActionMenu from './PostActionMenu';
 import PostDeletePopup from './PostDeletePopup';
@@ -104,44 +107,106 @@ const PostPhotos = ({ photos }: IPostPhotos) => {
 };
 
 interface IPostComment {
+    post: IPost;
     comment: IComment;
 }
 
-const PostComment = ({ comment }: IPostComment) => {
+const PostComment = ({ post, comment }: IPostComment) => {
+    const user = useUser() as IUser;
+    const [isActionMenuShown, setIsActionMenuShown] = useState(false);
+    const [isUpdatingComment, setIsUpdatingComment] = useState(false);
+    const [isCommentDeletePopupShown, setIsCommentDeletePopupShown] =
+        useState(false);
+
+    const CommentComponent = () =>
+        useMemo(
+            () =>
+                isUpdatingComment ? (
+                    <CommentUpdatePrompt
+                        post={post}
+                        comment={comment}
+                        cancelEditing={() => {
+                            setIsUpdatingComment(false);
+                        }}
+                    />
+                ) : (
+                    <StyledFlexColumnWrapper>
+                        <StyledFlexRowWrapper>
+                            <StyledCommentWrapper>
+                                <StyledCommentAuthorLink
+                                    to={getUserURL(comment.author)}
+                                >
+                                    <StyledCommentAuthorName>
+                                        {comment.author.displayName}
+                                    </StyledCommentAuthorName>
+                                </StyledCommentAuthorLink>
+                                <StyledCommentContent>
+                                    {comment.content}
+                                </StyledCommentContent>
+                            </StyledCommentWrapper>
+                            <StyledCommentThreeDotsButton
+                                onClick={() => {
+                                    setIsActionMenuShown(
+                                        (prevState) => !prevState,
+                                    );
+                                }}
+                            >
+                                {(areSameUser(comment.author, user) ||
+                                    areSameUser(
+                                        comment.author,
+                                        post.author,
+                                    )) && <BsThreeDots size={'16px'} />}
+                                {isActionMenuShown && (
+                                    <CommentActionMenu
+                                        handleEditComment={() => {
+                                            setIsUpdatingComment(true);
+                                        }}
+                                        handleDeleteComment={() => {
+                                            setIsCommentDeletePopupShown(true);
+                                        }}
+                                    />
+                                )}
+                            </StyledCommentThreeDotsButton>
+                        </StyledFlexRowWrapper>
+                        <StyledCommentDate>
+                            {getFormattedTime(comment.createdAt)}
+                        </StyledCommentDate>
+                    </StyledFlexColumnWrapper>
+                ),
+            [isUpdatingComment],
+        );
+
     return (
         <StyledPostCommentContainer>
             <StyledLinkBase to={getUserURL(comment.author)}>
                 <UserIcon user={comment.author} size={'32px'} />
             </StyledLinkBase>
-            <StyledFlexColumnWrapper>
-                <StyledCommentWrapper>
-                    <StyledCommentAuthorLink to={getUserURL(comment.author)}>
-                        <StyledCommentAuthorName>
-                            {comment.author.displayName}
-                        </StyledCommentAuthorName>
-                    </StyledCommentAuthorLink>
-                    <StyledCommentContent>
-                        {comment.content}
-                    </StyledCommentContent>
-                </StyledCommentWrapper>
-                <StyledCommentDate>
-                    {getFormattedTime(comment.createdAt)}
-                </StyledCommentDate>
-            </StyledFlexColumnWrapper>
+            <CommentComponent />
+            {isCommentDeletePopupShown && (
+                <CommentDeletePopup
+                    post={post}
+                    comment={comment}
+                    hidePopup={() => {
+                        setIsCommentDeletePopupShown(false);
+                    }}
+                />
+            )}
         </StyledPostCommentContainer>
     );
 };
 
 interface IPostComments {
     comments: IComment[];
+    post: IPost;
 }
 
-const PostComments = ({ comments }: IPostComments) => {
+const PostComments = ({ post, comments }: IPostComments) => {
     return (
         <StyledCommentsContainer>
             {comments.map((comment) => (
                 <PostComment
                     key={`post-comment-${comment.author.displayName}-${comment.content}`}
+                    post={post}
                     comment={comment}
                 />
             ))}
@@ -200,7 +265,7 @@ const PostRender = ({ post }: IPostRender) => {
                 )}
             </StyledActionButtonsWrapper>
             {clickedCommentButton && post.comments.length > 0 && (
-                <PostComments comments={post.comments} />
+                <PostComments comments={post.comments} post={post} />
             )}
         </StyledPostContainer>
     );
@@ -405,6 +470,8 @@ const StyledCommentWrapper = styled.div`
     padding: 8px 12px;
 
     border-radius: 18px;
+
+    width: 100%;
 `;
 
 const StyledCommentAuthorLink = styled(StyledLinkBase)`
@@ -432,6 +499,29 @@ const StyledFlexColumnWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2px;
+`;
+
+const StyledFlexRowWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+`;
+
+const StyledCommentThreeDotsButton = styled.button`
+    border: none;
+    background-color: transparent;
+    padding: 8px;
+    display: flex;
+
+    position: relative;
+
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--hover-background-color);
+    }
 `;
 
 export default PostsRender;
