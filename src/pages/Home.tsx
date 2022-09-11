@@ -47,7 +47,7 @@ const HomePage = () => {
                             <p>Loading Timeline...</p>
                         </StyledLoadingContainer>
                     )}
-                    <PostsRender posts={posts} />
+                    <PostsRender posts={posts} setPosts={setPosts} />
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>
             </StyledHomeContainer>

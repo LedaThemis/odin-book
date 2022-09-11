@@ -3,6 +3,10 @@ import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import {
+    ManagePostContext,
+    useManagePost,
+} from '../context/ManagePostProvider';
 import { useUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
@@ -22,7 +26,9 @@ import CommentButton from './buttons/CommentButton';
 import LikeButton from './buttons/LikeButton';
 import UserIcon from './icons/UserIcon';
 
-type IPostHeader = IPostRender;
+type IPostHeader = {
+    post: IPost;
+};
 
 const PostHeader = ({ post }: IPostHeader) => {
     const user = useUser() as IUser;
@@ -150,28 +156,21 @@ const PostRender = ({ post }: IPostRender) => {
     const user = useUser() as IUser;
     const [clickedCommentButton, setClickedCommentButton] = useState(false);
     const [errors, setErrors] = useState<ErrorType[]>([]);
+    const { updatePostInState } = useManagePost();
 
     const handleLikeButton = async () => {
-        if (!post.likes.includes(user._id)) {
-            const res = await likePost({ postId: post._id });
+        const fn = post.likes.includes(user._id) ? unlikePost : likePost;
 
-            switch (res.state) {
-                case 'success':
-                    break;
-                case 'failed':
-                    setErrors(res.errors);
-                    break;
-            }
-        } else {
-            const res = await unlikePost({ postId: post._id });
+        const res = await fn({ postId: post._id });
 
-            switch (res.state) {
-                case 'success':
-                    break;
-                case 'failed':
-                    setErrors(res.errors);
-                    break;
-            }
+        switch (res.state) {
+            case 'success':
+                setErrors([]);
+                updatePostInState(res.post);
+                break;
+            case 'failed':
+                setErrors(res.errors);
+                break;
         }
     };
 
@@ -205,13 +204,44 @@ const PostRender = ({ post }: IPostRender) => {
 
 interface IPostsRender {
     posts: IPost[];
+    setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
 }
 
-const PostsRender = ({ posts }: IPostsRender) => {
+const PostsRender = ({ posts, setPosts }: IPostsRender) => {
+    const addPostToState = (post: IPost) => {
+        setPosts((prevPosts) => [post].concat(prevPosts));
+    };
+
+    const updatePostInState = (id: number, post: IPost) => {
+        setPosts((prevPosts) =>
+            prevPosts
+                .slice(0, id)
+                .concat([post])
+                .concat(prevPosts.slice(id + 1)),
+        );
+    };
+
+    const deletePostFromState = (post: IPost) => {
+        setPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
+    };
+
     return (
         <StyledPostsContainer>
             {posts.map((post, id) => (
-                <PostRender key={`post-${id}-${post.content}`} post={post} />
+                <ManagePostContext.Provider
+                    key={`post-${id}-${post.content}`}
+                    value={{
+                        addPostToState,
+                        updatePostInState: (post: IPost) => {
+                            updatePostInState(id, post);
+                        },
+                        deletePostFromState: () => {
+                            deletePostFromState(post);
+                        },
+                    }}
+                >
+                    <PostRender post={post} />
+                </ManagePostContext.Provider>
             ))}
         </StyledPostsContainer>
     );

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { useManagePost } from '../context/ManagePostProvider';
 import deletePost from '../lib/deletePost';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
@@ -11,6 +12,8 @@ interface IPostDeletePopup {
 }
 
 const PostDeletePopup = ({ post, hidePopup }: IPostDeletePopup) => {
+    const { deletePostFromState } = useManagePost();
+
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
     const handleDelete = async () => {
@@ -18,6 +21,8 @@ const PostDeletePopup = ({ post, hidePopup }: IPostDeletePopup) => {
 
         switch (res.state) {
             case 'success':
+                deletePostFromState();
+                setErrors([]);
                 hidePopup();
                 break;
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { useManagePost } from '../context/ManagePostProvider';
 import createPostComment from '../lib/createPostComment';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
@@ -13,6 +14,8 @@ interface ICommentCreatePrompt {
 }
 
 const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
+    const { updatePostInState } = useManagePost();
+
     const [content, setContent] = useState('');
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
@@ -26,6 +29,8 @@ const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
         switch (res.state) {
             case 'success':
                 setContent('');
+                updatePostInState(res.post);
+                setErrors([]);
                 break;
             case 'failed':
                 setErrors(res.errors);

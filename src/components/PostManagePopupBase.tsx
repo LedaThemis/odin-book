@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
+import { useManagePost } from '../context/ManagePostProvider';
 import { useUser } from '../context/UserProvider';
 import createPost, { ICreatePostResponse } from '../lib/createPost';
 import { ErrorType } from '../lib/interfaces/Error';
@@ -63,6 +64,8 @@ const PostManagePopupBase = ({
     }, []);
 
     const user = useUser();
+    const { addPostToState, updatePostInState } = useManagePost();
+
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [content, setContent] = useState(initialState.content);
     const [photos, setPhotos] = useState<string[]>(initialState.photos);
@@ -94,10 +97,12 @@ const PostManagePopupBase = ({
         setIsSubmitDisabled(true);
 
         let res: ICreatePostResponse | IUpdatePostResponse;
+        let fn: typeof addPostToState | typeof updatePostInState;
 
         switch (actionType) {
             case 'Create':
                 res = await createPost({ content, photos });
+                fn = addPostToState;
                 break;
             case 'Update':
                 res = await updatePost({
@@ -105,6 +110,7 @@ const PostManagePopupBase = ({
                     content,
                     photos,
                 });
+                fn = updatePostInState;
                 break;
         }
 
@@ -112,6 +118,8 @@ const PostManagePopupBase = ({
 
         switch (res.state) {
             case 'success':
+                setErrors([]);
+                fn(res.post);
                 setIsPopupShown(false);
                 break;
             case 'failed':
