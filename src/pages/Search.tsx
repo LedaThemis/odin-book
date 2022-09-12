@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PeopleSearchResult from '../components/PeopleSearchResult';
 import { ErrorType } from '../lib/interfaces/Error';
@@ -11,6 +12,7 @@ import queryUsers from '../lib/queryUsers';
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get('q');
+    const [isFetching, setIsFetching] = useState(true);
     const [results, setResults] = useState<IUser[]>([]);
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
@@ -18,7 +20,9 @@ const SearchPage = () => {
         if (!queryParam || queryParam.length < 1) return;
 
         (async () => {
+            setIsFetching(true);
             const res = await queryUsers({ q: queryParam });
+            setIsFetching(false);
 
             switch (res.state) {
                 case 'success':
@@ -38,7 +42,9 @@ const SearchPage = () => {
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
-                <PeopleSearchResult users={results} errors={errors} />
+                <FetchingOverlay isFetching={isFetching}>
+                    <PeopleSearchResult users={results} errors={errors} />
+                </FetchingOverlay>
             </StyledContainer>
         </StyledWrapper>
     );
