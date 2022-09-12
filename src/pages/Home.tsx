@@ -15,6 +15,10 @@ const HomePage = () => {
     const [posts, setPosts] = useState<IPost[]>([]);
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
+    const addPostToState = (post: IPost) => {
+        setPosts((prevPosts) => [post].concat(prevPosts));
+    };
+
     useEffect(() => {
         (async () => {
             setIsFetchingPosts(true);
@@ -39,7 +43,7 @@ const HomePage = () => {
             <StyledHomeContainer>
                 <StyledLeftHomeContainer></StyledLeftHomeContainer>
                 <StyledMiddleHomeContainer>
-                    <PostCreatePrompt />
+                    <PostCreatePrompt addPostToState={addPostToState} />
                     {errors && <Errors errors={errors} />}
                     {isFetchingPosts && (
                         <StyledLoadingContainer>
