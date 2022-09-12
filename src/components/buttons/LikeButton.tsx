@@ -1,4 +1,4 @@
-import { FaRegThumbsUp } from 'react-icons/fa';
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 
 import BaseButton from './BaseButton';
 
@@ -11,7 +11,7 @@ const LikeButton = ({ onClick, isLiked }: ILikeButton) => {
     return (
         <BaseButton
             color={isLiked ? 'var(--primary-color)' : undefined}
-            Icon={FaRegThumbsUp}
+            Icon={isLiked ? AiFillLike : AiOutlineLike}
             text="Like"
             onClick={onClick}
         />
