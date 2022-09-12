@@ -303,7 +303,7 @@ const PostsRender = ({ posts, setPosts }: IPostsRender) => {
         <StyledPostsContainer>
             {posts.map((post, id) => (
                 <ManagePostContext.Provider
-                    key={`post-${id}-${post.content}`}
+                    key={`post-${post._id}-${post.content}`}
                     value={{
                         updatePostInState: (post: IPost) => {
                             updatePostInState(id, post);
