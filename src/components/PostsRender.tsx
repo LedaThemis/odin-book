@@ -148,29 +148,30 @@ const PostComment = ({ post, comment }: IPostComment) => {
                                     {comment.content}
                                 </StyledCommentContent>
                             </StyledCommentWrapper>
-                            <StyledCommentThreeDotsButton
-                                onClick={() => {
-                                    setIsActionMenuShown(
-                                        (prevState) => !prevState,
-                                    );
-                                }}
-                            >
-                                {(areSameUser(comment.author, user) ||
-                                    areSameUser(
-                                        comment.author,
-                                        post.author,
-                                    )) && <BsThreeDots size={'16px'} />}
-                                {isActionMenuShown && (
-                                    <CommentActionMenu
-                                        handleEditComment={() => {
-                                            setIsUpdatingComment(true);
-                                        }}
-                                        handleDeleteComment={() => {
-                                            setIsCommentDeletePopupShown(true);
-                                        }}
-                                    />
-                                )}
-                            </StyledCommentThreeDotsButton>
+                            {(areSameUser(comment.author, user) ||
+                                areSameUser(post.author, user)) && (
+                                <StyledCommentThreeDotsButton
+                                    onClick={() => {
+                                        setIsActionMenuShown(
+                                            (prevState) => !prevState,
+                                        );
+                                    }}
+                                >
+                                    <BsThreeDots size={'16px'} />
+                                    {isActionMenuShown && (
+                                        <CommentActionMenu
+                                            handleEditComment={() => {
+                                                setIsUpdatingComment(true);
+                                            }}
+                                            handleDeleteComment={() => {
+                                                setIsCommentDeletePopupShown(
+                                                    true,
+                                                );
+                                            }}
+                                        />
+                                    )}
+                                </StyledCommentThreeDotsButton>
+                            )}
                         </StyledFlexRowWrapper>
                         <StyledCommentDate>
                             {getFormattedTime(comment.createdAt)}
