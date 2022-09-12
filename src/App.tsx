@@ -5,6 +5,7 @@ import { useUser } from './context/UserProvider';
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
 import SearchPage from './pages/Search';
+import UserPage from './pages/User';
 
 function AuthenticatedComponent({ children }: { children: React.ReactNode }) {
     const user = useUser();
@@ -32,6 +33,14 @@ function App() {
                                 element={
                                     <AuthenticatedComponent>
                                         <SearchPage />
+                                    </AuthenticatedComponent>
+                                }
+                            />
+                            <Route
+                                path="users/:userId"
+                                element={
+                                    <AuthenticatedComponent>
+                                        <UserPage />
                                     </AuthenticatedComponent>
                                 }
                             />

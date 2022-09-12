@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
 import { useUser } from '../../context/UserProvider';
-import { IUser } from '../../lib/interfaces/User';
+import { IPopulatedUser, IUser } from '../../lib/interfaces/User';
 
 interface IUserIcon {
-    user?: IUser;
+    user?: IUser | IPopulatedUser;
     size?: string;
     className?: string;
     onClick?: () => void;
 }
 
 const UserIcon = ({ user, size, className, onClick }: IUserIcon) => {
-    let selectedUser: IUser;
+    let selectedUser: IUser | IPopulatedUser;
     let selectedSize: string;
 
     if (user) {
