@@ -1,6 +1,7 @@
 :root {
     --primary-color: #1877f2;
 
+    --web-wash-background-color: rgb(240, 242, 245);
     --comment-background-color: rgb(240, 242, 245);
     --hover-background-color: rgba(141, 141, 141, 0.178);
     --overlay-background-color: rgba(244, 244, 244, 0.8);
@@ -29,6 +30,8 @@
     --shadow-2: rgba(0, 0, 0, 0.2);
     --card-box-shadow: 0 12px 28px 0 var(--shadow-2),
         0 2px 4px 0 var(--shadow-1);
+    --search-box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 12px 0px,
+        rgba(255, 255, 255, 0.5) 0px 0px 0px 0px inset;
 
     --default-font-family: Roboto, sans-serif;
 }
