@@ -57,12 +57,16 @@ const PostHeader = ({ post }: IPostHeader) => {
                     </StyledPostCreatedDate>
                 </StyledAuthorNameCreatedDateContainer>
             </StyledPostHeaderContainer>
-            <StyledThreeDotsButton
-                onClick={() => setIsActionMenuShown((prevState) => !prevState)}
-            >
-                <BsThreeDots size={'20px'} />
-            </StyledThreeDotsButton>
-            {areSameUser(user, post.author) && isActionMenuShown && (
+            {areSameUser(user, post.author) && (
+                <StyledThreeDotsButton
+                    onClick={() =>
+                        setIsActionMenuShown((prevState) => !prevState)
+                    }
+                >
+                    <BsThreeDots size={'20px'} />
+                </StyledThreeDotsButton>
+            )}
+            {isActionMenuShown && (
                 <PostActionMenu
                     handleEditPost={() => {
                         setIsActionMenuShown(false);
