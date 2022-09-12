@@ -168,6 +168,10 @@ const PostComment = ({ post, comment }: IPostComment) => {
                                                     true,
                                                 );
                                             }}
+                                            showEdit={areSameUser(
+                                                comment.author,
+                                                user,
+                                            )}
                                         />
                                     )}
                                 </StyledCommentThreeDotsButton>

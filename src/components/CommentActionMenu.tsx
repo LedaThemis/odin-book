@@ -16,15 +16,19 @@ const CommentActionMenuBar = ({ text, onClick }: ICommentActionMenuBar) => {
 interface ICommentActionMenu {
     handleEditComment: () => void;
     handleDeleteComment: () => void;
+    showEdit: boolean;
 }
 
 const CommentActionMenu = ({
     handleEditComment,
     handleDeleteComment,
+    showEdit,
 }: ICommentActionMenu) => {
     return (
         <StyledActionMenu>
-            <CommentActionMenuBar text="Edit" onClick={handleEditComment} />
+            {showEdit && (
+                <CommentActionMenuBar text="Edit" onClick={handleEditComment} />
+            )}
             <CommentActionMenuBar text="Delete" onClick={handleDeleteComment} />
         </StyledActionMenu>
     );
