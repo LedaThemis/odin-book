@@ -65,6 +65,8 @@ const Navbar = () => {
 
 const StyledNavbar = styled.div`
     height: fit-content;
+    background-color: white;
+    box-shadow: var(--navbar-box-shadow);
 `;
 
 const StyledList = styled.ul`

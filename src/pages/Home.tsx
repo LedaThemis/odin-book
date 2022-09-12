@@ -34,7 +34,7 @@ const HomePage = () => {
     }, []);
 
     return (
-        <div>
+        <StyledWrapper>
             <Navbar />
             <StyledHomeContainer>
                 <StyledLeftHomeContainer></StyledLeftHomeContainer>
@@ -51,15 +51,17 @@ const HomePage = () => {
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>
             </StyledHomeContainer>
-        </div>
+        </StyledWrapper>
     );
 };
+const StyledWrapper = styled.div`
+    background-color: var(--background-color);
+    min-height: 100vh;
+`;
+
 const StyledHomeContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr minmax(380px, 1fr) 1fr;
-    background-color: var(--background-color);
-    min-height: 100vh;
-    height: 100%;
 `;
 
 const StyledLeftHomeContainer = styled.div``;
@@ -68,7 +70,7 @@ const StyledMiddleHomeContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 16px;
+    padding: 16px 0;
     gap: 10px;
 `;
 
