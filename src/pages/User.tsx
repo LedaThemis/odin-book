@@ -39,7 +39,7 @@ const UserPage = () => {
                     break;
             }
         })();
-    }, []);
+    }, [params.userId]);
 
     return (
         <StyledWrapper>
