@@ -14,6 +14,7 @@ import { IPost } from '../lib/interfaces/Post';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
 import Errors from './Errors';
+import FetchingOverlay from './HOCs/FetchingOverlay';
 import PopupBase from './PopupBase';
 import PostsRender from './PostsRender';
 import ProfileFriendsSection from './ProfileFriendsSection';
@@ -34,6 +35,8 @@ interface IProfileView {
 const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
     const currentUser = useUser() as IUser;
     const setCurrentUser = useSetUser();
+
+    const [isFetchingUserPosts, setIsFetchingUserPosts] = useState(false);
     const [isUnfriendUserPopupShown, setIsUnfriendUserPopupShown] =
         useState(false);
     const [userPosts, setUserPosts] = useState<IPost[]>([]);
@@ -99,7 +102,9 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
         if (!canSeePosts(profileUser, currentUser)) return;
 
         (async () => {
+            setIsFetchingUserPosts(true);
             const res = await getUserPosts({ userId: profileUser._id });
+            setIsFetchingUserPosts(false);
 
             switch (res.state) {
                 case 'success':
@@ -138,13 +143,18 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                         canSeePosts={canSeePosts(profileUser, currentUser)}
                     />
                     {errors.length > 0 && <Errors errors={errors} />}
-                    {canSeePosts(profileUser, currentUser) &&
-                        userPosts.length > 0 && (
-                            <PostsRender
-                                posts={userPosts}
-                                setPosts={setUserPosts}
-                            />
-                        )}
+                    <FetchingOverlay
+                        isFetching={isFetchingUserPosts}
+                        text="Loading user posts..."
+                    >
+                        {canSeePosts(profileUser, currentUser) &&
+                            userPosts.length > 0 && (
+                                <PostsRender
+                                    posts={userPosts}
+                                    setPosts={setUserPosts}
+                                />
+                            )}
+                    </FetchingOverlay>
                 </StyledUserPostsContainer>
             </StyledFlexRowContainer>
             {isUnfriendUserPopupShown && (

@@ -12,7 +12,7 @@ import queryUsers from '../lib/queryUsers';
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
     const queryParam = searchParams.get('q');
-    const [isFetching, setIsFetching] = useState(true);
+    const [isFetching, setIsFetching] = useState(false);
     const [results, setResults] = useState<IUser[]>([]);
     const [errors, setErrors] = useState<ErrorType[]>([]);
 

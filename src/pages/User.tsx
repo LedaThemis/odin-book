@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Errors from '../components/Errors';
+import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import ProfileView from '../components/ProfileView';
 import getUser from '../lib/getUser';
@@ -12,6 +13,7 @@ import { IPopulatedUser } from '../lib/interfaces/User';
 
 const UserPage = () => {
     const params = useParams();
+    const [isFetching, setIsFetching] = useState(false);
     const [profileUser, setProfileUser] = useState<IPopulatedUser>();
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
@@ -21,8 +23,9 @@ const UserPage = () => {
                 setErrors(handleError('User ID is not recognized.').errors);
                 return;
             }
-
+            setIsFetching(true);
             const res = await getUser({ userId: params.userId });
+            setIsFetching(false);
 
             switch (res.state) {
                 case 'success':
@@ -42,12 +45,17 @@ const UserPage = () => {
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
-                {profileUser && (
-                    <ProfileView
-                        profileUser={profileUser}
-                        setProfileUser={setProfileUser}
-                    />
-                )}
+                <FetchingOverlay
+                    isFetching={isFetching}
+                    text="Loading Profile..."
+                >
+                    {profileUser && (
+                        <ProfileView
+                            profileUser={profileUser}
+                            setProfileUser={setProfileUser}
+                        />
+                    )}
+                </FetchingOverlay>
                 {errors.length > 0 && <Errors errors={errors} />}
             </StyledContainer>
         </StyledWrapper>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { MoonLoader } from 'react-spinners';
 import styled from 'styled-components';
 
 import Errors from '../components/Errors';
+import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
 import PostsRender from '../components/PostsRender';
@@ -11,7 +11,7 @@ import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 
 const HomePage = () => {
-    const [isFetchingPosts, setIsFetchingPosts] = useState(true);
+    const [isFetchingPosts, setIsFetchingPosts] = useState(false);
     const [posts, setPosts] = useState<IPost[]>([]);
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
@@ -45,13 +45,12 @@ const HomePage = () => {
                 <StyledMiddleHomeContainer>
                     <PostCreatePrompt addPostToState={addPostToState} />
                     {errors && <Errors errors={errors} />}
-                    {isFetchingPosts && (
-                        <StyledLoadingContainer>
-                            <MoonLoader />
-                            <p>Loading Timeline...</p>
-                        </StyledLoadingContainer>
-                    )}
-                    <PostsRender posts={posts} setPosts={setPosts} />
+                    <FetchingOverlay
+                        isFetching={isFetchingPosts}
+                        text="Loading Timeline..."
+                    >
+                        <PostsRender posts={posts} setPosts={setPosts} />
+                    </FetchingOverlay>
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>
             </StyledHomeContainer>
@@ -79,12 +78,5 @@ const StyledMiddleHomeContainer = styled.div`
 `;
 
 const StyledRightHomeContainer = styled.div``;
-
-const StyledLoadingContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-`;
 
 export default HomePage;
