@@ -42,7 +42,12 @@ const UserPage = () => {
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
-                {profileUser && <ProfileView profileUser={profileUser} />}
+                {profileUser && (
+                    <ProfileView
+                        profileUser={profileUser}
+                        setProfileUser={setProfileUser}
+                    />
+                )}
                 {errors.length > 0 && <Errors errors={errors} />}
             </StyledContainer>
         </StyledWrapper>

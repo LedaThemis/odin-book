@@ -11,5 +11,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => (
     </UserContext.Provider>
 );
 const useUser = () => useContext(UserContext);
+const useSetUser = () => useAuth().setData;
 
-export { UserProvider, useUser };
+export { UserProvider, useUser, useSetUser };

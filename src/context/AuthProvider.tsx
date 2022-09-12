@@ -13,10 +13,16 @@ type DataType = {
 interface IAuthContext {
     data: DataType;
     login?: () => boolean;
+    setData: React.Dispatch<React.SetStateAction<DataType>>;
     logout?: () => Promise<void>;
 }
 
-const AuthContext = createContext<IAuthContext>({ data: {} });
+const AuthContext = createContext<IAuthContext>({
+    data: {},
+    setData: () => {
+        return;
+    },
+});
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
     const [data, setData] = useState<DataType>({});
@@ -49,7 +55,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ data, login, logout }}>
+        <AuthContext.Provider value={{ data, setData, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

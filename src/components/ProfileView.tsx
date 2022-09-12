@@ -1,68 +1,99 @@
-import { useEffect, useState } from 'react';
-import { BsPersonCheckFill } from 'react-icons/bs';
-import { MdPersonAddAlt1 } from 'react-icons/md';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useSetUser, useUser } from '../context/UserProvider';
 import areFriends from '../lib/areFriends';
 import areSameUser from '../lib/areSameUser';
 import canSeePosts from '../lib/canSeePosts';
+import friendUser from '../lib/friendUser';
+import getCurrentUser from '../lib/getCurrentUser';
 import getUserPosts from '../lib/getUserPosts';
+import hasSentFriendRequest from '../lib/hasSentFriendRequest';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
+import unfriendUser from '../lib/unfriendUser';
 import Errors from './Errors';
+import PopupBase from './PopupBase';
 import PostsRender from './PostsRender';
 import ProfileFriendsSection from './ProfileFriendsSection';
 import ProfilePostsSection from './ProfilePostsSection';
+import AcceptOrRejectFriendRequestButton from './buttons/AcceptOrRejectFriendRequestButton';
+import AddFriendButton from './buttons/AddFriendButton';
+import AreFriendsButton from './buttons/AreFriendsButton';
+import CancelFriendRequestButton from './buttons/CancelFriendRequestButton';
 import UserIcon from './icons/UserIcon';
-
-const AddFriendButton = () => {
-    return (
-        <StyledAddFriend
-            onMouseDown={(e) => {
-                e.currentTarget.style.transform = 'scale(0.96)';
-            }}
-            onMouseUp={(e) => {
-                e.currentTarget.style.transform = '';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.transform = '';
-            }}
-        >
-            <MdPersonAddAlt1 size={'24px'} />
-            <StyledButtonText>Add Friend</StyledButtonText>
-        </StyledAddFriend>
-    );
-};
-
-const AreFriendsButton = () => {
-    return (
-        <StyledAreFriendsButton
-            onMouseDown={(e) => {
-                e.currentTarget.style.transform = 'scale(0.96)';
-            }}
-            onMouseUp={(e) => {
-                e.currentTarget.style.transform = '';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.transform = '';
-            }}
-        >
-            <BsPersonCheckFill size={'24px'} />
-            <StyledButtonText>Friends</StyledButtonText>
-        </StyledAreFriendsButton>
-    );
-};
 
 interface IProfileView {
     profileUser: IPopulatedUser;
+    setProfileUser: React.Dispatch<
+        React.SetStateAction<IPopulatedUser | undefined>
+    >;
 }
 
-const ProfileView = ({ profileUser }: IProfileView) => {
+const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
     const currentUser = useUser() as IUser;
+    const setCurrentUser = useSetUser();
+    const [isUnfriendUserPopupShown, setIsUnfriendUserPopupShown] =
+        useState(false);
     const [userPosts, setUserPosts] = useState<IPost[]>([]);
     const [errors, setErrors] = useState<ErrorType[]>([]);
+
+    const handleFriend = async (op: 'Add' | 'Remove') => {
+        const fn = op === 'Add' ? friendUser : unfriendUser;
+
+        const res = await fn({ userId: profileUser._id });
+        const userRes = await getCurrentUser();
+
+        switch (res.state) {
+            case 'success':
+                setProfileUser(res.user);
+                setCurrentUser({
+                    user: userRes.user,
+                });
+                setIsUnfriendUserPopupShown(false);
+                break;
+            case 'failed':
+                setErrors(res.errors);
+                break;
+        }
+    };
+
+    const handleAddFriend = async () => {
+        await handleFriend('Add');
+    };
+
+    const handleRemoveFriend = async () => {
+        await handleFriend('Remove');
+    };
+
+    const ActionButton = () =>
+        useMemo(() => {
+            if (areFriends(profileUser, currentUser)) {
+                return (
+                    <AreFriendsButton
+                        onClick={() => {
+                            setIsUnfriendUserPopupShown(
+                                (prevState) => !prevState,
+                            );
+                        }}
+                    />
+                );
+            } else if (hasSentFriendRequest(profileUser, currentUser)) {
+                return (
+                    <CancelFriendRequestButton onClick={handleRemoveFriend} />
+                );
+            } else if (hasSentFriendRequest(currentUser, profileUser)) {
+                return (
+                    <AcceptOrRejectFriendRequestButton
+                        handleAccept={handleAddFriend}
+                        handleReject={handleRemoveFriend}
+                    />
+                );
+            } else {
+                return <AddFriendButton onClick={handleAddFriend} />;
+            }
+        }, [profileUser, currentUser]);
 
     useEffect(() => {
         if (!canSeePosts(profileUser, currentUser)) return;
@@ -73,13 +104,15 @@ const ProfileView = ({ profileUser }: IProfileView) => {
             switch (res.state) {
                 case 'success':
                     setUserPosts(res.posts);
+                    setErrors([]);
                     break;
                 case 'failed':
+                    setUserPosts([]);
                     setErrors(res.errors);
                     break;
             }
         })();
-    }, []);
+    }, [profileUser, currentUser]);
 
     return (
         <StyledWrapper>
@@ -89,12 +122,9 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                     <StyledFlexWrapper>
                         <StyledName>{profileUser.displayName}</StyledName>
                         <StyledActionButtonsContainer>
-                            {!areSameUser(profileUser, currentUser) &&
-                                (areFriends(profileUser, currentUser) ? (
-                                    <AreFriendsButton />
-                                ) : (
-                                    <AddFriendButton />
-                                ))}
+                            {!areSameUser(profileUser, currentUser) && (
+                                <ActionButton />
+                            )}
                         </StyledActionButtonsContainer>
                     </StyledFlexWrapper>
                 </StyledProfileTopSection>
@@ -107,6 +137,7 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                         hasPosts={userPosts.length > 0}
                         canSeePosts={canSeePosts(profileUser, currentUser)}
                     />
+                    {errors.length > 0 && <Errors errors={errors} />}
                     {canSeePosts(profileUser, currentUser) &&
                         userPosts.length > 0 && (
                             <PostsRender
@@ -114,9 +145,24 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                                 setPosts={setUserPosts}
                             />
                         )}
-                    {errors.length > 0 && <Errors errors={errors} />}
                 </StyledUserPostsContainer>
             </StyledFlexRowContainer>
+            {isUnfriendUserPopupShown && (
+                <PopupBase
+                    title={`Unfriend ${profileUser.displayName}?`}
+                    content={`Are you sure you want to unfriend ${profileUser.displayName}?`}
+                    submitButtonText="Confirm"
+                    cancelButtonText="Cancel"
+                    submitButtonFunction={handleRemoveFriend}
+                    cancelButtonFunction={() => {
+                        setIsUnfriendUserPopupShown(false);
+                    }}
+                    hidePopup={() => {
+                        setIsUnfriendUserPopupShown(false);
+                    }}
+                    errors={errors}
+                />
+            )}
         </StyledWrapper>
     );
 };
@@ -180,58 +226,6 @@ const StyledName = styled.h1``;
 const StyledActionButtonsContainer = styled.div`
     display: flex;
     align-items: center;
-`;
-
-const StyledAddFriend = styled.button`
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-
-    border-radius: var(--standard-border-radius);
-
-    padding: 8px 8px;
-    box-sizing: border-box;
-
-    display: flex;
-    gap: 4px;
-    align-items: center;
-
-    font-size: 15px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    &:hover {
-        filter: brightness(0.97);
-    }
-`;
-
-const StyledAreFriendsButton = styled.div`
-    background-color: var(--background-color);
-    color: black;
-    border: none;
-
-    border-radius: var(--standard-border-radius);
-
-    padding: 8px 12px;
-    box-sizing: border-box;
-
-    display: flex;
-    gap: 4px;
-    align-items: center;
-
-    font-size: 15px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    &:hover {
-        filter: brightness(0.97);
-    }
-`;
-
-const StyledButtonText = styled.p`
-    margin: 0;
 `;
 
 export default ProfileView;
