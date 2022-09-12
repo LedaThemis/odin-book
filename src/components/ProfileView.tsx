@@ -7,8 +7,11 @@ import { useUser } from '../context/UserProvider';
 import areFriends from '../lib/areFriends';
 import areSameUser from '../lib/areSameUser';
 import canSeePosts from '../lib/canSeePosts';
+import getUserPosts from '../lib/getUserPosts';
+import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
+import Errors from './Errors';
 import PostsRender from './PostsRender';
 import ProfileFriendsSection from './ProfileFriendsSection';
 import ProfilePostsSection from './ProfilePostsSection';
@@ -59,10 +62,23 @@ interface IProfileView {
 const ProfileView = ({ profileUser }: IProfileView) => {
     const currentUser = useUser() as IUser;
     const [userPosts, setUserPosts] = useState<IPost[]>([]);
+    const [errors, setErrors] = useState<ErrorType[]>([]);
 
     useEffect(() => {
-        // TODO: get users posts and set state
-        return;
+        if (!canSeePosts(profileUser, currentUser)) return;
+
+        (async () => {
+            const res = await getUserPosts({ userId: profileUser._id });
+
+            switch (res.state) {
+                case 'success':
+                    setUserPosts(res.posts);
+                    break;
+                case 'failed':
+                    setErrors(res.errors);
+                    break;
+            }
+        })();
     }, []);
 
     return (
@@ -98,6 +114,7 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                                 setPosts={setUserPosts}
                             />
                         )}
+                    {errors.length > 0 && <Errors errors={errors} />}
                 </StyledUserPostsContainer>
             </StyledFlexRowContainer>
         </StyledWrapper>
@@ -110,7 +127,7 @@ const StyledLineContainer = styled.div`
 `;
 
 const StyledWrapper = styled.div`
-    width: max(80%, 400px);
+    width: max(60%, 400px);
 
     display: flex;
     flex-direction: column;
