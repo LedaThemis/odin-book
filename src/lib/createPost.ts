@@ -23,7 +23,6 @@ const createPost = async ({
         const { data }: { data: ICreatePostResponse } = await axios.post(
             'posts',
             { content, photos },
-            { withCredentials: true },
         );
 
         return data;

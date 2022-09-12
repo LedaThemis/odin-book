@@ -8,9 +8,7 @@ interface IResponse {
 
 const getCurrentUser = async (): Promise<IResponse> => {
     try {
-        const { data }: { data: IResponse } = await axios.get('me', {
-            withCredentials: true,
-        });
+        const { data }: { data: IResponse } = await axios.get('me');
 
         return data;
     } catch (err) {
