@@ -24,10 +24,12 @@ const SearchBar = () => {
 
             switch (res.state) {
                 case 'success':
+                    setErrors([]);
                     setResults(res.users);
                     break;
 
                 case 'failed':
+                    setResults([]);
                     setErrors(res.errors);
                     break;
             }

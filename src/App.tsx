@@ -4,6 +4,7 @@ import AppProviders from './context';
 import { useUser } from './context/UserProvider';
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
+import SearchPage from './pages/Search';
 
 function AuthenticatedComponent({ children }: { children: React.ReactNode }) {
     const user = useUser();
@@ -23,6 +24,14 @@ function App() {
                                 element={
                                     <AuthenticatedComponent>
                                         <HomePage />
+                                    </AuthenticatedComponent>
+                                }
+                            />
+                            <Route
+                                path="search"
+                                element={
+                                    <AuthenticatedComponent>
+                                        <SearchPage />
                                     </AuthenticatedComponent>
                                 }
                             />
