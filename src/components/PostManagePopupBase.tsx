@@ -21,11 +21,13 @@ interface IPostManagePopupBase {
 
 interface IPostManagePopupBaseCreate extends IPostManagePopupBase {
     actionType: 'Create';
+    addPostToState: (post: IPost) => void;
     originalPost?: undefined;
 }
 
 interface IPostManagePoupBaseUpdate extends IPostManagePopupBase {
     actionType: 'Update';
+    addPostToState?: undefined;
     originalPost: IPost;
 }
 
@@ -47,6 +49,7 @@ const PostManagePopupBase = ({
     submitButtonText,
     actionType,
     originalPost,
+    addPostToState,
     setIsPopupShown,
 }: IPostManagePopup) => {
     const initialState = useMemo(() => {
@@ -64,7 +67,7 @@ const PostManagePopupBase = ({
     }, []);
 
     const user = useUser();
-    const { addPostToState, updatePostInState } = useManagePost();
+    const { updatePostInState } = useManagePost();
 
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [content, setContent] = useState(initialState.content);

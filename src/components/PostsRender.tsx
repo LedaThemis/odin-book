@@ -282,10 +282,6 @@ interface IPostsRender {
 }
 
 const PostsRender = ({ posts, setPosts }: IPostsRender) => {
-    const addPostToState = (post: IPost) => {
-        setPosts((prevPosts) => [post].concat(prevPosts));
-    };
-
     const updatePostInState = (id: number, post: IPost) => {
         setPosts((prevPosts) =>
             prevPosts
@@ -305,7 +301,6 @@ const PostsRender = ({ posts, setPosts }: IPostsRender) => {
                 <ManagePostContext.Provider
                     key={`post-${id}-${post.content}`}
                     value={{
-                        addPostToState,
                         updatePostInState: (post: IPost) => {
                             updatePostInState(id, post);
                         },

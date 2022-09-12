@@ -3,9 +3,6 @@ import { createContext, useContext } from 'react';
 import { IPost } from '../lib/interfaces/Post';
 
 const initialValue = {
-    addPostToState: () => {
-        return;
-    },
     updatePostInState: () => {
         return;
     },
@@ -15,7 +12,6 @@ const initialValue = {
 };
 
 interface IManagePostContext {
-    addPostToState: (post: IPost) => void;
     updatePostInState: (post: IPost) => void;
     deletePostFromState: () => void;
 }
