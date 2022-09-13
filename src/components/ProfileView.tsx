@@ -136,7 +136,9 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                 <StyledLineContainer />
             </StyledContainer>
             <StyledFlexRowContainer>
-                <UsersSection title="Friends" users={profileUser.friends} />
+                <StyledFriendsSectionWrapper>
+                    <UsersSection title="Friends" users={profileUser.friends} />
+                </StyledFriendsSectionWrapper>
                 <StyledUserPostsContainer>
                     <ProfilePostsSection
                         hasPosts={userPosts.length > 0}
@@ -183,7 +185,8 @@ const StyledLineContainer = styled.div`
 `;
 
 const StyledWrapper = styled.div`
-    width: max(60%, 400px);
+    width: 100%;
+    max-width: 1250px;
 
     display: flex;
     flex-direction: column;
@@ -194,6 +197,15 @@ const StyledFlexRowContainer = styled.div`
     display: flex;
     gap: 16px;
     align-items: flex-start;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    @media screen and (max-width: 1250px) {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 16px;
+    }
 `;
 
 const StyledUserPostsContainer = styled.div`
@@ -202,6 +214,19 @@ const StyledUserPostsContainer = styled.div`
     gap: 16px;
 
     width: 100%;
+
+    @media screen and (max-width: 1250px) {
+        max-width: 680px;
+    }
+`;
+
+const StyledFriendsSectionWrapper = styled.div`
+    width: 100%;
+    max-width: 380px;
+
+    @media screen and (max-width: 1250px) {
+        max-width: 680px;
+    }
 `;
 
 const StyledContainer = styled.div`
@@ -223,12 +248,22 @@ const StyledProfileTopSection = styled.div`
 
     background: linear-gradient(var(--background-color) 50%, transparent 50%)
         no-repeat;
+
+    @media screen and (max-width: 1250px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 const StyledFlexWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;
+
+    @media screen and (max-width: 1250px) {
+        flex-direction: column;
+        align-items: center;
+    }
 `;
 
 const StyledName = styled.h1``;

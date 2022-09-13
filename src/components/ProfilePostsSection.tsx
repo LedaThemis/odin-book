@@ -33,8 +33,6 @@ const StyledContainer = styled.div`
     padding: 12px 16px;
     gap: 8px;
 
-    min-width: 380px;
-
     box-shadow: 0 1px 2px var(--shadow-2);
 
     background-color: white;
