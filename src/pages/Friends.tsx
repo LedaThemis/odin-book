@@ -85,51 +85,52 @@ const FriendsPage = () => {
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
-                <FetchingOverlay
-                    isFetching={isFetching}
-                    text="Fetching friends..."
-                    errors={fErrors}
-                >
-                    <UsersSection
-                        title="Friends"
-                        users={userFriends}
-                        noUsersText="No friends to show"
-                    />
-                </FetchingOverlay>
-                <FetchingOverlay
-                    isFetching={isFetching}
-                    text="Fetching incoming friend requests..."
-                    errors={ifrErrors}
-                >
-                    <UsersSection
-                        title="Incoming friend requests"
-                        users={userIncoming}
-                        noUsersText="No incoming friend requests to show"
-                    />
-                </FetchingOverlay>
-
-                <FetchingOverlay
-                    isFetching={isFetching}
-                    text="Fetching outgoing friend requests..."
-                    errors={ofrErrors}
-                >
-                    <UsersSection
-                        title="Outgoing friend requests"
-                        users={userOutgoing}
-                        noUsersText="No outgoing friend requests to show"
-                    />
-                </FetchingOverlay>
-                <FetchingOverlay
-                    isFetching={isFetching}
-                    text="Fetching people you might know..."
-                    errors={pErrors}
-                >
-                    <UsersSection
-                        title="People you might know"
-                        users={userPeople}
-                        noUsersText="Wait a sec... you know everyone!"
-                    />
-                </FetchingOverlay>
+                <StyledSectionsContainer>
+                    <FetchingOverlay
+                        isFetching={isFetching}
+                        text="Fetching friends..."
+                        errors={fErrors}
+                    >
+                        <UsersSection
+                            title="Friends"
+                            users={userFriends}
+                            noUsersText="No friends to show"
+                        />
+                    </FetchingOverlay>
+                    <FetchingOverlay
+                        isFetching={isFetching}
+                        text="Fetching incoming friend requests..."
+                        errors={ifrErrors}
+                    >
+                        <UsersSection
+                            title="Incoming friend requests"
+                            users={userIncoming}
+                            noUsersText="No incoming friend requests to show"
+                        />
+                    </FetchingOverlay>
+                    <FetchingOverlay
+                        isFetching={isFetching}
+                        text="Fetching outgoing friend requests..."
+                        errors={ofrErrors}
+                    >
+                        <UsersSection
+                            title="Outgoing friend requests"
+                            users={userOutgoing}
+                            noUsersText="No outgoing friend requests to show"
+                        />
+                    </FetchingOverlay>
+                    <FetchingOverlay
+                        isFetching={isFetching}
+                        text="Fetching people you might know..."
+                        errors={pErrors}
+                    >
+                        <UsersSection
+                            title="People you might know"
+                            users={userPeople}
+                            noUsersText="Wait a sec... you know everyone!"
+                        />
+                    </FetchingOverlay>
+                </StyledSectionsContainer>
             </StyledContainer>
         </StyledWrapper>
     );
@@ -143,13 +144,17 @@ const StyledWrapper = styled.div`
 
 const StyledContainer = styled.div`
     display: flex;
-    gap: 16px;
-    align-items: center;
-
-    flex-direction: column;
+    justify-content: center;
 
     padding: 16px 0;
     box-sizing: border-box;
+`;
+
+const StyledSectionsContainer = styled.div`
+    display: flex;
+    gap: 16px;
+
+    flex-direction: column;
 `;
 
 export default FriendsPage;
