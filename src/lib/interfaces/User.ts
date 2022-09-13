@@ -4,6 +4,9 @@ interface IBaseUser {
     displayName: string;
     photoURL: string;
     incomingFriendRequests: string[];
+    custom: {
+        photoURL: string;
+    }
     createdAt: Date;
     updatedAt: Date;
 }

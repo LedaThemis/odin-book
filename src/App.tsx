@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import AppProviders from './context';
 import { useUser } from './context/UserProvider';
+import FriendsPage from './pages/Friends';
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
 import SearchPage from './pages/Search';
@@ -50,6 +51,14 @@ function App() {
                                 element={
                                     <AuthenticatedComponent>
                                         <UserPage />
+                                    </AuthenticatedComponent>
+                                }
+                            />
+                            <Route
+                                path="settings"
+                                element={
+                                    <AuthenticatedComponent>
+                                        <SettingsPage />
                                     </AuthenticatedComponent>
                                 }
                             />

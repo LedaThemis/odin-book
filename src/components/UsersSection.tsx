@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import getUserURL from '../lib/getUserURL';
 import { IUser } from '../lib/interfaces/User';
+import SectionBase from './SectionBase';
 import UserIcon from './icons/UserIcon';
 
 interface IUsersSectionBar {
@@ -28,8 +29,7 @@ interface IUsersSection {
 
 const UsersSection = ({ users, title, noUsersText }: IUsersSection) => {
     return (
-        <StyledContainer>
-            <StyledSectionTitle>{title}</StyledSectionTitle>
+        <SectionBase title={title}>
             {users.length > 0
                 ? users.map((user) => (
                       <UsersSectionBar
@@ -38,32 +38,9 @@ const UsersSection = ({ users, title, noUsersText }: IUsersSection) => {
                       />
                   ))
                 : noUsersText && <StyledInfo>{noUsersText}</StyledInfo>}
-        </StyledContainer>
+        </SectionBase>
     );
 };
-
-const StyledContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    box-sizing: border-box;
-
-    padding: 12px 16px;
-    gap: 8px;
-    min-width: 380px;
-
-    box-shadow: 0 1px 2px var(--shadow-2);
-
-    background-color: white;
-
-    border-radius: var(--standard-border-radius);
-`;
-
-const StyledSectionTitle = styled.h2`
-    font-size: 20px;
-    font-weight: 700;
-    margin: 8px 0;
-`;
 
 const StyledFlexWrapper = styled.div`
     display: flex;

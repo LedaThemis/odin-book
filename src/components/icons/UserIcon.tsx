@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { useUser } from '../../context/UserProvider';
+import getOverrideField from '../../lib/getOverrideField';
 import { IPopulatedUser, IUser } from '../../lib/interfaces/User';
 
 interface IUserIcon {
@@ -28,20 +29,26 @@ const UserIcon = ({ user, size, className, onClick }: IUserIcon) => {
 
     return (
         <StyledImg
+            size={selectedSize}
             className={className}
             onClick={onClick}
-            src={selectedUser.photoURL}
+            src={getOverrideField(selectedUser, 'photoURL')}
             referrerPolicy="no-referrer"
-            style={{ width: selectedSize, height: selectedSize }}
         />
     );
 };
 
-const StyledImg = styled.img`
+const StyledImg = styled.img<{ size: string }>`
+    object-fit: cover;
+    background-color: var(--background-color);
+
+    width: ${(props) => props.size};
+    height: ${(props) => props.size};
+    flex-shrink: 0;
+
     border: 1px solid rgba(0, 0, 0, 0.1);
-    width: 40px;
-    height: 40px;
     border-radius: 100%;
+
     cursor: pointer;
 `;
 
