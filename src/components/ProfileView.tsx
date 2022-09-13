@@ -14,11 +14,11 @@ import { IPost } from '../lib/interfaces/Post';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
 import Errors from './Errors';
-import ProfileFriendsSection from './FriendsSection';
 import FetchingOverlay from './HOCs/FetchingOverlay';
 import PopupBase from './PopupBase';
 import PostsRender from './PostsRender';
 import ProfilePostsSection from './ProfilePostsSection';
+import UsersSection from './UsersSection';
 import AcceptOrRejectFriendRequestButton from './buttons/AcceptOrRejectFriendRequestButton';
 import AddFriendButton from './buttons/AddFriendButton';
 import AreFriendsButton from './buttons/AreFriendsButton';
@@ -136,7 +136,7 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                 <StyledLineContainer />
             </StyledContainer>
             <StyledFlexRowContainer>
-                <ProfileFriendsSection users={profileUser.friends} />
+                <UsersSection title="Friends" users={profileUser.friends} />
                 <StyledUserPostsContainer>
                     <ProfilePostsSection
                         hasPosts={userPosts.length > 0}
