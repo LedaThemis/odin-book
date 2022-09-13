@@ -8,7 +8,9 @@ const SettingsPage = () => {
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
-                <UserUpdateSection />
+                <StyledSectionsContainer>
+                    <UserUpdateSection />
+                </StyledSectionsContainer>
             </StyledContainer>
         </StyledWrapper>
     );
@@ -27,5 +29,7 @@ const StyledContainer = styled.div`
     box-sizing: border-box;
     padding: 16px 0;
 `;
+
+const StyledSectionsContainer = styled.div``;
 
 export default SettingsPage;
