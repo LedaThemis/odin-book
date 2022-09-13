@@ -153,8 +153,13 @@ const StyledContainer = styled.div`
 const StyledSectionsContainer = styled.div`
     display: flex;
     gap: 16px;
-
     flex-direction: column;
+
+    min-width: 568px;
+
+    @media screen and (max-width: 600px) {
+        min-width: fit-content;
+    }
 `;
 
 export default FriendsPage;

@@ -42,9 +42,11 @@ const SearchPage = () => {
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
-                <FetchingOverlay isFetching={isFetching}>
-                    <PeopleSearchResult users={results} errors={errors} />
-                </FetchingOverlay>
+                <StyledSectionsContainer>
+                    <FetchingOverlay isFetching={isFetching}>
+                        <PeopleSearchResult users={results} errors={errors} />
+                    </FetchingOverlay>
+                </StyledSectionsContainer>
             </StyledContainer>
         </StyledWrapper>
     );
@@ -62,6 +64,14 @@ const StyledContainer = styled.div`
 
     box-sizing: border-box;
     padding: 16px 0;
+`;
+
+const StyledSectionsContainer = styled.div`
+    min-width: 568px;
+
+    @media screen and (max-width: 600px) {
+        min-width: fit-content;
+    }
 `;
 
 export default SearchPage;
