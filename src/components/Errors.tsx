@@ -8,6 +8,10 @@ interface IErrors {
 }
 
 const Errors = ({ errors }: IErrors) => {
+    if (errors.length === 0) {
+        return <></>;
+    }
+
     return (
         <StyledContainer>
             {errors.map((error, id) => (

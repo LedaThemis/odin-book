@@ -41,7 +41,7 @@ const PeopleSearchResult = ({ users, errors }: IPeopleSearchResult) => {
             ) : (
                 <StyledInfo>No people found</StyledInfo>
             )}
-            {errors.length > 0 && <Errors errors={errors} />}
+            <Errors errors={errors} />
         </StyledContainer>
     );
 };

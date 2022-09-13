@@ -142,7 +142,7 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                         hasPosts={userPosts.length > 0}
                         canSeePosts={canSeePosts(profileUser, currentUser)}
                     />
-                    {errors.length > 0 && <Errors errors={errors} />}
+                    <Errors errors={errors} />
                     <FetchingOverlay
                         isFetching={isFetchingUserPosts}
                         text="Loading user posts..."

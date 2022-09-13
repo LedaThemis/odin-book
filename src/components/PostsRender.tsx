@@ -268,7 +268,7 @@ const PostRender = ({ post }: IPostRender) => {
                     />
                 </StyledActionButtonsContainer>
                 {clickedCommentButton && <StyledLineContainer />}
-                {errors.length > 0 && <Errors errors={errors} />}
+                <Errors errors={errors} />
                 {clickedCommentButton && (
                     <StyledCommentCreatePrompt post={post} />
                 )}

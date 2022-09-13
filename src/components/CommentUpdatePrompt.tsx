@@ -59,7 +59,7 @@ const CommentUpdatePrompt = ({
                     />
                 </StyledForm>
                 <StyledP onClick={cancelEditing}>Cancel</StyledP>
-                {errors.length > 0 && <Errors errors={errors} />}
+                <Errors errors={errors} />
             </StyledWrapper>
         </StyledContainer>
     );

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Errors from '../components/Errors';
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import ProfileView from '../components/ProfileView';
@@ -48,6 +47,7 @@ const UserPage = () => {
                 <FetchingOverlay
                     isFetching={isFetching}
                     text="Loading Profile..."
+                    errors={errors}
                 >
                     {profileUser && (
                         <ProfileView
@@ -56,7 +56,6 @@ const UserPage = () => {
                         />
                     )}
                 </FetchingOverlay>
-                {errors.length > 0 && <Errors errors={errors} />}
             </StyledContainer>
         </StyledWrapper>
     );

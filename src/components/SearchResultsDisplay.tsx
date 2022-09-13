@@ -82,7 +82,7 @@ const SearchResultsDisplay = ({
                     text={`Search for ${query}`}
                 />
             </StyledSpecialLink>
-            {errors.length > 0 && <Errors errors={errors} />}
+            <Errors errors={errors} />
         </StyledSearchResultsDisplay>
     );
 };
