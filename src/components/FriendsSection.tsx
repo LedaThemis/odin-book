@@ -5,11 +5,11 @@ import getUserURL from '../lib/getUserURL';
 import { IUser } from '../lib/interfaces/User';
 import UserIcon from './icons/UserIcon';
 
-interface IProfileFriendsSectionBar {
+interface IFriendsSectionBar {
     user: IUser;
 }
 
-const ProfileFriendsSectionBar = ({ user }: IProfileFriendsSectionBar) => {
+const FriendsSectionBar = ({ user }: IFriendsSectionBar) => {
     return (
         <StyledFlexWrapper>
             <StyledLink to={getUserURL(user)}>
@@ -20,24 +20,23 @@ const ProfileFriendsSectionBar = ({ user }: IProfileFriendsSectionBar) => {
     );
 };
 
-interface IProfileFriendsSection {
+interface IFriendsSection {
     users: IUser[];
+    noFriendsText?: string;
 }
 
-const ProfileFriendsSection = ({ users }: IProfileFriendsSection) => {
+const FriendsSection = ({ users, noFriendsText }: IFriendsSection) => {
     return (
         <StyledContainer>
             <StyledSectionTitle>Friends</StyledSectionTitle>
-            {users.length > 0 ? (
-                users.map((user) => (
-                    <ProfileFriendsSectionBar
-                        key={`people-searchresult-userbar-${user._id}`}
-                        user={user}
-                    />
-                ))
-            ) : (
-                <StyledInfo>This user has no friends.</StyledInfo>
-            )}
+            {users.length > 0
+                ? users.map((user) => (
+                      <FriendsSectionBar
+                          key={`people-searchresult-userbar-${user._id}`}
+                          user={user}
+                      />
+                  ))
+                : noFriendsText && <StyledInfo>{noFriendsText}</StyledInfo>}
         </StyledContainer>
     );
 };
@@ -87,4 +86,4 @@ const StyledInfo = styled.p`
     padding: 4px 0;
 `;
 
-export default ProfileFriendsSection;
+export default FriendsSection;
