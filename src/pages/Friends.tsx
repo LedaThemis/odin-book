@@ -5,7 +5,9 @@ import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import UsersSection from '../components/UsersSection';
 import { useUser } from '../context/UserProvider';
+import getUserOutgoingFriendRequests from '../lib/getOutgoingFriendRequests';
 import getUserFriends from '../lib/getUserFriends';
+import getUserIncomingFriendRequests from '../lib/getUserIncomingFriendRequests';
 import getUserPeople from '../lib/getUserPeople';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IUser } from '../lib/interfaces/User';
@@ -13,22 +15,26 @@ import { IUser } from '../lib/interfaces/User';
 const FriendsPage = () => {
     const user = useUser() as IUser;
 
-    const [isFetchingFriends, setIsFetchingFriends] = useState(false);
-    const [isFetchingPeople, setIsFetchingPeople] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
     const [userFriends, setUserFriends] = useState<IUser[]>([]);
+    const [userIncoming, setUserIncoming] = useState<IUser[]>([]);
+    const [userOutgoing, setUserOutgoing] = useState<IUser[]>([]);
     const [userPeople, setUserPeople] = useState<IUser[]>([]);
     const [fErrors, setFErrors] = useState<ErrorType[]>([]);
+    const [ifrErrors, setIFRErrors] = useState<ErrorType[]>([]);
+    const [ofrErrors, setOFRErrors] = useState<ErrorType[]>([]);
     const [pErrors, setPErrors] = useState<ErrorType[]>([]);
 
     useEffect(() => {
         (async () => {
-            setIsFetchingFriends(true);
-            const fRes = await getUserFriends({ userId: user._id });
-            setIsFetchingFriends(false);
-
-            setIsFetchingPeople(true);
-            const pRes = await getUserPeople();
-            setIsFetchingPeople(false);
+            setIsFetching(true);
+            const [fRes, ifrRes, ofrRes, pRes] = await Promise.all([
+                getUserFriends({ userId: user._id }),
+                getUserIncomingFriendRequests(),
+                getUserOutgoingFriendRequests(),
+                getUserPeople(),
+            ]);
+            setIsFetching(false);
 
             switch (fRes.state) {
                 case 'success':
@@ -38,6 +44,28 @@ const FriendsPage = () => {
                 case 'failed':
                     setUserFriends([]);
                     setFErrors(fRes.errors);
+                    break;
+            }
+
+            switch (ifrRes.state) {
+                case 'success':
+                    setIFRErrors([]);
+                    setUserIncoming(ifrRes.users);
+                    break;
+                case 'failed':
+                    setUserIncoming([]);
+                    setIFRErrors(ifrRes.errors);
+                    break;
+            }
+
+            switch (ofrRes.state) {
+                case 'success':
+                    setOFRErrors([]);
+                    setUserOutgoing(ofrRes.users);
+                    break;
+                case 'failed':
+                    setUserOutgoing([]);
+                    setOFRErrors(ofrRes.errors);
                     break;
             }
 
@@ -58,7 +86,7 @@ const FriendsPage = () => {
             <Navbar />
             <StyledContainer>
                 <FetchingOverlay
-                    isFetching={isFetchingFriends}
+                    isFetching={isFetching}
                     text="Fetching friends..."
                     errors={fErrors}
                 >
@@ -69,7 +97,30 @@ const FriendsPage = () => {
                     />
                 </FetchingOverlay>
                 <FetchingOverlay
-                    isFetching={isFetchingPeople}
+                    isFetching={isFetching}
+                    text="Fetching incoming friend requests..."
+                    errors={ifrErrors}
+                >
+                    <UsersSection
+                        title="Incoming friend requests"
+                        users={userIncoming}
+                        noUsersText="No incoming friend requests to show"
+                    />
+                </FetchingOverlay>
+
+                <FetchingOverlay
+                    isFetching={isFetching}
+                    text="Fetching outgoing friend requests..."
+                    errors={ofrErrors}
+                >
+                    <UsersSection
+                        title="Outgoing friend requests"
+                        users={userOutgoing}
+                        noUsersText="No outgoing friend requests to show"
+                    />
+                </FetchingOverlay>
+                <FetchingOverlay
+                    isFetching={isFetching}
                     text="Fetching people you might know..."
                     errors={pErrors}
                 >
