@@ -64,7 +64,7 @@ const StyledWrapper = styled.div`
 
 const StyledHomeContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr minmax(380px, 1fr) 1fr;
+    justify-content: center;
 `;
 
 const StyledLeftHomeContainer = styled.div``;
@@ -73,8 +73,11 @@ const StyledMiddleHomeContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 0;
+    padding: 16px 16px;
+    box-sizing: border-box;
     gap: 10px;
+
+    max-width: 680px;
 `;
 
 const StyledRightHomeContainer = styled.div``;
