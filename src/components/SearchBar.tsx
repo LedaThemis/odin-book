@@ -71,11 +71,24 @@ const StyledContainer = styled.div`
     padding: 8px 16px;
     border-radius: 9999px;
     box-sizing: border-box;
+
+    @media screen and (max-width: 900px) {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    @media screen and (max-width: 750px) {
+        width: 80px;
+    }
 `;
 
 const StyledSpan = styled.span`
     box-sizing: border-box;
     display: flex;
+
+    @media screen and (max-width: 900px) {
+        display: none;
+    }
 `;
 
 const StyledInput = styled.input`
@@ -83,6 +96,7 @@ const StyledInput = styled.input`
     font-family: Roboto, sans-serif;
     background-color: inherit;
     color: var(--form-text-color);
+    width: 100%;
 
     &:focus {
         outline: none;
