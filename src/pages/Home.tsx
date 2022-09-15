@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import Errors from '../components/Errors';
@@ -6,6 +6,7 @@ import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
 import PostsRender from '../components/PostsRender';
+import useTimeline from '../hooks/useTimeline';
 import getTimeline from '../lib/getTimeline';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
@@ -15,9 +16,20 @@ const HomePage = () => {
     const [posts, setPosts] = useState<IPost[]>([]);
     const [errors, setErrors] = useState<ErrorType[]>([]);
 
+    const { posts: timelinePosts } = useTimeline();
+
     const addPostToState = (post: IPost) => {
         setPosts((prevPosts) => [post].concat(prevPosts));
     };
+
+    const postsList = useMemo(() => {
+        const lst = posts.concat(timelinePosts);
+        return lst.sort(
+            (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+        );
+    }, [posts, timelinePosts]);
 
     useEffect(() => {
         (async () => {
@@ -49,7 +61,7 @@ const HomePage = () => {
                         isFetching={isFetchingPosts}
                         text="Loading Timeline..."
                     >
-                        <PostsRender posts={posts} setPosts={setPosts} />
+                        <PostsRender posts={postsList} setPosts={setPosts} />
                     </FetchingOverlay>
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>
