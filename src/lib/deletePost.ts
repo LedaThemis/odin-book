@@ -1,7 +1,6 @@
 import axios from './axiosInstance';
 import handleError from './handleError';
 import { ErrorResponse } from './interfaces/Error';
-import { IPost } from './interfaces/Post';
 
 interface IDeletePost {
     postId: string;
@@ -9,7 +8,7 @@ interface IDeletePost {
 
 interface IDeletePostSuccessResponse {
     state: 'success';
-    post: IPost;
+    postId: string;
 }
 
 export type IDeletePostResponse = ErrorResponse | IDeletePostSuccessResponse;

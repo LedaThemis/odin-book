@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import {
     ManagePostContext,
     useManagePost,
 } from '../context/ManagePostProvider';
+import { useSocket } from '../context/SocketProvider';
 import { useUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
@@ -286,30 +287,42 @@ interface IPostsRender {
 }
 
 const PostsRender = ({ posts, setPosts }: IPostsRender) => {
-    const updatePostInState = (id: number, post: IPost) => {
+    const socket = useSocket();
+
+    const updatePostInState = (post: IPost) => {
         setPosts((prevPosts) =>
-            prevPosts
-                .slice(0, id)
-                .concat([post])
-                .concat(prevPosts.slice(id + 1)),
+            prevPosts.map((p) => (p._id === post._id ? post : p)),
         );
     };
 
-    const deletePostFromState = (post: IPost) => {
-        setPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
+    const deletePostFromState = (postId: string) => {
+        setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
     };
+
+    useEffect(() => {
+        socket.on('timeline_update', (post: IPost) => {
+            updatePostInState(post);
+        });
+
+        socket.on('timeline_delete', (postId: string) => {
+            deletePostFromState(postId);
+        });
+
+        return () => {
+            socket.off('timeline_update');
+            socket.off('timeline_delete');
+        };
+    }, []);
 
     return (
         <StyledPostsContainer>
-            {posts.map((post, id) => (
+            {posts.map((post) => (
                 <ManagePostContext.Provider
                     key={`post-${post._id}-${post.content}`}
                     value={{
-                        updatePostInState: (post: IPost) => {
-                            updatePostInState(id, post);
-                        },
+                        updatePostInState,
                         deletePostFromState: () => {
-                            deletePostFromState(post);
+                            deletePostFromState(post._id);
                         },
                     }}
                 >
