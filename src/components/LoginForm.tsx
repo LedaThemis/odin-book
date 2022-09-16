@@ -24,9 +24,8 @@ const StyledFormContainer = styled.div`
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
-    margin: 40px 0 0;
-    padding: 20px 0 28px;
-    width: 396px;
+    padding: 20px 28px;
+    max-width: 396px;
     height: fit-content;
 `;
 

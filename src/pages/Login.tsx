@@ -32,10 +32,23 @@ const StyledContainer = styled.div`
     padding: 0 40px;
     padding-top: 152px;
     box-sizing: border-box;
+
+    @media screen and (max-width: 1100px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+
+        gap: 28px;
+    }
 `;
 
 const TextContentContainer = styled.div`
     margin-right: 50px;
+    
+    @media screen and (max-width: 1100px) {
+        margin-right: 0;
+        text-align: center;
+    }
 `;
 
 const StyledFacebookHeader = styled.h1`
