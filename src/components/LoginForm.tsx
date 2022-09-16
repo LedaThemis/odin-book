@@ -8,7 +8,7 @@ const LoginForm = () => {
         <StyledFormContainer>
             <GoogleSignInButton />
             <StyledLineContainer />
-            <StyledP>Or use on of the available guest accounts:</StyledP>
+            <StyledP>Or use one of the available guest accounts:</StyledP>
             <GuestAccountSelect />
         </StyledFormContainer>
     );
