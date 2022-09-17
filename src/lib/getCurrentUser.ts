@@ -1,21 +1,15 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
+import { InData } from './interfaces/Response';
 import { IUser } from './interfaces/User';
 
-interface IResponse {
+interface IGetCurrentUserResponse {
     user?: IUser;
 }
 
-const getCurrentUser = async (): Promise<IResponse> => {
-    try {
-        const { data }: { data: IResponse } = await axios.get('me');
+const getCurrentUser = async (): Promise<IUser | undefined> => {
+    const { data }: InData<IGetCurrentUserResponse> = await axios.get('me');
 
-        return data;
-    } catch (err) {
-        console.error(handleError(err));
-
-        return {};
-    }
+    return data.user;
 };
 
 export default getCurrentUser;

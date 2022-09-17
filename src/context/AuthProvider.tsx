@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { createContext, useContext, useState } from 'react';
 import { MoonLoader } from 'react-spinners';
 import styled from 'styled-components';
 
@@ -25,17 +26,10 @@ const AuthContext = createContext<IAuthContext>({
 });
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
+    // TODO: DELETE (HERE FOR COMPATIBILITY)
     const [data, setData] = useState<DataType>({});
-    const [isFetching, setIsFetching] = useState<boolean>(true);
 
-    useEffect(() => {
-        (async () => {
-            const response = await getCurrentUser();
-
-            setData(response);
-            setIsFetching(false);
-        })();
-    }, []);
+    const currentUserQuery = useQuery(['me'], getCurrentUser);
 
     const login = () => {
         return true;
@@ -46,7 +40,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         setData({});
     };
 
-    if (isFetching) {
+    if (currentUserQuery.isLoading) {
         return (
             <StyledLoaderContainer>
                 <MoonLoader />
@@ -55,7 +49,16 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     return (
-        <AuthContext.Provider value={{ data, setData, login, logout }}>
+        <AuthContext.Provider
+            value={{
+                data: {
+                    user: currentUserQuery.data,
+                },
+                setData,
+                login,
+                logout,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

@@ -55,7 +55,8 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                     user,
                 );
 
-                // TODO: Update current user
+                // Update current user
+                queryClient.invalidateQueries(['me']);
             },
         },
     );
@@ -68,7 +69,8 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                     user,
                 );
 
-                // TODO: Update current user
+                // Update current user
+                queryClient.invalidateQueries(['me']);
 
                 setIsUnfriendUserPopupShown(false);
             },

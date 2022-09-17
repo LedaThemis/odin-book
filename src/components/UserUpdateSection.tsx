@@ -1,44 +1,32 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import styled from 'styled-components';
 
-import { useSetUser, useUser } from '../context/UserProvider';
+import { useUser } from '../context/UserProvider';
 import getOverrideField from '../lib/getOverrideField';
 import hasCustomField from '../lib/hasCustomField';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IUser } from '../lib/interfaces/User';
 import updateUser from '../lib/updateUser';
-import Errors from './Errors';
 import SectionBase from './SectionBase';
 
 const UserUpdateSection = () => {
     const user = useUser() as IUser;
-    const setUser = useSetUser();
 
-    const [statusText, setStatusText] = useState('');
-    const [errors, setErrors] = useState<ErrorType[]>([]);
+    const queryClient = useQueryClient();
+    const userMutation = useMutation(() => updateUser({ photoURL }), {
+        onSuccess: (user) => {
+            queryClient.setQueryData<IUser>(['me'], user);
+            toast.success('Successfully updated avatar!');
+        },
+    });
+
     const [photoURL, setPhotoURL] = useState(
         hasCustomField(user, 'photoURL') ? user.custom.photoURL : '',
     );
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
-    const handleSubmit = async () => {
-        setIsSubmitDisabled(true);
-        const res = await updateUser({ photoURL });
-        setIsSubmitDisabled(false);
-
-        switch (res.state) {
-            case 'success':
-                setErrors([]);
-                setStatusText('Successfully updated avatar!');
-                setUser({
-                    user: res.user,
-                });
-                break;
-            case 'failed':
-                setStatusText('');
-                setErrors(res.errors);
-                break;
-        }
+    const handleSubmit = () => {
+        userMutation.mutate();
     };
 
     return (
@@ -63,7 +51,7 @@ const UserUpdateSection = () => {
                 }}
                 onClick={handleSubmit}
                 disabled={
-                    isSubmitDisabled ||
+                    userMutation.isLoading ||
                     getOverrideField(user, 'photoURL') === photoURL
                 }
             >
@@ -72,8 +60,6 @@ const UserUpdateSection = () => {
             <StyledInfo>
                 Set to an empty string to use your Google account avatar.
             </StyledInfo>
-            {statusText && <StyledStatusText>{statusText}</StyledStatusText>}
-            <Errors errors={errors} />
         </SectionBase>
     );
 };
@@ -119,12 +105,6 @@ const StyledSubmitButton = styled.button`
 
 const StyledInfo = styled.p`
     margin: 0;
-`;
-
-const StyledStatusText = styled.p`
-    margin: 2px 0;
-    color: green;
-    text-align: center;
 `;
 
 export default UserUpdateSection;
