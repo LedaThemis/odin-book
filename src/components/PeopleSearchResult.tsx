@@ -24,10 +24,9 @@ const PeopleSearchResultUserBar = ({ user }: IPeopleSearchResultUserBar) => {
 
 interface IPeopleSearchResult {
     users: IUser[];
-    errors: ErrorType[];
 }
 
-const PeopleSearchResult = ({ users, errors }: IPeopleSearchResult) => {
+const PeopleSearchResult = ({ users }: IPeopleSearchResult) => {
     return (
         <StyledContainer>
             <StyledSectionTitle>People</StyledSectionTitle>
@@ -41,7 +40,6 @@ const PeopleSearchResult = ({ users, errors }: IPeopleSearchResult) => {
             ) : (
                 <StyledInfo>No people found</StyledInfo>
             )}
-            <Errors errors={errors} />
         </StyledContainer>
     );
 };

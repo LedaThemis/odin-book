@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ErrorType } from '../lib/interfaces/Error';
 import { IUser } from '../lib/interfaces/User';
-import Errors from './Errors';
 import SearchIcon from './icons/SearchIcon';
 
 function isLastItemOfList<T>(arr: T[], index: number) {
@@ -52,14 +50,12 @@ const SearchActionMenuBar = ({ text, query }: ISearchActionMenuBar) => {
 interface ISearchResultsDisplay {
     query: string;
     users: IUser[];
-    errors: ErrorType[];
     hide: () => void;
 }
 
 const SearchResultsDisplay = ({
     query,
     users,
-    errors,
     hide,
 }: ISearchResultsDisplay) => {
     return (
@@ -82,7 +78,6 @@ const SearchResultsDisplay = ({
                     text={`Search for ${query}`}
                 />
             </StyledSpecialLink>
-            <Errors errors={errors} />
         </StyledSearchResultsDisplay>
     );
 };
