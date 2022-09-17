@@ -1,19 +1,16 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import {
-    ManagePostContext,
-    useManagePost,
-} from '../context/ManagePostProvider';
+import { ManagePostContext } from '../context/ManagePostProvider';
 import { useSocket } from '../context/SocketProvider';
 import { useUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
 import getUserURL from '../lib/getUserURL';
 import { IComment } from '../lib/interfaces/Comment';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import { IUser } from '../lib/interfaces/User';
 import isPostLiked from '../lib/isPostLiked';
@@ -23,7 +20,6 @@ import CommentActionMenu from './CommentActionMenu';
 import CommentCreatePrompt from './CommentCreatePrompt';
 import CommentDeletePopup from './CommentDeletePopup';
 import CommentUpdatePrompt from './CommentUpdatePrompt';
-import Errors from './Errors';
 import PostActionMenu from './PostActionMenu';
 import PostDeletePopup from './PostDeletePopup';
 import PostUpdatePopup from './PostUpdatePopup';
@@ -226,23 +222,30 @@ interface IPostRender {
 
 const PostRender = ({ post }: IPostRender) => {
     const user = useUser() as IUser;
+
+    const queryClient = useQueryClient();
+    const likeMutation = useMutation(() => likePost({ postId: post._id }), {
+        onSuccess: (post) => {
+            queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
+                old.map((p) => (p._id === post._id ? post : p)),
+            );
+        },
+    });
+    const unlikeMutation = useMutation(() => unlikePost({ postId: post._id }), {
+        onSuccess: (post) => {
+            queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
+                old.map((p) => (p._id === post._id ? post : p)),
+            );
+        },
+    });
+
     const [clickedCommentButton, setClickedCommentButton] = useState(false);
-    const [errors, setErrors] = useState<ErrorType[]>([]);
-    const { updatePostInState } = useManagePost();
 
-    const handleLikeButton = async () => {
-        const fn = isPostLiked(post, user) ? unlikePost : likePost;
-
-        const res = await fn({ postId: post._id });
-
-        switch (res.state) {
-            case 'success':
-                setErrors([]);
-                updatePostInState(res.post);
-                break;
-            case 'failed':
-                setErrors(res.errors);
-                break;
+    const handleLikeButton = () => {
+        if (isPostLiked(post, user)) {
+            unlikeMutation.mutate();
+        } else {
+            likeMutation.mutate();
         }
     };
 
@@ -265,7 +268,6 @@ const PostRender = ({ post }: IPostRender) => {
                     />
                 </StyledActionButtonsContainer>
                 {clickedCommentButton && <StyledLineContainer />}
-                <Errors errors={errors} />
                 {clickedCommentButton && (
                     <StyledCommentCreatePrompt post={post} />
                 )}
