@@ -5,7 +5,6 @@ import { IPost } from '../lib/interfaces/Post';
 import PostManagePopupBase from './PostManagePopupBase';
 
 interface IPostCreatePopup {
-    addPostToState: (post: IPost) => void;
     setIsPopupShown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

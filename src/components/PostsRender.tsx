@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useSocket } from '../context/SocketProvider';
 import { useUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
@@ -280,37 +279,9 @@ const PostRender = ({ post }: IPostRender) => {
 
 interface IPostsRender {
     posts: IPost[];
-    setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
 }
 
-const PostsRender = ({ posts, setPosts }: IPostsRender) => {
-    const socket = useSocket();
-
-    const updatePostInState = (post: IPost) => {
-        setPosts((prevPosts) =>
-            prevPosts.map((p) => (p._id === post._id ? post : p)),
-        );
-    };
-
-    const deletePostFromState = (postId: string) => {
-        setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
-    };
-
-    useEffect(() => {
-        socket.on('timeline_update', (post: IPost) => {
-            updatePostInState(post);
-        });
-
-        socket.on('timeline_delete', (postId: string) => {
-            deletePostFromState(postId);
-        });
-
-        return () => {
-            socket.off('timeline_update');
-            socket.off('timeline_delete');
-        };
-    }, []);
-
+const PostsRender = ({ posts }: IPostsRender) => {
     return (
         <StyledPostsContainer>
             {posts.map((post) => (

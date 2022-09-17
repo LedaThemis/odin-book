@@ -10,7 +10,6 @@ import friendUser from '../lib/friendUser';
 import getUserPosts from '../lib/getUserPosts';
 import hasSentFriendRequest from '../lib/hasSentFriendRequest';
 import { ErrorType } from '../lib/interfaces/Error';
-import { IPost } from '../lib/interfaces/Post';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
 import FetchingOverlay from './HOCs/FetchingOverlay';
@@ -81,9 +80,6 @@ const ProfileView = ({ profileUser }: IProfileView) => {
         useState(false);
 
     // TODO: DELETE (HERE FOR COMPATIBILITY)
-    const [userPosts, setUserPosts] = useState<IPost[]>([]);
-
-    // TODO: DELETE (HERE FOR COMPATIBILITY)
     const errors: ErrorType[] = [];
 
     const ActionButton = () =>
@@ -146,12 +142,7 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                             isFetching={isLoading}
                             text="Loading user posts..."
                         >
-                            {data.length > 0 && (
-                                <PostsRender
-                                    posts={data}
-                                    setPosts={setUserPosts}
-                                />
-                            )}
+                            {data.length > 0 && <PostsRender posts={data} />}
                         </FetchingOverlay>
                     )}
                 </StyledUserPostsContainer>

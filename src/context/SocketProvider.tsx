@@ -1,3 +1,4 @@
+import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
@@ -16,12 +17,23 @@ interface ISocketProvider {
 
 const SocketProvider = ({ children }: ISocketProvider) => {
     const user = useUser();
+    const queryClient = useQueryClient();
 
     useEffect(() => {
         if (user && !socket.connected) {
             socket.connect();
         }
     }, [user]);
+
+    useEffect(() => {
+        socket.on('invalidate', (filters: InvalidateQueryFilters) => {
+            queryClient.invalidateQueries(filters);
+        });
+
+        return () => {
+            socket.off('invalidate');
+        };
+    }, []);
 
     return (
         <SocketContext.Provider value={socket}>

@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
 import PostsRender from '../components/PostsRender';
-import useTimeline from '../hooks/useTimeline';
 import getTimeline from '../lib/getTimeline';
-import { IPost } from '../lib/interfaces/Post';
 
 const HomePage = () => {
     const {
@@ -19,40 +16,18 @@ const HomePage = () => {
         refetchOnWindowFocus: false,
     });
 
-    const [posts, setPosts] = useState<IPost[]>([]);
-
-    const { posts: timelinePosts } = useTimeline();
-
-    const addPostToState = (post: IPost) => {
-        setPosts((prevPosts) => [post].concat(prevPosts));
-    };
-
-    const postsList = useMemo(() => {
-        const lst = data.concat(timelinePosts);
-        return lst.sort(
-            (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime(),
-        );
-    }, [data, timelinePosts]);
-
     return (
         <StyledWrapper>
             <Navbar />
             <StyledHomeContainer>
                 <StyledLeftHomeContainer></StyledLeftHomeContainer>
                 <StyledMiddleHomeContainer>
-                    <PostCreatePrompt addPostToState={addPostToState} />
+                    <PostCreatePrompt />
                     <FetchingOverlay
                         isFetching={isLoading}
                         text="Loading Timeline..."
                     >
-                        {isSuccess && (
-                            <PostsRender
-                                posts={postsList}
-                                setPosts={setPosts}
-                            />
-                        )}
+                        {isSuccess && <PostsRender posts={data} />}
                     </FetchingOverlay>
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>

@@ -4,15 +4,10 @@ import styled from 'styled-components';
 
 import { useUser } from '../context/UserProvider';
 import getCurrentUserURL from '../lib/getCurrentUserURL';
-import { IPost } from '../lib/interfaces/Post';
 import PostCreatePopup from './PostCreatePopup';
 import UserIcon from './icons/UserIcon';
 
-interface IPostCreatePrompt {
-    addPostToState: (post: IPost) => void;
-}
-
-const PostCreatePrompt = ({ addPostToState }: IPostCreatePrompt) => {
+const PostCreatePrompt = () => {
     const user = useUser();
     const [isPopupShown, setIsPopupShown] = useState(false);
 
@@ -29,10 +24,7 @@ const PostCreatePrompt = ({ addPostToState }: IPostCreatePrompt) => {
                 <p>{promptText}</p>
             </StyledButton>
             {isPopupShown && (
-                <PostCreatePopup
-                    addPostToState={addPostToState}
-                    setIsPopupShown={setIsPopupShown}
-                />
+                <PostCreatePopup setIsPopupShown={setIsPopupShown} />
             )}
         </StyledContainer>
     );
