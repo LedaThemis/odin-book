@@ -4,7 +4,6 @@ import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { ManagePostContext } from '../context/ManagePostProvider';
 import { useSocket } from '../context/SocketProvider';
 import { useUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
@@ -315,17 +314,7 @@ const PostsRender = ({ posts, setPosts }: IPostsRender) => {
     return (
         <StyledPostsContainer>
             {posts.map((post) => (
-                <ManagePostContext.Provider
-                    key={`post-${post._id}-${post.content}`}
-                    value={{
-                        updatePostInState,
-                        deletePostFromState: () => {
-                            deletePostFromState(post._id);
-                        },
-                    }}
-                >
-                    <PostRender post={post} />
-                </ManagePostContext.Provider>
+                <PostRender key={post._id} post={post} />
             ))}
         </StyledPostsContainer>
     );
