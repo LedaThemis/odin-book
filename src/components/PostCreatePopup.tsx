@@ -16,10 +16,10 @@ const PostCreatePopup = ({ setIsPopupShown }: IPostCreatePopup) => {
         ({ content, photos }: { content: string; photos: string[] }) =>
             createPost({ content, photos }),
         {
-            onSuccess: (data) => {
+            onSuccess: (post) => {
                 // Push new post to timeline posts state
                 queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                    [data].concat(old),
+                    [post].concat(old),
                 );
                 // Hide popup
                 setIsPopupShown(false);
