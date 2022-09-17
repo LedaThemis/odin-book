@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,54 +6,23 @@ import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import ProfileView from '../components/ProfileView';
 import getUser from '../lib/getUser';
-import handleError from '../lib/handleError';
-import { ErrorType } from '../lib/interfaces/Error';
-import { IPopulatedUser } from '../lib/interfaces/User';
 
 const UserPage = () => {
     const params = useParams();
-    const [isFetching, setIsFetching] = useState(false);
-    const [profileUser, setProfileUser] = useState<IPopulatedUser>();
-    const [errors, setErrors] = useState<ErrorType[]>([]);
-
-    useEffect(() => {
-        (async () => {
-            if (!params.userId) {
-                setErrors(handleError('User ID is not recognized.').errors);
-                return;
-            }
-            setIsFetching(true);
-            const res = await getUser({ userId: params.userId });
-            setIsFetching(false);
-
-            switch (res.state) {
-                case 'success':
-                    setErrors([]);
-                    setProfileUser(res.user);
-                    break;
-
-                case 'failed':
-                    setProfileUser(undefined);
-                    setErrors(res.errors);
-                    break;
-            }
-        })();
-    }, [params.userId]);
+    const userQuery = useQuery(['users', params.userId], () =>
+        getUser({ userId: params.userId as string }),
+    );
 
     return (
         <StyledWrapper>
             <Navbar />
             <StyledContainer>
                 <FetchingOverlay
-                    isFetching={isFetching}
+                    isFetching={userQuery.isLoading}
                     text="Loading Profile..."
-                    errors={errors}
                 >
-                    {profileUser && (
-                        <ProfileView
-                            profileUser={profileUser}
-                            setProfileUser={setProfileUser}
-                        />
+                    {userQuery.isSuccess && (
+                        <ProfileView profileUser={userQuery.data} />
                     )}
                 </FetchingOverlay>
             </StyledContainer>

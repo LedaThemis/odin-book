@@ -1,29 +1,24 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
+import { InData } from './interfaces/Response';
 import { IPopulatedUser } from './interfaces/User';
 
 interface IFriendUser {
     userId: string;
 }
 
-interface IUnFriendUserSuccessResponse {
+interface IUnFriendUserResponse {
     state: 'success';
     user: IPopulatedUser;
 }
 
-type IUnFriendUserResponse = IUnFriendUserSuccessResponse | ErrorResponse;
-
 const unfriendUser = async ({
     userId,
-}: IFriendUser): Promise<IUnFriendUserResponse> => {
-    try {
-        const { data } = await axios.delete(`users/${userId}/friend`);
+}: IFriendUser): Promise<IPopulatedUser> => {
+    const { data }: InData<IUnFriendUserResponse> = await axios.delete(
+        `users/${userId}/friend`,
+    );
 
-        return data;
-    } catch (err) {
-        return handleError(err);
-    }
+    return data.user;
 };
 
 export default unfriendUser;

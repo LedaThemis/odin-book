@@ -1,29 +1,22 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
+import { InData } from './interfaces/Response';
 import { IPopulatedUser } from './interfaces/User';
 
 interface IFriendUser {
     userId: string;
 }
 
-interface IFriendUserSuccessResponse {
+interface IFriendUserResponse {
     state: 'success';
     user: IPopulatedUser;
 }
 
-type IFriendUserResponse = IFriendUserSuccessResponse | ErrorResponse;
+const friendUser = async ({ userId }: IFriendUser): Promise<IPopulatedUser> => {
+    const { data }: InData<IFriendUserResponse> = await axios.post(
+        `users/${userId}/friend`,
+    );
 
-const friendUser = async ({
-    userId,
-}: IFriendUser): Promise<IFriendUserResponse> => {
-    try {
-        const { data } = await axios.post(`users/${userId}/friend`);
-
-        return data;
-    } catch (err) {
-        return handleError(err);
-    }
+    return data.user;
 };
 
 export default friendUser;

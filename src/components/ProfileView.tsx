@@ -1,19 +1,18 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { useSetUser, useUser } from '../context/UserProvider';
+import { useUser } from '../context/UserProvider';
 import areFriends from '../lib/areFriends';
 import areSameUser from '../lib/areSameUser';
 import canSeePosts from '../lib/canSeePosts';
 import friendUser from '../lib/friendUser';
-import getCurrentUser from '../lib/getCurrentUser';
 import getUserPosts from '../lib/getUserPosts';
 import hasSentFriendRequest from '../lib/hasSentFriendRequest';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
-import Errors from './Errors';
 import FetchingOverlay from './HOCs/FetchingOverlay';
 import PopupBase from './PopupBase';
 import PostsRender from './PostsRender';
@@ -27,48 +26,63 @@ import UserIcon from './icons/UserIcon';
 
 interface IProfileView {
     profileUser: IPopulatedUser;
-    setProfileUser: React.Dispatch<
-        React.SetStateAction<IPopulatedUser | undefined>
-    >;
 }
 
-const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
+const ProfileView = ({ profileUser }: IProfileView) => {
     const currentUser = useUser() as IUser;
-    const setCurrentUser = useSetUser();
 
-    const [isFetchingUserPosts, setIsFetchingUserPosts] = useState(false);
+    const isFriend = useMemo(
+        () => canSeePosts(profileUser, currentUser),
+        [profileUser, currentUser],
+    );
+
+    const queryClient = useQueryClient();
+
+    const { isLoading, data = [] } = useQuery(
+        ['users', profileUser._id, 'posts'],
+        () => getUserPosts({ userId: profileUser._id }),
+        {
+            enabled: isFriend,
+        },
+    );
+
+    const friendUserMutation = useMutation(
+        () => friendUser({ userId: profileUser._id }),
+        {
+            onSuccess: (user) => {
+                queryClient.setQueryData<IPopulatedUser>(
+                    ['users', profileUser._id],
+                    user,
+                );
+
+                // TODO: Update current user
+            },
+        },
+    );
+    const unfriendUserMutation = useMutation(
+        () => unfriendUser({ userId: profileUser._id }),
+        {
+            onSuccess: (user) => {
+                queryClient.setQueryData<IPopulatedUser>(
+                    ['users', profileUser._id],
+                    user,
+                );
+
+                // TODO: Update current user
+
+                setIsUnfriendUserPopupShown(false);
+            },
+        },
+    );
+
     const [isUnfriendUserPopupShown, setIsUnfriendUserPopupShown] =
         useState(false);
+
+    // TODO: DELETE (HERE FOR COMPATIBILITY)
     const [userPosts, setUserPosts] = useState<IPost[]>([]);
-    const [errors, setErrors] = useState<ErrorType[]>([]);
 
-    const handleFriend = async (op: 'Add' | 'Remove') => {
-        const fn = op === 'Add' ? friendUser : unfriendUser;
-
-        const res = await fn({ userId: profileUser._id });
-        const userRes = await getCurrentUser();
-
-        switch (res.state) {
-            case 'success':
-                setProfileUser(res.user);
-                setCurrentUser({
-                    user: userRes.user,
-                });
-                setIsUnfriendUserPopupShown(false);
-                break;
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
-    };
-
-    const handleAddFriend = async () => {
-        await handleFriend('Add');
-    };
-
-    const handleRemoveFriend = async () => {
-        await handleFriend('Remove');
-    };
+    // TODO: DELETE (HERE FOR COMPATIBILITY)
+    const errors: ErrorType[] = [];
 
     const ActionButton = () =>
         useMemo(() => {
@@ -84,40 +98,21 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                 );
             } else if (hasSentFriendRequest(profileUser, currentUser)) {
                 return (
-                    <CancelFriendRequestButton onClick={handleRemoveFriend} />
+                    <CancelFriendRequestButton
+                        onClick={unfriendUserMutation.mutate}
+                    />
                 );
             } else if (hasSentFriendRequest(currentUser, profileUser)) {
                 return (
                     <AcceptOrRejectFriendRequestButton
-                        handleAccept={handleAddFriend}
-                        handleReject={handleRemoveFriend}
+                        handleAccept={friendUserMutation.mutate}
+                        handleReject={unfriendUserMutation.mutate}
                     />
                 );
             } else {
-                return <AddFriendButton onClick={handleAddFriend} />;
+                return <AddFriendButton onClick={friendUserMutation.mutate} />;
             }
         }, [profileUser, currentUser]);
-
-    useEffect(() => {
-        if (!canSeePosts(profileUser, currentUser)) return;
-
-        (async () => {
-            setIsFetchingUserPosts(true);
-            const res = await getUserPosts({ userId: profileUser._id });
-            setIsFetchingUserPosts(false);
-
-            switch (res.state) {
-                case 'success':
-                    setUserPosts(res.posts);
-                    setErrors([]);
-                    break;
-                case 'failed':
-                    setUserPosts([]);
-                    setErrors(res.errors);
-                    break;
-            }
-        })();
-    }, [profileUser, currentUser]);
 
     return (
         <StyledWrapper>
@@ -141,22 +136,22 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                 </StyledFriendsSectionWrapper>
                 <StyledUserPostsContainer>
                     <ProfilePostsSection
-                        hasPosts={userPosts.length > 0}
-                        canSeePosts={canSeePosts(profileUser, currentUser)}
+                        hasPosts={data.length > 0}
+                        canSeePosts={isFriend}
                     />
-                    <Errors errors={errors} />
-                    <FetchingOverlay
-                        isFetching={isFetchingUserPosts}
-                        text="Loading user posts..."
-                    >
-                        {canSeePosts(profileUser, currentUser) &&
-                            userPosts.length > 0 && (
+                    {isFriend && (
+                        <FetchingOverlay
+                            isFetching={isLoading}
+                            text="Loading user posts..."
+                        >
+                            {data.length > 0 && (
                                 <PostsRender
-                                    posts={userPosts}
+                                    posts={data}
                                     setPosts={setUserPosts}
                                 />
                             )}
-                    </FetchingOverlay>
+                        </FetchingOverlay>
+                    )}
                 </StyledUserPostsContainer>
             </StyledFlexRowContainer>
             {isUnfriendUserPopupShown && (
@@ -165,7 +160,7 @@ const ProfileView = ({ profileUser, setProfileUser }: IProfileView) => {
                     content={`Are you sure you want to unfriend ${profileUser.displayName}?`}
                     submitButtonText="Confirm"
                     cancelButtonText="Cancel"
-                    submitButtonFunction={handleRemoveFriend}
+                    submitButtonFunction={unfriendUserMutation.mutate}
                     cancelButtonFunction={() => {
                         setIsUnfriendUserPopupShown(false);
                     }}

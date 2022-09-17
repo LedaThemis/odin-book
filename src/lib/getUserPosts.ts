@@ -1,29 +1,22 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
 import { IPost } from './interfaces/Post';
+import { InData } from './interfaces/Response';
 
 interface IGetUserPosts {
     userId: string;
 }
 
-interface IGetUserPostsSuccessResponse {
+interface IGetUserPostsResponse {
     state: 'success';
     posts: IPost[];
 }
 
-type IGetUserPostsResponse = IGetUserPostsSuccessResponse | ErrorResponse;
+const getUserPosts = async ({ userId }: IGetUserPosts): Promise<IPost[]> => {
+    const { data }: InData<IGetUserPostsResponse> = await axios.get(
+        `users/${userId}/posts`,
+    );
 
-const getUserPosts = async ({
-    userId,
-}: IGetUserPosts): Promise<IGetUserPostsResponse> => {
-    try {
-        const { data } = await axios.get(`users/${userId}/posts`);
-
-        return data;
-    } catch (err) {
-        return handleError(err);
-    }
+    return data.posts;
 };
 
 export default getUserPosts;
