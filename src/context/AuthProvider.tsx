@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { createContext, useContext, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createContext, useContext } from 'react';
 import { MoonLoader } from 'react-spinners';
 import styled from 'styled-components';
 
@@ -8,27 +8,23 @@ import { IUser } from '../lib/interfaces/User';
 import logoutUser from '../lib/logout';
 
 type DataType = {
-    user?: IUser;
+    user: IUser | null;
 };
 
 interface IAuthContext {
     data: DataType;
     login?: () => boolean;
-    setData: React.Dispatch<React.SetStateAction<DataType>>;
     logout?: () => Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContext>({
-    data: {},
-    setData: () => {
-        return;
+    data: {
+        user: null,
     },
 });
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-    // TODO: DELETE (HERE FOR COMPATIBILITY)
-    const [data, setData] = useState<DataType>({});
-
+    const queryClient = useQueryClient();
     const currentUserQuery = useQuery(['me'], getCurrentUser);
 
     const login = () => {
@@ -37,13 +33,19 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const logout = async () => {
         await logoutUser();
-        setData({});
+        queryClient.invalidateQueries(['me']);
     };
 
     if (currentUserQuery.isLoading) {
         return (
             <StyledLoaderContainer>
                 <MoonLoader />
+            </StyledLoaderContainer>
+        );
+    } else if (currentUserQuery.isError) {
+        return (
+            <StyledLoaderContainer>
+                <h1>Fetching current user from server resulted in an error.</h1>
             </StyledLoaderContainer>
         );
     }
@@ -54,7 +56,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
                 data: {
                     user: currentUserQuery.data,
                 },
-                setData,
                 login,
                 logout,
             }}

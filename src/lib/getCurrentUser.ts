@@ -6,8 +6,12 @@ interface IGetCurrentUserResponse {
     user?: IUser;
 }
 
-const getCurrentUser = async (): Promise<IUser | undefined> => {
+const getCurrentUser = async (): Promise<IUser | null> => {
     const { data }: InData<IGetCurrentUserResponse> = await axios.get('me');
+
+    if (!data.user) {
+        return null;
+    }
 
     return data.user;
 };
