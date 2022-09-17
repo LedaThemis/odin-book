@@ -1,26 +1,17 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
+import { InData } from './interfaces/Response';
 import { IUser } from './interfaces/User';
 
-interface IGetUserOutgoingFriendRequestsSuccessResponse {
+interface IGetUserOutgoingFriendRequestsResponse {
     state: 'success';
     users: IUser[];
 }
 
-type IGetUserOutgoingFriendRequestsResponse =
-    | IGetUserOutgoingFriendRequestsSuccessResponse
-    | ErrorResponse;
+const getUserOutgoingFriendRequests = async (): Promise<IUser[]> => {
+    const { data }: InData<IGetUserOutgoingFriendRequestsResponse> =
+        await axios.get('outgoing');
 
-const getUserOutgoingFriendRequests =
-    async (): Promise<IGetUserOutgoingFriendRequestsResponse> => {
-        try {
-            const { data } = await axios.get('outgoing');
-
-            return data;
-        } catch (err) {
-            return handleError(err);
-        }
-    };
+    return data.users;
+};
 
 export default getUserOutgoingFriendRequests;
