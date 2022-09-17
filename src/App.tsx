@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import AppProviders from './context';
@@ -19,6 +20,7 @@ function App() {
     return (
         <AppProviders>
             <div className="App">
+                <Toaster />
                 <BrowserRouter>
                     <Routes>
                         <Route path="/">

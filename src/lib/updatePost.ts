@@ -1,7 +1,6 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
 import { IPost } from './interfaces/Post';
+import { InData } from './interfaces/Response';
 
 interface IUpdatePost {
     postId: string;
@@ -9,28 +8,25 @@ interface IUpdatePost {
     photos: string[];
 }
 
-interface IUpdatePostSuccessResponse {
+interface IUpdatePostResponse {
     state: 'success';
     post: IPost;
 }
-
-export type IUpdatePostResponse = IUpdatePostSuccessResponse | ErrorResponse;
 
 const updatePost = async ({
     postId,
     content,
     photos,
-}: IUpdatePost): Promise<IUpdatePostResponse> => {
-    try {
-        const { data } = await axios.post(`posts/${postId}`, {
+}: IUpdatePost): Promise<IPost> => {
+    const { data }: InData<IUpdatePostResponse> = await axios.post(
+        `posts/${postId}`,
+        {
             content,
             photos,
-        });
+        },
+    );
 
-        return data;
-    } catch (e: unknown) {
-        return handleError(e);
-    }
+    return data.post;
 };
 
 export default updatePost;

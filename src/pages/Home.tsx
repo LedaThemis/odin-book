@@ -1,20 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import Errors from '../components/Errors';
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
 import PostsRender from '../components/PostsRender';
 import useTimeline from '../hooks/useTimeline';
 import getTimeline from '../lib/getTimeline';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 
 const HomePage = () => {
-    const [isFetchingPosts, setIsFetchingPosts] = useState(false);
+    const {
+        isSuccess,
+        isLoading,
+        data = [],
+    } = useQuery(['timeline'], getTimeline, {
+        refetchOnWindowFocus: false,
+    });
+
     const [posts, setPosts] = useState<IPost[]>([]);
-    const [errors, setErrors] = useState<ErrorType[]>([]);
 
     const { posts: timelinePosts } = useTimeline();
 
@@ -23,31 +28,13 @@ const HomePage = () => {
     };
 
     const postsList = useMemo(() => {
-        const lst = posts.concat(timelinePosts);
+        const lst = data.concat(timelinePosts);
         return lst.sort(
             (a, b) =>
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime(),
         );
-    }, [posts, timelinePosts]);
-
-    useEffect(() => {
-        (async () => {
-            setIsFetchingPosts(true);
-            const res = await getTimeline();
-            setIsFetchingPosts(false);
-
-            switch (res.state) {
-                case 'success':
-                    setErrors([]);
-                    setPosts(res.posts);
-                    break;
-                case 'failed':
-                    setErrors(res.errors);
-                    break;
-            }
-        })();
-    }, []);
+    }, [data, timelinePosts]);
 
     return (
         <StyledWrapper>
@@ -56,12 +43,16 @@ const HomePage = () => {
                 <StyledLeftHomeContainer></StyledLeftHomeContainer>
                 <StyledMiddleHomeContainer>
                     <PostCreatePrompt addPostToState={addPostToState} />
-                    {errors && <Errors errors={errors} />}
                     <FetchingOverlay
-                        isFetching={isFetchingPosts}
+                        isFetching={isLoading}
                         text="Loading Timeline..."
                     >
-                        <PostsRender posts={postsList} setPosts={setPosts} />
+                        {isSuccess && (
+                            <PostsRender
+                                posts={postsList}
+                                setPosts={setPosts}
+                            />
+                        )}
                     </FetchingOverlay>
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>

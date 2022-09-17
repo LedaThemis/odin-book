@@ -1,56 +1,43 @@
+import { UseMutationResult } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
-import { useManagePost } from '../context/ManagePostProvider';
 import { useUser } from '../context/UserProvider';
-import createPost, { ICreatePostResponse } from '../lib/createPost';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
-import updatePost, { IUpdatePostResponse } from '../lib/updatePost';
-import Errors from './Errors';
 import PostAddMediaBar from './PostAddMediaBar';
 import PostHeader from './PostHeader';
 import PostImageInputBar from './PostImageInputBar';
 
-interface IPostManagePopupBase {
-    title: string;
-    submitButtonText: string;
-    setIsPopupShown: React.Dispatch<React.SetStateAction<boolean>>;
+interface IPostBody {
+    content: string;
+    photos: string[];
 }
-
-interface IPostManagePopupBaseCreate extends IPostManagePopupBase {
-    actionType: 'Create';
-    addPostToState: (post: IPost) => void;
-    originalPost?: undefined;
-}
-
-interface IPostManagePoupBaseUpdate extends IPostManagePopupBase {
-    actionType: 'Update';
-    addPostToState?: undefined;
-    originalPost: IPost;
-}
-
-type IPostManagePopup = IPostManagePopupBaseCreate | IPostManagePoupBaseUpdate;
 
 const isSameAsInitialState = (
-    content: string,
-    photos: string[],
-    initialState: { content: string; photos: string[] },
+    content: IPostBody['content'],
+    photos: IPostBody['photos'],
+    initialState: IPostBody,
 ) => {
     return (
         content === initialState.content &&
         JSON.stringify(photos) === JSON.stringify(initialState.photos)
     );
 };
+interface IPostManagePopup {
+    title: string;
+    submitButtonText: string;
+    originalPost?: IPost;
+    setIsPopupShown: React.Dispatch<React.SetStateAction<boolean>>;
+    mutation: UseMutationResult<IPost, unknown, IPostBody, unknown>;
+}
 
 const PostManagePopupBase = ({
     title,
     submitButtonText,
-    actionType,
     originalPost,
-    addPostToState,
     setIsPopupShown,
+    mutation,
 }: IPostManagePopup) => {
     const initialState = useMemo(() => {
         if (originalPost) {
@@ -67,15 +54,12 @@ const PostManagePopupBase = ({
     }, []);
 
     const user = useUser();
-    const { updatePostInState } = useManagePost();
 
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [content, setContent] = useState(initialState.content);
     const [photos, setPhotos] = useState<string[]>(initialState.photos);
-    const [errors, setErrors] = useState<ErrorType[]>([]);
 
     const handleImageAddClick = () => {
-        setPhotos(photos.concat(['']));
+        setPhotos((prevPhotos) => prevPhotos.concat(['']));
     };
 
     const handleImageInputChange = (
@@ -83,10 +67,7 @@ const PostManagePopupBase = ({
         id: number,
     ) => {
         setPhotos((prevPhotos) =>
-            prevPhotos
-                .slice(0, id)
-                .concat([e.target.value])
-                .concat(prevPhotos.slice(id + 1)),
+            prevPhotos.map((v, i) => (i === id ? e.target.value : v)),
         );
     };
 
@@ -94,41 +75,6 @@ const PostManagePopupBase = ({
         setPhotos((prevPhotos) =>
             prevPhotos.slice(0, id).concat(prevPhotos.slice(id + 1)),
         );
-    };
-
-    const handleSubmit = async () => {
-        setIsSubmitDisabled(true);
-
-        let res: ICreatePostResponse | IUpdatePostResponse;
-        let fn: typeof addPostToState | typeof updatePostInState;
-
-        switch (actionType) {
-            case 'Create':
-                res = await createPost({ content, photos });
-                fn = addPostToState;
-                break;
-            case 'Update':
-                res = await updatePost({
-                    postId: originalPost._id,
-                    content,
-                    photos,
-                });
-                fn = updatePostInState;
-                break;
-        }
-
-        setIsSubmitDisabled(false);
-
-        switch (res.state) {
-            case 'success':
-                setErrors([]);
-                fn(res.post);
-                setIsPopupShown(false);
-                break;
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
     };
 
     return (
@@ -189,16 +135,17 @@ const PostManagePopupBase = ({
                         onMouseLeave={(e) => {
                             e.currentTarget.style.transform = '';
                         }}
-                        onClick={handleSubmit}
+                        onClick={() => {
+                            mutation.mutate({ content, photos });
+                        }}
                         disabled={
-                            content.length < 1 ||
-                            isSubmitDisabled ||
+                            content.trim().length === 0 ||
+                            mutation.isLoading ||
                             isSameAsInitialState(content, photos, initialState)
                         }
                     >
                         {submitButtonText}
                     </StyledSubmitButton>
-                    <Errors errors={errors} />
                 </StyledPostManageBottomContainer>
             </StyledContainer>
         </StyledOverlay>
