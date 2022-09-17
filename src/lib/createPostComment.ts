@@ -1,35 +1,29 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
 import { IPost } from './interfaces/Post';
+import { InData } from './interfaces/Response';
 
 interface ICreatePostComment {
     postId: string;
     content: string;
 }
 
-interface ICreatePostCommentSuccessResponse {
+interface ICreatePostCommentResponse {
     state: 'success';
     post: IPost;
 }
 
-type ICreatePostCommentResponse =
-    | ICreatePostCommentSuccessResponse
-    | ErrorResponse;
-
 const createPostComment = async ({
     postId,
     content,
-}: ICreatePostComment): Promise<ICreatePostCommentResponse> => {
-    try {
-        const { data } = await axios.post(`posts/${postId}/comments`, {
+}: ICreatePostComment): Promise<IPost> => {
+    const { data }: InData<ICreatePostCommentResponse> = await axios.post(
+        `posts/${postId}/comments`,
+        {
             content,
-        });
+        },
+    );
 
-        return data;
-    } catch (e: unknown) {
-        return handleError(e);
-    }
+    return data.post;
 };
 
 export default createPostComment;

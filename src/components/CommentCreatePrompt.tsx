@@ -1,11 +1,9 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { useManagePost } from '../context/ManagePostProvider';
 import createPostComment from '../lib/createPostComment';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
-import Errors from './Errors';
 import UserIcon from './icons/UserIcon';
 
 interface ICommentCreatePrompt {
@@ -14,28 +12,27 @@ interface ICommentCreatePrompt {
 }
 
 const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
-    const { updatePostInState } = useManagePost();
+    const queryClient = useQueryClient();
+    const mutation = useMutation(
+        () => createPostComment({ postId: post._id, content }),
+        {
+            onSuccess: (post) => {
+                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
+                    old.map((p) => (p._id === post._id ? post : p)),
+                );
+                setContent('');
+            },
+        },
+    );
 
     const [content, setContent] = useState('');
-    const [errors, setErrors] = useState<ErrorType[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (content.length < 1) return;
 
-        const res = await createPostComment({ postId: post._id, content });
-
-        switch (res.state) {
-            case 'success':
-                setContent('');
-                updatePostInState(res.post);
-                setErrors([]);
-                break;
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
+        mutation.mutate();
     };
 
     return (
@@ -51,7 +48,6 @@ const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
                     />
                 </StyledForm>
                 <StyledP>Press Enter to post.</StyledP>
-                <Errors errors={errors} />
             </StyledWrapper>
         </StyledContainer>
     );

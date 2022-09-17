@@ -214,11 +214,7 @@ const PostComments = ({ post, comments }: IPostComments) => {
     return (
         <StyledCommentsContainer>
             {comments.map((comment) => (
-                <PostComment
-                    key={`post-comment-${comment.author.displayName}-${comment.content}`}
-                    post={post}
-                    comment={comment}
-                />
+                <PostComment key={comment._id} post={post} comment={comment} />
             ))}
         </StyledCommentsContainer>
     );

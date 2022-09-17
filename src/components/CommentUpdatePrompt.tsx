@@ -1,12 +1,10 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { useManagePost } from '../context/ManagePostProvider';
 import { IComment } from '../lib/interfaces/Comment';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import updateComment from '../lib/updateComment';
-import Errors from './Errors';
 
 interface ICommentUpdatePrompt {
     post: IPost;
@@ -19,32 +17,33 @@ const CommentUpdatePrompt = ({
     comment,
     cancelEditing,
 }: ICommentUpdatePrompt) => {
-    const { updatePostInState } = useManagePost();
+    const queryClient = useQueryClient();
+    const mutation = useMutation(
+        () => updateComment({ commentId: comment._id, content }),
+        {
+            onSuccess: (comment) => {
+                const postCopy = Object.assign({}, post);
+                postCopy.comments = postCopy.comments.map((c) =>
+                    c._id === comment._id ? comment : c,
+                );
+
+                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
+                    old.map((p) => (p._id === postCopy._id ? postCopy : p)),
+                );
+
+                cancelEditing();
+            },
+        },
+    );
 
     const [content, setContent] = useState(comment.content);
-    const [errors, setErrors] = useState<ErrorType[]>([]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (content.length < 1) return;
 
-        const res = await updateComment({ commentId: comment._id, content });
-
-        switch (res.state) {
-            case 'success':
-                setContent('');
-                post.comments = post.comments.map((c) =>
-                    c._id === comment._id ? res.comment : c,
-                );
-                updatePostInState(post);
-                setErrors([]);
-                cancelEditing();
-                break;
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
+        mutation.mutate();
     };
 
     return (
@@ -59,7 +58,6 @@ const CommentUpdatePrompt = ({
                     />
                 </StyledForm>
                 <StyledP onClick={cancelEditing}>Cancel</StyledP>
-                <Errors errors={errors} />
             </StyledWrapper>
         </StyledContainer>
     );

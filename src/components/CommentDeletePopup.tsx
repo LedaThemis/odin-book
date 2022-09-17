@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useManagePost } from '../context/ManagePostProvider';
 import deleteComment from '../lib/deleteComment';
 import { IComment } from '../lib/interfaces/Comment';
 import { ErrorType } from '../lib/interfaces/Error';
@@ -18,28 +17,21 @@ const CommentDeletePopup = ({
     comment,
     hidePopup,
 }: ICommentDeletePopup) => {
-    const { updatePostInState } = useManagePost();
-
-    const [errors, setErrors] = useState<ErrorType[]>([]);
-
-    const handleDelete = async () => {
-        const res = await deleteComment({
-            postId: post._id,
-            commentId: comment._id,
-        });
-
-        switch (res.state) {
-            case 'success':
-                updatePostInState(res.post);
-                setErrors([]);
+    const queryClient = useQueryClient();
+    const mutation = useMutation(
+        () => deleteComment({ postId: post._id, commentId: comment._id }),
+        {
+            onSuccess: (post) => {
+                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
+                    old.map((p) => (p._id === post._id ? post : p)),
+                );
                 hidePopup();
-                break;
+            },
+        },
+    );
 
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
-    };
+    // TODO: DELETE (HERE FOR COMPATIBILITY)
+    const errors: ErrorType[] = [];
 
     return (
         <PopupBase
@@ -47,7 +39,7 @@ const CommentDeletePopup = ({
             content="Are you sure you want to delete this comment?"
             submitButtonText="Delete"
             cancelButtonText="No"
-            submitButtonFunction={handleDelete}
+            submitButtonFunction={mutation.mutate}
             cancelButtonFunction={hidePopup}
             hidePopup={hidePopup}
             errors={errors}
