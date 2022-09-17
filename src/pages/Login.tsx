@@ -44,7 +44,7 @@ const StyledContainer = styled.div`
 
 const TextContentContainer = styled.div`
     margin-right: 50px;
-    
+
     @media screen and (max-width: 1100px) {
         margin-right: 0;
         text-align: center;

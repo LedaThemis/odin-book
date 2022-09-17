@@ -6,7 +6,7 @@ interface IBaseUser {
     incomingFriendRequests: string[];
     custom: {
         photoURL: string;
-    }
+    };
     createdAt: Date;
     updatedAt: Date;
 }
