@@ -1,23 +1,16 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
+import { InData } from './interfaces/Response';
 import { IUser } from './interfaces/User';
 
-interface IGetGuestUsersSuccessResponse {
+interface IGetGuestUsersResponse {
     state: 'success';
     users: IUser[];
 }
 
-type IGetGuestUsersResponse = IGetGuestUsersSuccessResponse | ErrorResponse;
+const getGuestUsers = async (): Promise<IUser[]> => {
+    const { data }: InData<IGetGuestUsersResponse> = await axios.get('/guests');
 
-const getGuestUsers = async (): Promise<IGetGuestUsersResponse> => {
-    try {
-        const { data } = await axios.get('/guests');
-
-        return data;
-    } catch (err) {
-        return handleError(err);
-    }
+    return data.users;
 };
 
 export default getGuestUsers;

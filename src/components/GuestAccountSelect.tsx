@@ -1,75 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { ImArrowRight } from 'react-icons/im';
 import styled from 'styled-components';
 
 import getGuestUsers from '../lib/getGuestUsers';
-import { ErrorType } from '../lib/interfaces/Error';
-import { IUser } from '../lib/interfaces/User';
 import loginGuest from '../lib/loginGuest';
-import Errors from './Errors';
 import FetchingOverlay from './HOCs/FetchingOverlay';
 
 const GuestAccountSelect = () => {
-    const [isFetching, setIsFetching] = useState(false);
-    const [isLoggingIn, setIsLogginIn] = useState(false);
-    const [errors, setErrors] = useState<ErrorType[]>([]);
-    const [selectedUserId, setSelectedUserId] = useState('');
-    const [guestUsers, setGuestUsers] = useState<IUser[]>([]);
-
-    const handleSubmit = async () => {
-        setIsLogginIn(true);
-        const res = await loginGuest({ userId: selectedUserId });
-        setIsLogginIn(false);
-
-        switch (res.state) {
-            case 'success':
+    const { isLoading, data = [] } = useQuery(
+        ['users', 'guest'],
+        getGuestUsers,
+    );
+    const guestLoginMutation = useMutation(
+        () => loginGuest({ userId: selectedUserId }),
+        {
+            onSuccess: () => {
                 location.href = location.origin;
-                break;
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
+            },
+        },
+    );
+
+    const [selectedUserId, setSelectedUserId] = useState('');
+
+    const handleSubmit = () => {
+        guestLoginMutation.mutate();
     };
-
-    useEffect(() => {
-        (async () => {
-            setIsFetching(true);
-            const res = await getGuestUsers();
-            setIsFetching(false);
-
-            switch (res.state) {
-                case 'success':
-                    setGuestUsers(res.users);
-                    break;
-                case 'failed':
-                    setErrors(res.errors);
-                    break;
-            }
-        })();
-    }, []);
 
     return (
         <StyledContainer>
-            <FetchingOverlay isFetching={isFetching}>
+            <FetchingOverlay isFetching={isLoading}>
                 <StyledSelect
                     name="guest-users"
-                    disabled={guestUsers.length === 0}
+                    disabled={data.length === 0}
                     value={selectedUserId}
                     onChange={(e) => {
                         setSelectedUserId(e.target.value);
                     }}
                 >
                     <option value="" disabled></option>
-                    {guestUsers.map((u) => (
+                    {data.map((u) => (
                         <option key={u._id} value={u._id}>
                             {u.displayName}
                         </option>
                     ))}
                 </StyledSelect>
-                <Errors errors={errors} />
             </FetchingOverlay>
             <StyledContinueButton
-                disabled={selectedUserId === '' || isLoggingIn}
+                disabled={selectedUserId === '' || guestLoginMutation.isLoading}
                 onClick={handleSubmit}
             >
                 <ImArrowRight fill="white" size={'18px'} />
