@@ -1,28 +1,21 @@
 import axios from './axiosInstance';
-import handleError from './handleError';
-import { ErrorResponse } from './interfaces/Error';
+import { InData } from './interfaces/Response';
 
 interface IDeletePost {
     postId: string;
 }
 
-interface IDeletePostSuccessResponse {
+interface IDeletePostResponse {
     state: 'success';
     postId: string;
 }
 
-export type IDeletePostResponse = ErrorResponse | IDeletePostSuccessResponse;
+const deletePost = async ({ postId }: IDeletePost): Promise<string> => {
+    const { data }: InData<IDeletePostResponse> = await axios.delete(
+        `posts/${postId}`,
+    );
 
-const deletePost = async ({
-    postId,
-}: IDeletePost): Promise<IDeletePostResponse> => {
-    try {
-        const { data } = await axios.delete(`posts/${postId}`);
-
-        return data;
-    } catch (e: unknown) {
-        return handleError(e);
-    }
+    return data.postId;
 };
 
 export default deletePost;

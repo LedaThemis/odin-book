@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useManagePost } from '../context/ManagePostProvider';
 import deletePost from '../lib/deletePost';
 import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
@@ -12,25 +11,18 @@ interface IPostDeletePopup {
 }
 
 const PostDeletePopup = ({ post, hidePopup }: IPostDeletePopup) => {
-    const { deletePostFromState } = useManagePost();
+    const queryClient = useQueryClient();
+    const mutation = useMutation(() => deletePost({ postId: post._id }), {
+        onSuccess: (postId) => {
+            queryClient.setQueryData<IPost[]>(['timeline'], (old) =>
+                old?.filter((p) => p._id !== postId),
+            );
+            hidePopup();
+        },
+    });
 
-    const [errors, setErrors] = useState<ErrorType[]>([]);
-
-    const handleDelete = async () => {
-        const res = await deletePost({ postId: post._id });
-
-        switch (res.state) {
-            case 'success':
-                deletePostFromState();
-                setErrors([]);
-                hidePopup();
-                break;
-
-            case 'failed':
-                setErrors(res.errors);
-                break;
-        }
-    };
+    // TODO: DELETE (HERE FOR COMPATIBILITY)
+    const errors: ErrorType[] = [];
 
     return (
         <PopupBase
@@ -38,7 +30,7 @@ const PostDeletePopup = ({ post, hidePopup }: IPostDeletePopup) => {
             content="Items in your trash will be deleted immediately."
             submitButtonText="Move"
             cancelButtonText="Cancel"
-            submitButtonFunction={handleDelete}
+            submitButtonFunction={mutation.mutate}
             cancelButtonFunction={hidePopup}
             hidePopup={hidePopup}
             errors={errors}
