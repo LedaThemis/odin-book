@@ -11,28 +11,18 @@ interface IUserIcon {
     onClick?: () => void;
 }
 
-const UserIcon = ({ user, size, className, onClick }: IUserIcon) => {
-    let selectedUser: IUser | IPopulatedUser;
-    let selectedSize: string;
-
-    if (user) {
-        selectedUser = user;
-    } else {
-        selectedUser = useCurrentUser() as IUser;
-    }
-
-    if (size) {
-        selectedSize = size;
-    } else {
-        selectedSize = '40px';
-    }
-
+const UserIcon = ({
+    user = useCurrentUser() as IUser,
+    size = '40px',
+    className,
+    onClick,
+}: IUserIcon) => {
     return (
         <StyledImg
-            size={selectedSize}
+            size={size}
             className={className}
             onClick={onClick}
-            src={getOverrideField(selectedUser, 'photoURL')}
+            src={getOverrideField(user, 'photoURL')}
             referrerPolicy="no-referrer"
         />
     );
