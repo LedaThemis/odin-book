@@ -7,6 +7,7 @@ import UserMenu from './UserMenu';
 import FacebookIcon from './icons/FacebookIcon';
 import FriendsIcon from './icons/FriendsIcon';
 import HomeIcon from './icons/HomeIcon';
+import MessagesIcon from './icons/MessagesIcon';
 import UserIcon from './icons/UserIcon';
 
 const getIsSelected = (key: string) =>
@@ -52,7 +53,18 @@ const Navbar = () => {
                         </li>
                     </StyledList>
                 </StyledMiddleListContainer>
-                <StyledHighZIndexList>
+                <StyledRightList>
+                    <li>
+                        <Link to="/messages">
+                            <StyledNavbarRightIcon
+                                isSelected={getIsSelected('/messages')}
+                            >
+                                <MessagesIcon
+                                    filled={getIsSelected('/messages')}
+                                />
+                            </StyledNavbarRightIcon>
+                        </Link>
+                    </li>
                     <li>
                         <UserIcon
                             onClick={() =>
@@ -61,7 +73,7 @@ const Navbar = () => {
                         />
                         {userMenuShown && <StyledUserMenu />}
                     </li>
-                </StyledHighZIndexList>
+                </StyledRightList>
             </StyledMetaList>
         </StyledNavbar>
     );
@@ -112,6 +124,10 @@ const StyledMiddleListContainer = styled.div`
     position: absolute;
 `;
 
+const StyledRightList = styled(StyledHighZIndexList)`
+    align-items: center;
+`;
+
 const StyledNavbarIcon = styled.div<{ isSelected: boolean }>`
     display: flex;
     align-items: center;
@@ -137,6 +153,25 @@ const StyledNavbarIcon = styled.div<{ isSelected: boolean }>`
 
     @media screen and (max-width: 400px) {
         width: 20px;
+    }
+`;
+
+const StyledNavbarRightIcon = styled.div<{ isSelected: boolean }>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: ${(props) =>
+        props.isSelected
+            ? '#e7f3ff'
+            : 'var(--secondary-button-background-color)'};
+
+    padding: 10px;
+
+    border-radius: 50%;
+
+    &:hover {
+        filter: brightness(0.98);
     }
 `;
 

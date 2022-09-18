@@ -6,6 +6,7 @@ import { useCurrentUser } from './context/UserProvider';
 import FriendsPage from './pages/Friends';
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
+import MessagesPage from './pages/Messages';
 import SearchPage from './pages/Search';
 import SettingsPage from './pages/Settings';
 import UserPage from './pages/User';
@@ -45,6 +46,14 @@ function App() {
                                 element={
                                     <AuthenticatedComponent>
                                         <FriendsPage />
+                                    </AuthenticatedComponent>
+                                }
+                            />
+                            <Route
+                                path="messages"
+                                element={
+                                    <AuthenticatedComponent>
+                                        <MessagesPage />
                                     </AuthenticatedComponent>
                                 }
                             />
