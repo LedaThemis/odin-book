@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
+import useUserPosts from '../hooks/useUserPosts';
 import areFriends from '../lib/areFriends';
 import areSameUser from '../lib/areSameUser';
 import canSeePosts from '../lib/canSeePosts';
 import friendUser from '../lib/friendUser';
-import getUserPosts from '../lib/getUserPosts';
 import hasSentFriendRequest from '../lib/hasSentFriendRequest';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
@@ -27,7 +27,7 @@ interface IProfileView {
 }
 
 const ProfileView = ({ profileUser }: IProfileView) => {
-    const currentUser = useUser() as IUser;
+    const currentUser = useCurrentUser() as IUser;
 
     const isFriend = useMemo(
         () => canSeePosts(profileUser, currentUser),
@@ -36,13 +36,7 @@ const ProfileView = ({ profileUser }: IProfileView) => {
 
     const queryClient = useQueryClient();
 
-    const { isLoading, data = [] } = useQuery(
-        ['users', profileUser._id, 'posts'],
-        () => getUserPosts({ userId: profileUser._id }),
-        {
-            enabled: isFriend,
-        },
-    );
+    const { isLoading, data = [] } = useUserPosts(profileUser._id, isFriend);
 
     const friendUserMutation = useMutation(
         () => friendUser({ userId: profileUser._id }),

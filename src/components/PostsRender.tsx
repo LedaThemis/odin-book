@@ -4,7 +4,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 import areSameUser from '../lib/areSameUser';
 import getFormattedTime from '../lib/getFormattedTime';
 import getUserURL from '../lib/getUserURL';
@@ -30,7 +30,7 @@ type IPostHeader = {
 };
 
 const PostHeader = ({ post }: IPostHeader) => {
-    const user = useUser() as IUser;
+    const user = useCurrentUser() as IUser;
     const [isActionMenuShown, setIsActionMenuShown] = useState(false);
     const [isPostUpdatePopupShown, setIsPostUpdatePopupShown] = useState(false);
     const [isPostDeletePopupShown, setIsPostDeletePopupShown] = useState(false);
@@ -111,7 +111,7 @@ interface IPostComment {
 }
 
 const PostComment = ({ post, comment }: IPostComment) => {
-    const user = useUser() as IUser;
+    const user = useCurrentUser() as IUser;
     const [isActionMenuShown, setIsActionMenuShown] = useState(false);
     const [isUpdatingComment, setIsUpdatingComment] = useState(false);
     const [isCommentDeletePopupShown, setIsCommentDeletePopupShown] =
@@ -219,7 +219,7 @@ interface IPostRender {
 }
 
 const PostRender = ({ post }: IPostRender) => {
-    const user = useUser() as IUser;
+    const user = useCurrentUser() as IUser;
 
     const queryClient = useQueryClient();
     const likeMutation = useMutation(() => likePost({ postId: post._id }), {

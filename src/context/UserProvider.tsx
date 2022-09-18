@@ -10,6 +10,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => (
         {children}
     </UserContext.Provider>
 );
-const useUser = () => useContext(UserContext);
+const useCurrentUser = () => useContext(UserContext);
 
-export { UserProvider, useUser };
+export { UserProvider, useCurrentUser };

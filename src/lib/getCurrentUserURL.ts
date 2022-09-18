@@ -1,9 +1,9 @@
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 import getUserURL from './getUserURL';
 import { IUser } from './interfaces/User';
 
 const getCurrentUserURL = () => {
-    const user = useUser() as IUser;
+    const user = useCurrentUser() as IUser;
 
     return getUserURL(user);
 };

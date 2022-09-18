@@ -1,17 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import ProfileView from '../components/ProfileView';
-import getUser from '../lib/getUser';
+import useUser from '../hooks/useUser';
 
 const UserPage = () => {
     const params = useParams();
-    const userQuery = useQuery(['users', params.userId], () =>
-        getUser({ userId: params.userId as string }),
-    );
+    const userQuery = useUser(`${params.userId}`);
 
     return (
         <StyledWrapper>

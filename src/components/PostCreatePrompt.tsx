@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 import getCurrentUserURL from '../lib/getCurrentUserURL';
 import PostCreatePopup from './PostCreatePopup';
 import UserIcon from './icons/UserIcon';
 
 const PostCreatePrompt = () => {
-    const user = useUser();
+    const user = useCurrentUser();
     const [isPopupShown, setIsPopupShown] = useState(false);
 
     const promptText = `What's on your mind, ${user?.displayName}?`;

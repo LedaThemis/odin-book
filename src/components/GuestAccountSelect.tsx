@@ -1,17 +1,14 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ImArrowRight } from 'react-icons/im';
 import styled from 'styled-components';
 
-import getGuestUsers from '../lib/getGuestUsers';
+import useGuestUsers from '../hooks/useGuestUsers';
 import loginGuest from '../lib/loginGuest';
 import FetchingOverlay from './HOCs/FetchingOverlay';
 
 const GuestAccountSelect = () => {
-    const { isLoading, data = [] } = useQuery(
-        ['users', 'guest'],
-        getGuestUsers,
-    );
+    const { isLoading, data = [] } = useGuestUsers();
     const guestLoginMutation = useMutation(
         () => loginGuest({ userId: selectedUserId }),
         {

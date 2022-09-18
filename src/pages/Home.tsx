@@ -1,20 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
 import PostsRender from '../components/PostsRender';
-import getTimeline from '../lib/getTimeline';
+import useTimeline from '../hooks/useTimeline';
 
 const HomePage = () => {
-    const {
-        isSuccess,
-        isLoading,
-        data = [],
-    } = useQuery(['timeline'], getTimeline, {
-        refetchOnWindowFocus: false,
-    });
+    const { isSuccess, isLoading, data = [] } = useTimeline();
 
     return (
         <StyledWrapper>

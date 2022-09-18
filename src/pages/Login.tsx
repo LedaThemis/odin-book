@@ -2,10 +2,10 @@ import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoginForm from '../components/LoginForm';
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 
 const LoginPage = () => {
-    const user = useUser();
+    const user = useCurrentUser();
 
     if (user) {
         return <Navigate to="/" />;

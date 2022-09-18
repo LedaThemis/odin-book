@@ -2,7 +2,7 @@ import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext, useEffect } from 'react';
 import { io } from 'socket.io-client';
 
-import { useUser } from './UserProvider';
+import { useCurrentUser } from './UserProvider';
 
 const socket = io(process.env.REACT_APP_SERVER_ENDPOINT, {
     autoConnect: false,
@@ -16,7 +16,7 @@ interface ISocketProvider {
 }
 
 const SocketProvider = ({ children }: ISocketProvider) => {
-    const user = useUser();
+    const user = useCurrentUser();
     const queryClient = useQueryClient();
 
     useEffect(() => {

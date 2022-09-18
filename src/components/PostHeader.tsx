@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 import getCurrentUserURL from '../lib/getCurrentUserURL';
 import UserIcon from './icons/UserIcon';
 
 const PostHeader = () => {
-    const user = useUser();
+    const user = useCurrentUser();
 
     return (
         <StyledContainer>

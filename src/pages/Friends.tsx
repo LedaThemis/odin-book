@@ -1,31 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import UsersSection from '../components/UsersSection';
-import { useUser } from '../context/UserProvider';
-import getUserOutgoingFriendRequests from '../lib/getOutgoingFriendRequests';
-import getUserFriends from '../lib/getUserFriends';
-import getUserIncomingFriendRequests from '../lib/getUserIncomingFriendRequests';
-import getUserPeople from '../lib/getUserPeople';
+import { useCurrentUser } from '../context/UserProvider';
+import useIncomingFriendRequests from '../hooks/useIncomingFriendRequests';
+import useOutgoingFriendRequests from '../hooks/useOutgoingFriendRequests';
+import usePeopleYouMightKnow from '../hooks/usePeopleYouMightKnow';
+import useUserFriends from '../hooks/useUserFriends';
 import { IUser } from '../lib/interfaces/User';
 
 const FriendsPage = () => {
-    const user = useUser() as IUser;
+    const user = useCurrentUser() as IUser;
 
-    const userFriendsQuery = useQuery(['users', user._id, 'friends'], () =>
-        getUserFriends({ userId: user._id }),
-    );
-    const incomingFriendRequestsQuery = useQuery(
-        ['incoming'],
-        getUserIncomingFriendRequests,
-    );
-    const outgoingFriendRequestsQuery = useQuery(
-        ['outgoing'],
-        getUserOutgoingFriendRequests,
-    );
-    const userPeopleQuery = useQuery(['people'], getUserPeople);
+    const userFriendsQuery = useUserFriends(user._id);
+    const incomingFriendRequestsQuery = useIncomingFriendRequests();
+    const outgoingFriendRequestsQuery = useOutgoingFriendRequests();
+    const userPeopleQuery = usePeopleYouMightKnow();
 
     return (
         <StyledWrapper>

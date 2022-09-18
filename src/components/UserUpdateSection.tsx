@@ -3,7 +3,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 import getOverrideField from '../lib/getOverrideField';
 import hasCustomField from '../lib/hasCustomField';
 import { IUser } from '../lib/interfaces/User';
@@ -11,7 +11,7 @@ import updateUser from '../lib/updateUser';
 import SectionBase from './SectionBase';
 
 const UserUpdateSection = () => {
-    const user = useUser() as IUser;
+    const user = useCurrentUser() as IUser;
 
     const queryClient = useQueryClient();
     const userMutation = useMutation(() => updateUser({ photoURL }), {

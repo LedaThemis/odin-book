@@ -1,9 +1,9 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext } from 'react';
 import { MoonLoader } from 'react-spinners';
 import styled from 'styled-components';
 
-import getCurrentUser from '../lib/getCurrentUser';
+import useCurrentUser from '../hooks/useCurrentUser';
 import { IUser } from '../lib/interfaces/User';
 import logoutUser from '../lib/logout';
 
@@ -25,7 +25,7 @@ const AuthContext = createContext<IAuthContext>({
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
     const queryClient = useQueryClient();
-    const currentUserQuery = useQuery(['me'], getCurrentUser);
+    const currentUserQuery = useCurrentUser();
 
     const login = () => {
         return true;

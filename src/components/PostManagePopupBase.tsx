@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
-import { useUser } from '../context/UserProvider';
+import { useCurrentUser } from '../context/UserProvider';
 import { IPost } from '../lib/interfaces/Post';
 import PostAddMediaBar from './PostAddMediaBar';
 import PostHeader from './PostHeader';
@@ -53,7 +53,7 @@ const PostManagePopupBase = ({
         }
     }, []);
 
-    const user = useUser();
+    const user = useCurrentUser();
 
     const [content, setContent] = useState(initialState.content);
     const [photos, setPhotos] = useState<string[]>(initialState.photos);

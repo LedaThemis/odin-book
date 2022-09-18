@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { useUser } from '../../context/UserProvider';
+import { useCurrentUser } from '../../context/UserProvider';
 import getOverrideField from '../../lib/getOverrideField';
 import { IPopulatedUser, IUser } from '../../lib/interfaces/User';
 
@@ -18,7 +18,7 @@ const UserIcon = ({ user, size, className, onClick }: IUserIcon) => {
     if (user) {
         selectedUser = user;
     } else {
-        selectedUser = useUser() as IUser;
+        selectedUser = useCurrentUser() as IUser;
     }
 
     if (size) {
