@@ -2,9 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import getUserURL from '../lib/getUserURL';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IUser } from '../lib/interfaces/User';
-import Errors from './Errors';
 import UserIcon from './icons/UserIcon';
 
 interface IPeopleSearchResultUserBar {

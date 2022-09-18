@@ -9,7 +9,6 @@ import canSeePosts from '../lib/canSeePosts';
 import friendUser from '../lib/friendUser';
 import getUserPosts from '../lib/getUserPosts';
 import hasSentFriendRequest from '../lib/hasSentFriendRequest';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
 import FetchingOverlay from './HOCs/FetchingOverlay';
@@ -78,9 +77,6 @@ const ProfileView = ({ profileUser }: IProfileView) => {
 
     const [isUnfriendUserPopupShown, setIsUnfriendUserPopupShown] =
         useState(false);
-
-    // TODO: DELETE (HERE FOR COMPATIBILITY)
-    const errors: ErrorType[] = [];
 
     const ActionButton = () =>
         useMemo(() => {
@@ -160,7 +156,6 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                     hidePopup={() => {
                         setIsUnfriendUserPopupShown(false);
                     }}
-                    errors={errors}
                 />
             )}
         </StyledWrapper>

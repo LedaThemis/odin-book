@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import deleteComment from '../lib/deleteComment';
 import { IComment } from '../lib/interfaces/Comment';
-import { ErrorType } from '../lib/interfaces/Error';
 import { IPost } from '../lib/interfaces/Post';
 import PopupBase from './PopupBase';
 
@@ -30,9 +29,6 @@ const CommentDeletePopup = ({
         },
     );
 
-    // TODO: DELETE (HERE FOR COMPATIBILITY)
-    const errors: ErrorType[] = [];
-
     return (
         <PopupBase
             title="Delete Comment?"
@@ -42,7 +38,6 @@ const CommentDeletePopup = ({
             submitButtonFunction={mutation.mutate}
             cancelButtonFunction={hidePopup}
             hidePopup={hidePopup}
-            errors={errors}
         />
     );
 };

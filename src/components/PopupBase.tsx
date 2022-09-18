@@ -1,9 +1,6 @@
 import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
-import { ErrorType } from '../lib/interfaces/Error';
-import Errors from './Errors';
-
 interface IPopupBase {
     title: string;
     content: string;
@@ -12,7 +9,6 @@ interface IPopupBase {
     submitButtonFunction: () => void;
     cancelButtonFunction: () => void;
     hidePopup: () => void;
-    errors: ErrorType[];
 }
 
 const PopupBase = ({
@@ -23,7 +19,6 @@ const PopupBase = ({
     submitButtonFunction,
     cancelButtonFunction,
     hidePopup,
-    errors,
 }: IPopupBase) => {
     return (
         <StyledOverlay>
@@ -79,7 +74,6 @@ const PopupBase = ({
                         {submitButtonText}
                     </StyledSubmitButton>
                 </StyledPopupBaseBottomContainer>
-                <Errors errors={errors} />
             </StyledContainer>
         </StyledOverlay>
     );
