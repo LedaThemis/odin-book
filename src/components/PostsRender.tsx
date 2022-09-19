@@ -122,7 +122,6 @@ const PostComment = ({ post, comment }: IPostComment) => {
             () =>
                 isUpdatingComment ? (
                     <CommentUpdatePrompt
-                        post={post}
                         comment={comment}
                         cancelEditing={() => {
                             setIsUpdatingComment(false);
@@ -223,17 +222,13 @@ const PostRender = ({ post }: IPostRender) => {
 
     const queryClient = useQueryClient();
     const likeMutation = useMutation(() => likePost({ postId: post._id }), {
-        onSuccess: (post) => {
-            queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                old.map((p) => (p._id === post._id ? post : p)),
-            );
+        onSuccess: () => {
+            queryClient.invalidateQueries(['timeline']);
         },
     });
     const unlikeMutation = useMutation(() => unlikePost({ postId: post._id }), {
-        onSuccess: (post) => {
-            queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                old.map((p) => (p._id === post._id ? post : p)),
-            );
+        onSuccess: () => {
+            queryClient.invalidateQueries(['timeline']);
         },
     });
 

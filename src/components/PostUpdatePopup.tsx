@@ -22,11 +22,8 @@ const PostUpdatePopup = ({
                 photos,
             }),
         {
-            onSuccess: (post) => {
-                // Update post in timeline posts state
-                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                    old.map((p) => (p._id === post._id ? post : p)),
-                );
+            onSuccess: () => {
+                queryClient.invalidateQueries(['timeline']);
                 // Hide popup
                 setIsPopupShown(false);
             },

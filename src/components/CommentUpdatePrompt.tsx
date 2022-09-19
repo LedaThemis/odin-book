@@ -3,17 +3,14 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { IComment } from '../lib/interfaces/Comment';
-import { IPost } from '../lib/interfaces/Post';
 import updateComment from '../lib/updateComment';
 
 interface ICommentUpdatePrompt {
-    post: IPost;
     comment: IComment;
     cancelEditing: () => void;
 }
 
 const CommentUpdatePrompt = ({
-    post,
     comment,
     cancelEditing,
 }: ICommentUpdatePrompt) => {
@@ -21,15 +18,8 @@ const CommentUpdatePrompt = ({
     const mutation = useMutation(
         () => updateComment({ commentId: comment._id, content }),
         {
-            onSuccess: (comment) => {
-                const postCopy = Object.assign({}, post);
-                postCopy.comments = postCopy.comments.map((c) =>
-                    c._id === comment._id ? comment : c,
-                );
-
-                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                    old.map((p) => (p._id === postCopy._id ? postCopy : p)),
-                );
+            onSuccess: () => {
+                queryClient.invalidateQueries(['timeline']);
 
                 cancelEditing();
             },

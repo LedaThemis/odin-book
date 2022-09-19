@@ -12,10 +12,8 @@ interface IPostDeletePopup {
 const PostDeletePopup = ({ post, hidePopup }: IPostDeletePopup) => {
     const queryClient = useQueryClient();
     const mutation = useMutation(() => deletePost({ postId: post._id }), {
-        onSuccess: (postId) => {
-            queryClient.setQueryData<IPost[]>(['timeline'], (old) =>
-                old?.filter((p) => p._id !== postId),
-            );
+        onSuccess: () => {
+            queryClient.invalidateQueries(['timeline']);
             hidePopup();
         },
     });

@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import createPost from '../lib/createPost';
-import { IPost } from '../lib/interfaces/Post';
 import PostManagePopupBase from './PostManagePopupBase';
 
 interface IPostCreatePopup {
@@ -15,12 +14,8 @@ const PostCreatePopup = ({ setIsPopupShown }: IPostCreatePopup) => {
         ({ content, photos }: { content: string; photos: string[] }) =>
             createPost({ content, photos }),
         {
-            onSuccess: (post) => {
-                // Push new post to timeline posts state
-                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                    [post].concat(old),
-                );
-                // Hide popup
+            onSuccess: () => {
+                queryClient.invalidateQueries(['timeline']);
                 setIsPopupShown(false);
             },
         },

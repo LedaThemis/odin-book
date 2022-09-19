@@ -16,10 +16,8 @@ const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
     const mutation = useMutation(
         () => createPostComment({ postId: post._id, content }),
         {
-            onSuccess: (post) => {
-                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                    old.map((p) => (p._id === post._id ? post : p)),
-                );
+            onSuccess: () => {
+                queryClient.invalidateQueries(['timeline']);
                 setContent('');
             },
         },

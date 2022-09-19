@@ -20,10 +20,8 @@ const CommentDeletePopup = ({
     const mutation = useMutation(
         () => deleteComment({ postId: post._id, commentId: comment._id }),
         {
-            onSuccess: (post) => {
-                queryClient.setQueryData<IPost[]>(['timeline'], (old = []) =>
-                    old.map((p) => (p._id === post._id ? post : p)),
-                );
+            onSuccess: () => {
+                queryClient.invalidateQueries(['timeline']);
                 hidePopup();
             },
         },

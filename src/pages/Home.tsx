@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
@@ -7,7 +9,22 @@ import PostsRender from '../components/PostsRender';
 import useTimeline from '../hooks/useTimeline';
 
 const HomePage = () => {
-    const { isSuccess, isLoading, data = [] } = useTimeline();
+    const {
+        isSuccess,
+        isLoading,
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useTimeline();
+
+    const [ref, inView] = useInView();
+
+    useEffect(() => {
+        if (inView) {
+            fetchNextPage();
+        }
+    }, [inView]);
 
     return (
         <StyledWrapper>
@@ -20,8 +37,25 @@ const HomePage = () => {
                         isFetching={isLoading}
                         text="Loading Timeline..."
                     >
-                        {isSuccess && <PostsRender posts={data} />}
+                        {isSuccess && (
+                            <>
+                                {data.pages.map((group, i) => (
+                                    <PostsRender key={i} posts={group.posts} />
+                                ))}
+                            </>
+                        )}
                     </FetchingOverlay>
+                    <StyledButton
+                        onClick={() => fetchNextPage()}
+                        ref={ref}
+                        disabled={!hasNextPage || isFetchingNextPage}
+                    >
+                        {isFetchingNextPage
+                            ? 'Loading more...'
+                            : hasNextPage
+                            ? 'Load more'
+                            : 'Nothing more to load'}
+                    </StyledButton>
                 </StyledMiddleHomeContainer>
                 <StyledRightHomeContainer></StyledRightHomeContainer>
             </StyledHomeContainer>
@@ -52,5 +86,9 @@ const StyledMiddleHomeContainer = styled.div`
 `;
 
 const StyledRightHomeContainer = styled.div``;
+
+const StyledButton = styled.button`
+    cursor: pointer;
+`;
 
 export default HomePage;
