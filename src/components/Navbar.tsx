@@ -83,6 +83,9 @@ const StyledNavbar = styled.div`
     height: fit-content;
     background-color: white;
     box-shadow: var(--navbar-box-shadow);
+
+    border-bottom: 1px solid var(--section-separator-background-color);
+    z-index: 1;
 `;
 
 const StyledList = styled.ul`
