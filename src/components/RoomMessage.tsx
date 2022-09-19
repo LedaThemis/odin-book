@@ -163,6 +163,14 @@ const StyledContent = styled.p<{ bySelf: boolean }>`
         props.bySelf
             ? 'var(--primary-color)'
             : 'var(--message-background-color)'};
+
+    @media screen and (max-width: 600px) {
+        max-width: 200px;
+    }
+
+    @media screen and (max-width: 500px) {
+        max-width: 150px;
+    }
 `;
 
 const StyledAttachments = styled.div`
@@ -178,6 +186,15 @@ const StyledAttachments = styled.div`
     border-radius: 2px;
 
     border: 2px solid var(--background-color);
+
+    @media screen and (max-width: 600px) {
+        max-width: 200px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    @media screen and (max-width: 500px) {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
 `;
 
 const StyledAttachment = styled.img`

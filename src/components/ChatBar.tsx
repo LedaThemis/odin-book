@@ -47,6 +47,10 @@ const StyledChatBar = styled(Link)<{ isSelected: boolean }>`
 const StyledUsername = styled.p`
     color: var(--primary-text-color);
     font-size: 15px;
+
+    @media screen and (max-width: 900px) {
+        display: none;
+    }
 `;
 
 export default ChatBar;
