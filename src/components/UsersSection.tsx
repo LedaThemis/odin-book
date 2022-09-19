@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { useCurrentUser } from '../context/UserProvider';
+import areFriends from '../lib/areFriends';
 import getUserURL from '../lib/getUserURL';
 import { IUser } from '../lib/interfaces/User';
 import SectionBase from './SectionBase';
+import MessageButton from './buttons/MessageButton';
 import UserIcon from './icons/UserIcon';
 
 interface IUsersSectionBar {
@@ -11,12 +14,21 @@ interface IUsersSectionBar {
 }
 
 const UsersSectionBar = ({ user }: IUsersSectionBar) => {
+    const currentUser = useCurrentUser() as IUser;
+
     return (
         <StyledFlexWrapper>
-            <StyledLink to={getUserURL(user)}>
-                <UserIcon user={user} size={'60px'} />
-            </StyledLink>
-            <StyledLink to={getUserURL(user)}>{user.displayName}</StyledLink>
+            <StyledFlexRowWrapper>
+                <StyledLink to={getUserURL(user)}>
+                    <UserIcon user={user} size={'60px'} />
+                </StyledLink>
+                <StyledLink to={getUserURL(user)}>
+                    {user.displayName}
+                </StyledLink>
+            </StyledFlexRowWrapper>
+            {areFriends(currentUser, user) && (
+                <MessageButton userId={user._id} />
+            )}
         </StyledFlexWrapper>
     );
 };
@@ -43,6 +55,12 @@ const UsersSection = ({ users, title, noUsersText }: IUsersSection) => {
 };
 
 const StyledFlexWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+const StyledFlexRowWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;

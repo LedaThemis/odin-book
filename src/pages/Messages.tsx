@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Chats from '../components/Chats';
@@ -12,6 +13,9 @@ const MessagesPage = () => {
                     <StyledSectionTitle>Chats</StyledSectionTitle>
                     <Chats />
                 </StyledLeftContainer>
+                <StyledOutlet>
+                    <Outlet />
+                </StyledOutlet>
             </StyledContainer>
         </StyledWrapper>
     );
@@ -20,7 +24,7 @@ const MessagesPage = () => {
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
 
     background-color: var(--background-color);
 `;
@@ -32,7 +36,8 @@ const StyledContainer = styled.div`
 `;
 
 const StyledLeftContainer = styled.div`
-    min-height: 100%;
+    max-height: calc(100vh - 56px); // Navbar height
+    overflow-y: scroll;
     background-color: white;
     padding: 0 16px;
     box-sizing: border-box;
@@ -45,6 +50,16 @@ const StyledSectionTitle = styled.h1`
     color: var(--primary-text-color);
     font-size: 24px;
     margin: 20px 0;
+`;
+
+const StyledOutlet = styled.div`
+    max-height: calc(100vh - 56px); // Navbar height
+    flex-grow: 1;
+
+    // Style <Outlet />
+    & > div {
+        height: 100%;
+    }
 `;
 
 export default MessagesPage;

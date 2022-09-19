@@ -166,7 +166,7 @@ const StyledNavbarRightIcon = styled.div<{ isSelected: boolean }>`
 
     background-color: ${(props) =>
         props.isSelected
-            ? '#e7f3ff'
+            ? 'var(--secondary-highlight-background-color)'
             : 'var(--secondary-button-background-color)'};
 
     padding: 10px;

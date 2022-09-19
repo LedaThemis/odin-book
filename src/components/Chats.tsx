@@ -32,6 +32,10 @@ const Chats = () => {
     );
 };
 
-const StyledChatBarContainer = styled.div``;
+const StyledChatBarContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+`;
 
 export default Chats;

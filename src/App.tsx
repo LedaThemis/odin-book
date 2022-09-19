@@ -1,6 +1,7 @@
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
+import Room from './components/Room';
 import AppProviders from './context';
 import { useCurrentUser } from './context/UserProvider';
 import FriendsPage from './pages/Friends';
@@ -56,7 +57,16 @@ function App() {
                                         <MessagesPage />
                                     </AuthenticatedComponent>
                                 }
-                            />
+                            >
+                                <Route
+                                    path=":roomId"
+                                    element={
+                                        <AuthenticatedComponent>
+                                            <Room />
+                                        </AuthenticatedComponent>
+                                    }
+                                />
+                            </Route>
                             <Route
                                 path="users/:userId"
                                 element={

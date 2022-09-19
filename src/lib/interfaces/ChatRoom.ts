@@ -1,9 +1,18 @@
+import { IMessage } from './Message';
 import { IUser } from './User';
 
-export interface IChatRoom {
+export interface IBaseChatRoom {
     _id: string;
     members: IUser[];
-    messages: string[];
     createdAt: string;
     updatedAt: string;
+}
+
+export interface IChatRoom extends IBaseChatRoom {
+    messages: string[];
+}
+
+
+export interface IPopulatedChatRoom extends IBaseChatRoom {
+    messages: IMessage[];
 }

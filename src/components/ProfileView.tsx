@@ -20,6 +20,7 @@ import AcceptOrRejectFriendRequestButton from './buttons/AcceptOrRejectFriendReq
 import AddFriendButton from './buttons/AddFriendButton';
 import AreFriendsButton from './buttons/AreFriendsButton';
 import CancelFriendRequestButton from './buttons/CancelFriendRequestButton';
+import MessageButton from './buttons/MessageButton';
 import UserIcon from './icons/UserIcon';
 
 interface IProfileView {
@@ -76,13 +77,16 @@ const ProfileView = ({ profileUser }: IProfileView) => {
         useMemo(() => {
             if (areFriends(profileUser, currentUser)) {
                 return (
-                    <AreFriendsButton
-                        onClick={() => {
-                            setIsUnfriendUserPopupShown(
-                                (prevState) => !prevState,
-                            );
-                        }}
-                    />
+                    <StyledButtonsContainer>
+                        <MessageButton userId={profileUser._id} />
+                        <AreFriendsButton
+                            onClick={() => {
+                                setIsUnfriendUserPopupShown(
+                                    (prevState) => !prevState,
+                                );
+                            }}
+                        />
+                    </StyledButtonsContainer>
                 );
             } else if (hasSentFriendRequest(profileUser, currentUser)) {
                 return (
@@ -248,6 +252,10 @@ const StyledName = styled.h1``;
 const StyledActionButtonsContainer = styled.div`
     display: flex;
     align-items: center;
+`;
+
+const StyledButtonsContainer = styled(StyledActionButtonsContainer)`
+    gap: 4px;
 `;
 
 export default ProfileView;

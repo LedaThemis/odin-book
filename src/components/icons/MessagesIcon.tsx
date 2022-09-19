@@ -1,4 +1,4 @@
-const MessagesIcon = ({ filled }: { filled: boolean }) => {
+const MessagesIcon = ({ filled }: { filled?: boolean }) => {
     return filled ? (
         <svg
             viewBox="0 0 28 28"

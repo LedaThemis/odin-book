@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useCurrentUser } from '../context/UserProvider';
@@ -14,8 +14,10 @@ const ChatBar = ({ room }: IChatBar) => {
     const currentUser = useCurrentUser() as IUser;
     const otherUsers = room.members.filter((u) => u._id !== currentUser._id);
 
+    const params = useParams();
+
     return (
-        <StyledChatBar to={room._id}>
+        <StyledChatBar to={room._id} isSelected={params.roomId === room._id}>
             <UserIcon user={otherUsers[0]} size={'56px'} />
             <StyledUsername>
                 {otherUsers.map((u) => u.displayName).join('&')}
@@ -24,17 +26,21 @@ const ChatBar = ({ room }: IChatBar) => {
     );
 };
 
-const StyledChatBar = styled(Link)`
+const StyledChatBar = styled(Link)<{ isSelected: boolean }>`
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
 
+    background-color: ${(props) =>
+        props.isSelected ? 'var(--secondary-highlight-background-color)' : ''};
+
     padding: 8px;
     border-radius: 8px;
 
     &:hover {
-        background-color: var(--hover-background-color);
+        background-color: ${(props) =>
+            !props.isSelected ? 'var(--hover-background-color)' : ''};
     }
 `;
 
