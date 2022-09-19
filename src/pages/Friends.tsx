@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
+import UserPeople from '../components/UserPeople';
 import UsersSection from '../components/UsersSection';
 import { useCurrentUser } from '../context/UserProvider';
 import useIncomingFriendRequests from '../hooks/useIncomingFriendRequests';
 import useOutgoingFriendRequests from '../hooks/useOutgoingFriendRequests';
-import usePeopleYouMightKnow from '../hooks/usePeopleYouMightKnow';
 import useUserFriends from '../hooks/useUserFriends';
 import { IUser } from '../lib/interfaces/User';
 
@@ -16,7 +16,6 @@ const FriendsPage = () => {
     const userFriendsQuery = useUserFriends(user._id);
     const incomingFriendRequestsQuery = useIncomingFriendRequests();
     const outgoingFriendRequestsQuery = useOutgoingFriendRequests();
-    const userPeopleQuery = usePeopleYouMightKnow();
 
     return (
         <StyledWrapper>
@@ -59,18 +58,7 @@ const FriendsPage = () => {
                             />
                         )}
                     </FetchingOverlay>
-                    <FetchingOverlay
-                        isFetching={userPeopleQuery.isLoading}
-                        text="Fetching people you might know..."
-                    >
-                        {userPeopleQuery.isSuccess && (
-                            <UsersSection
-                                title="People you might know"
-                                users={userPeopleQuery.data}
-                                noUsersText="Wait a sec... you know everyone!"
-                            />
-                        )}
-                    </FetchingOverlay>
+                    <UserPeople />
                 </StyledSectionsContainer>
             </StyledContainer>
         </StyledWrapper>
