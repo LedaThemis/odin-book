@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoIosImages, IoMdSend } from 'react-icons/io';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -46,6 +46,18 @@ const RoomMessages = ({ roomId }: IRoomMessages) => {
     const currentUser = useCurrentUser() as IUser;
     const roomMessagesQuery = useChatRoomMessages(roomId);
 
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [roomMessagesQuery.data]);
+
     return (
         <StyledMessagesContainerWrapper>
             <StyledMessagesContainer>
@@ -54,14 +66,20 @@ const RoomMessages = ({ roomId }: IRoomMessages) => {
                         (roomMessagesQuery.data.length === 0 ? (
                             <p>You don&apos;t have any messages with user.</p>
                         ) : (
-                            roomMessagesQuery.data.map((m) => (
-                                <RoomMessage
-                                    key={m._id}
-                                    message={m}
-                                    roomId={roomId}
-                                    bySelf={areSameUser(currentUser, m.author)}
-                                />
-                            ))
+                            <>
+                                {roomMessagesQuery.data.map((m) => (
+                                    <RoomMessage
+                                        key={m._id}
+                                        message={m}
+                                        roomId={roomId}
+                                        bySelf={areSameUser(
+                                            currentUser,
+                                            m.author,
+                                        )}
+                                    />
+                                ))}
+                                <div ref={messagesEndRef} />
+                            </>
                         ))}
                 </FetchingOverlay>
             </StyledMessagesContainer>
