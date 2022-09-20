@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { FaThumbsUp } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { useCurrentUser } from '../context/UserProvider';
@@ -11,6 +12,7 @@ import unlikePost from '../lib/unlikePost';
 import CommentCreatePrompt from './CommentCreatePrompt';
 import PostComments from './PostComments';
 import PostHeader from './PostHeader';
+import PostLikesPopup from './PostLikesPopup';
 import PostPhotos from './PostPhotos';
 import CommentButton from './buttons/CommentButton';
 import LikeButton from './buttons/LikeButton';
@@ -21,6 +23,8 @@ interface PostProps {
 
 const Post = ({ post }: PostProps) => {
     const user = useCurrentUser() as IUser;
+
+    const [isLikesPopupShown, setIsLikesPopupShown] = useState(false);
 
     const queryClient = useQueryClient();
     const likeMutation = useMutation(() => likePost({ postId: post._id }), {
@@ -49,6 +53,28 @@ const Post = ({ post }: PostProps) => {
             <PostHeader post={post} />
             <StyledPostContent>{post.content}</StyledPostContent>
             {post.photos.length > 0 && <PostPhotos photos={post.photos} />}
+            {post.likes.length > 0 && (
+                <StyledPostStatsContainer>
+                    <StyledLikesCountContainer
+                        onClick={() => {
+                            setIsLikesPopupShown(true);
+                        }}
+                    >
+                        <StyledLikeIconContainer>
+                            <FaThumbsUp size="12px" />
+                        </StyledLikeIconContainer>
+                        <StyledLikesCount>{post.likes.length}</StyledLikesCount>
+                    </StyledLikesCountContainer>
+                    {isLikesPopupShown && (
+                        <PostLikesPopup
+                            postId={post._id}
+                            hidePopup={() => {
+                                setIsLikesPopupShown(false);
+                            }}
+                        />
+                    )}
+                </StyledPostStatsContainer>
+            )}
             <StyledActionButtonsWrapper>
                 <StyledLineContainer />
                 <StyledActionButtonsContainer>
@@ -86,6 +112,37 @@ const StyledLineContainer = styled.div`
 const StyledPostContent = styled(StyledParagraphBase)`
     white-space: pre-line;
     padding: 0 12px;
+`;
+
+const StyledPostStatsContainer = styled.div`
+    display: flex;
+    padding: 0 12px;
+`;
+
+const StyledLikesCountContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+const StyledLikeIconContainer = styled.div`
+    display: flex;
+
+    padding: 4px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--secondary-background-color);
+`;
+
+const StyledLikesCount = styled.p`
+    margin: 0;
+    color: var(--secondary-text-color);
 `;
 
 const StyledPostContainer = styled.div`
