@@ -81,7 +81,7 @@ const Navbar = () => {
 
 const StyledNavbar = styled.div`
     height: fit-content;
-    background-color: white;
+    background-color: var(--secondary-background-color);
     box-shadow: var(--navbar-box-shadow);
 
     border-bottom: 1px solid var(--section-separator-background-color);

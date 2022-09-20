@@ -27,7 +27,7 @@ const StyledContainer = styled.div`
 
     box-shadow: 0 1px 2px var(--shadow-2);
 
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     border-radius: var(--standard-border-radius);
 `;

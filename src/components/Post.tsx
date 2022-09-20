@@ -95,7 +95,7 @@ const StyledPostContainer = styled.div`
 
     padding-bottom: 8px;
 
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     border-radius: var(--standard-border-radius);
     box-shadow: 0 1px 2px var(--shadow-2);

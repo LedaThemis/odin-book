@@ -42,7 +42,7 @@ const StyledButton = styled.button`
     width: 36px;
     height: 36px;
 
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     &:hover {
         background-color: var(--hover-background-color);

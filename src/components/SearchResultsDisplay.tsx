@@ -83,7 +83,7 @@ const SearchResultsDisplay = ({
 };
 
 const StyledSearchResultsDisplay = styled.div`
-    background-color: white;
+    background-color: var(--secondary-background-color);
     display: flex;
     flex-direction: column;
     width: 344px;

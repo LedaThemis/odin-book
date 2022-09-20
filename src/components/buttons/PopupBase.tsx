@@ -101,7 +101,7 @@ const StyledContainer = styled.div`
     box-shadow: var(--card-box-shadow);
     border-radius: var(--standard-border-radius);
 
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     box-sizing: border-box;
     padding: 6px 12px;
@@ -185,7 +185,7 @@ const StyledSubmitButton = styled.button`
     height: 36px;
 
     background-color: var(--primary-button-color);
-    color: white;
+    color: var(--secondary-background-color);
 
     &:disabled {
         background-color: var(--disabled-button-background-color);

@@ -174,7 +174,7 @@ const StyledContainer = styled.div`
     box-shadow: var(--card-box-shadow);
     border-radius: var(--standard-border-radius);
 
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     box-sizing: border-box;
     padding: 6px 12px;

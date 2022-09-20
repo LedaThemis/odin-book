@@ -49,7 +49,7 @@ const StyledLineContainer = styled.div`
 `;
 
 const StyledActionMenu = styled.div`
-    background-color: white;
+    background-color: var(--secondary-background-color);
     display: flex;
     flex-direction: column;
     gap: 8px;

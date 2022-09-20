@@ -20,7 +20,7 @@ const StyledFormContainer = styled.div`
     align-items: center;
     gap: 16px;
 
-    background-color: #fff;
+    background-color: var(--secondary-background-color);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;

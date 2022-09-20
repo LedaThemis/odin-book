@@ -32,13 +32,13 @@ const StyledWrapper = styled.div`
 const StyledContainer = styled.div`
     display: flex;
     flex-grow: 1;
-    background-color: white;
+    background-color: var(--secondary-background-color);
 `;
 
 const StyledLeftContainer = styled.div`
     max-height: calc(100vh - 56px); // Navbar height
     overflow-y: scroll;
-    background-color: white;
+    background-color: var(--secondary-background-color);
     padding: 0 16px;
     box-sizing: border-box;
     width: 360px;

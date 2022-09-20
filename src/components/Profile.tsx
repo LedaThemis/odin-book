@@ -213,7 +213,7 @@ const StyledFriendsSectionWrapper = styled.div`
 const StyledContainer = styled.div`
     padding: 12px 8px;
     box-sizing: border-box;
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     border-radius: var(--standard-border-radius);
 

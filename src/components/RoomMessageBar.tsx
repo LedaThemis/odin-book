@@ -143,7 +143,7 @@ const StyledButtonBase = styled.button`
 
     padding: 4px;
 
-    background-color: white;
+    background-color: var(--secondary-background-color);
 
     &:hover {
         background-color: var(--hover-background-color);

@@ -79,7 +79,7 @@ const StyledContinueButton = styled.button`
     }
 
     &:disabled {
-        background-color: grey;
+        background-color: var(--disabled-background-color);
         cursor: default;
     }
 `;

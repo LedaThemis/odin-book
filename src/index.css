@@ -23,6 +23,8 @@
     --form-text-color: rgb(101, 103, 107);
 
     --background-color: #f0f2f5;
+    --secondary-background-color: #ffffff;
+    --disabled-background-color: grey;
 
     --hover-overlay: rgba(0, 0, 0, 0.05);
     --always-dark-overlay: rgba(0, 0, 0, 0.4);
