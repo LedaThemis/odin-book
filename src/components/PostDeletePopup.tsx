@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import deletePost from '../lib/deletePost';
 import { IPost } from '../lib/interfaces/Post';
-import PopupBase from './PopupBase';
+import PopupBase from './buttons/PopupBase';
 
 interface IPostDeletePopup {
     post: IPost;

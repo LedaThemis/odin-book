@@ -12,22 +12,22 @@ import hasSentFriendRequest from '../lib/hasSentFriendRequest';
 import { IPopulatedUser, IUser } from '../lib/interfaces/User';
 import unfriendUser from '../lib/unfriendUser';
 import FetchingOverlay from './HOCs/FetchingOverlay';
-import PopupBase from './PopupBase';
-import PostsRender from './PostsRender';
-import ProfilePostsSection from './ProfilePostsSection';
+import Posts from './Posts';
+import ProfilePosts from './ProfilePosts';
 import UsersSection from './UsersSection';
 import AcceptOrRejectFriendRequestButton from './buttons/AcceptOrRejectFriendRequestButton';
 import AddFriendButton from './buttons/AddFriendButton';
 import AreFriendsButton from './buttons/AreFriendsButton';
 import CancelFriendRequestButton from './buttons/CancelFriendRequestButton';
 import MessageButton from './buttons/MessageButton';
+import PopupBase from './buttons/PopupBase';
 import UserIcon from './icons/UserIcon';
 
-interface IProfileView {
+interface IProfile {
     profileUser: IPopulatedUser;
 }
 
-const ProfileView = ({ profileUser }: IProfileView) => {
+const Profile = ({ profileUser }: IProfile) => {
     const currentUser = useCurrentUser() as IUser;
 
     const isFriend = useMemo(
@@ -127,7 +127,7 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                     <UsersSection title="Friends" users={profileUser.friends} />
                 </StyledFriendsSectionWrapper>
                 <StyledUserPostsContainer>
-                    <ProfilePostsSection
+                    <ProfilePosts
                         hasPosts={data.length > 0}
                         canSeePosts={isFriend}
                     />
@@ -136,7 +136,7 @@ const ProfileView = ({ profileUser }: IProfileView) => {
                             isFetching={isLoading}
                             text="Loading user posts..."
                         >
-                            {data.length > 0 && <PostsRender posts={data} />}
+                            {data.length > 0 && <Posts posts={data} />}
                         </FetchingOverlay>
                     )}
                 </StyledUserPostsContainer>
@@ -258,4 +258,4 @@ const StyledButtonsContainer = styled(StyledActionButtonsContainer)`
     gap: 4px;
 `;
 
-export default ProfileView;
+export default Profile;

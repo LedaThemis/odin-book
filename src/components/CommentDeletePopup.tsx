@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import deleteComment from '../lib/deleteComment';
 import { IComment } from '../lib/interfaces/Comment';
 import { IPost } from '../lib/interfaces/Post';
-import PopupBase from './PopupBase';
+import PopupBase from './buttons/PopupBase';
 
 interface ICommentDeletePopup {
     post: IPost;

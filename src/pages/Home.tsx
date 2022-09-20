@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
 import PostCreatePrompt from '../components/PostCreatePrompt';
-import PostsRender from '../components/PostsRender';
+import Posts from '../components/Posts';
 import useTimeline from '../hooks/useTimeline';
 
 const HomePage = () => {
@@ -40,7 +40,7 @@ const HomePage = () => {
                         {isSuccess && (
                             <>
                                 {data.pages.map((group, i) => (
-                                    <PostsRender key={i} posts={group.posts} />
+                                    <Posts key={i} posts={group.posts} />
                                 ))}
                             </>
                         )}

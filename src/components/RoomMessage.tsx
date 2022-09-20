@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import deleteRoomMessage from '../lib/deleteRoomMessage';
 import { IMessage } from '../lib/interfaces/Message';
-import PopupBase from './PopupBase';
+import PopupBase from './buttons/PopupBase';
 import UserIcon from './icons/UserIcon';
 
 interface IRoomMessageDeletePopup {

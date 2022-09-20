@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import FetchingOverlay from '../components/HOCs/FetchingOverlay';
 import Navbar from '../components/Navbar';
-import ProfileView from '../components/ProfileView';
+import Profile from '../components/Profile';
 import useUser from '../hooks/useUser';
 
 const UserPage = () => {
@@ -19,7 +19,7 @@ const UserPage = () => {
                     text="Loading Profile..."
                 >
                     {userQuery.isSuccess && (
-                        <ProfileView profileUser={userQuery.data} />
+                        <Profile profileUser={userQuery.data} />
                     )}
                 </FetchingOverlay>
             </StyledContainer>

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import getLoginURL from '../lib/getLoginURL';
+import getLoginURL from '../../lib/getLoginURL';
 
 const GoogleIcon = ({ active }: { active: boolean }) => (
     <div

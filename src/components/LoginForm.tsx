@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import GoogleSignInButton from './GoogleSignInButton';
+import GoogleSignInButton from './buttons/GoogleSignInButton';
 import GuestAccountSelect from './GuestAccountSelect';
 
 const LoginForm = () => {

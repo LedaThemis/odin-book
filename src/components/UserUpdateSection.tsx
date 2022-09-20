@@ -8,7 +8,7 @@ import getOverrideField from '../lib/getOverrideField';
 import hasCustomField from '../lib/hasCustomField';
 import { IUser } from '../lib/interfaces/User';
 import updateUser from '../lib/updateUser';
-import SectionBase from './SectionBase';
+import SectionBase from './bases/SectionBase';
 
 const UserUpdateSection = () => {
     const user = useCurrentUser() as IUser;

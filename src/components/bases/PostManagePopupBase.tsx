@@ -3,11 +3,11 @@ import { useMemo, useState } from 'react';
 import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
-import { useCurrentUser } from '../context/UserProvider';
-import { IPost } from '../lib/interfaces/Post';
-import PostAddMediaBar from './PostAddMediaBar';
-import PostHeader from './PostHeader';
-import PostImageInputBar from './PostImageInputBar';
+import { useCurrentUser } from '../../context/UserProvider';
+import { IPost } from '../../lib/interfaces/Post';
+import PostAddMediaBar from '../PostAddMediaBar';
+import PostHeader from '../PostPopupHeader';
+import PostImageInputBar from '../PostImageInputBar';
 
 interface IPostBody {
     content: string;

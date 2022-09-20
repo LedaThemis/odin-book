@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import createPost from '../lib/createPost';
-import PostManagePopupBase from './PostManagePopupBase';
+import PostManagePopupBase from './bases/PostManagePopupBase';
 
 interface IPostCreatePopup {
     setIsPopupShown: React.Dispatch<React.SetStateAction<boolean>>;

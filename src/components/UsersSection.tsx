@@ -5,7 +5,7 @@ import { useCurrentUser } from '../context/UserProvider';
 import areFriends from '../lib/areFriends';
 import getUserURL from '../lib/getUserURL';
 import { IUser } from '../lib/interfaces/User';
-import SectionBase from './SectionBase';
+import SectionBase from './bases/SectionBase';
 import MessageButton from './buttons/MessageButton';
 import UserIcon from './icons/UserIcon';
 
