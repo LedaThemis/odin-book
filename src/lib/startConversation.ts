@@ -11,9 +11,7 @@ interface IStartConversationResponse {
     room: IChatRoom;
 }
 
-const startConversation = async ({
-    userId,
-}: IStartConversation): Promise<IChatRoom> => {
+const startConversation = async ({ userId }: IStartConversation) => {
     const { data }: InData<IStartConversationResponse> = await axios.post(
         'chat/conversations',
         { userId },

@@ -11,7 +11,7 @@ interface IUnLikePostResponse {
     post: IPost;
 }
 
-const unlikePost = async ({ postId }: IUnLikePost): Promise<IPost> => {
+const unlikePost = async ({ postId }: IUnLikePost) => {
     const { data }: InData<IUnLikePostResponse> = await axios.delete(
         `posts/${postId}/like`,
     );

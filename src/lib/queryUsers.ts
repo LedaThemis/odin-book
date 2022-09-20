@@ -11,7 +11,7 @@ interface IQueryUsersResponse {
     users: IUser[];
 }
 
-const queryUsers = async ({ q }: IQueryUsers): Promise<IUser[]> => {
+const queryUsers = async ({ q }: IQueryUsers) => {
     const options = { q };
     const params = new URLSearchParams(options);
 

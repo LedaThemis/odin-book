@@ -11,9 +11,7 @@ interface IUnFriendUserResponse {
     user: IPopulatedUser;
 }
 
-const unfriendUser = async ({
-    userId,
-}: IFriendUser): Promise<IPopulatedUser> => {
+const unfriendUser = async ({ userId }: IFriendUser) => {
     const { data }: InData<IUnFriendUserResponse> = await axios.delete(
         `users/${userId}/friend`,
     );

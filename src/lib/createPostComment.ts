@@ -12,10 +12,7 @@ interface ICreatePostCommentResponse {
     post: IPost;
 }
 
-const createPostComment = async ({
-    postId,
-    content,
-}: ICreatePostComment): Promise<IPost> => {
+const createPostComment = async ({ postId, content }: ICreatePostComment) => {
     const { data }: InData<ICreatePostCommentResponse> = await axios.post(
         `posts/${postId}/comments`,
         {

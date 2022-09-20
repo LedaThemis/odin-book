@@ -11,7 +11,7 @@ interface IUpdateUserResponse {
     user: IUser;
 }
 
-const updateUser = async ({ photoURL }: IUpdateUser): Promise<IUser> => {
+const updateUser = async ({ photoURL }: IUpdateUser) => {
     const { data }: InData<IUpdateUserResponse> = await axios.post(`me`, {
         photoURL,
     });

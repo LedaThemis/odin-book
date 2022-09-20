@@ -7,7 +7,7 @@ interface IGetGuestUsersResponse {
     users: IUser[];
 }
 
-const getGuestUsers = async (): Promise<IUser[]> => {
+const getGuestUsers = async () => {
     const { data }: InData<IGetGuestUsersResponse> = await axios.get('/guests');
 
     return data.users;

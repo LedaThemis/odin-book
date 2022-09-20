@@ -7,7 +7,7 @@ interface IGetConversationsResponse {
     conversations: IChatRoom[];
 }
 
-const getConversations = async (): Promise<IChatRoom[]> => {
+const getConversations = async () => {
     const { data }: InData<IGetConversationsResponse> = await axios.get(
         'chat/conversations',
     );

@@ -10,7 +10,7 @@ interface IDeletePostResponse {
     postId: string;
 }
 
-const deletePost = async ({ postId }: IDeletePost): Promise<string> => {
+const deletePost = async ({ postId }: IDeletePost) => {
     const { data }: InData<IDeletePostResponse> = await axios.delete(
         `posts/${postId}`,
     );

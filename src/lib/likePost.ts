@@ -11,7 +11,7 @@ interface ILikePostResponse {
     post: IPost;
 }
 
-const likePost = async ({ postId }: ILikePost): Promise<IPost> => {
+const likePost = async ({ postId }: ILikePost) => {
     const { data }: InData<ILikePostResponse> = await axios.post(
         `posts/${postId}/like`,
     );

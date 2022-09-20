@@ -13,11 +13,7 @@ interface IUpdatePostResponse {
     post: IPost;
 }
 
-const updatePost = async ({
-    postId,
-    content,
-    photos,
-}: IUpdatePost): Promise<IPost> => {
+const updatePost = async ({ postId, content, photos }: IUpdatePost) => {
     const { data }: InData<IUpdatePostResponse> = await axios.post(
         `posts/${postId}`,
         {

@@ -12,10 +12,7 @@ interface IDeleteCommentResponse {
     post: IPost;
 }
 
-const deleteComment = async ({
-    postId,
-    commentId,
-}: IDeleteComment): Promise<IPost> => {
+const deleteComment = async ({ postId, commentId }: IDeleteComment) => {
     const { data }: InData<IDeleteCommentResponse> = await axios.delete(
         `posts/${postId}/comments/${commentId}`,
     );

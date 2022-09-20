@@ -12,10 +12,7 @@ interface IUpdateCommentResponse {
     comment: IComment;
 }
 
-const updateComment = async ({
-    commentId,
-    content,
-}: IUpdateComment): Promise<IComment> => {
+const updateComment = async ({ commentId, content }: IUpdateComment) => {
     const { data }: InData<IUpdateCommentResponse> = await axios.post(
         `comments/${commentId}`,
         {

@@ -7,7 +7,7 @@ interface IGetUserOutgoingFriendRequestsResponse {
     users: IUser[];
 }
 
-const getUserOutgoingFriendRequests = async (): Promise<IUser[]> => {
+const getUserOutgoingFriendRequests = async () => {
     const { data }: InData<IGetUserOutgoingFriendRequestsResponse> =
         await axios.get('outgoing');
 

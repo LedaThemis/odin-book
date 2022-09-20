@@ -12,7 +12,7 @@ interface ICreatePostResponse {
     post: IPost;
 }
 
-const createPost = async ({ content, photos }: ICreatePost): Promise<IPost> => {
+const createPost = async ({ content, photos }: ICreatePost) => {
     const { data }: InData<ICreatePostResponse> = await axios.post('posts', {
         content,
         photos,

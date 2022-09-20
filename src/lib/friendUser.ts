@@ -11,7 +11,7 @@ interface IFriendUserResponse {
     user: IPopulatedUser;
 }
 
-const friendUser = async ({ userId }: IFriendUser): Promise<IPopulatedUser> => {
+const friendUser = async ({ userId }: IFriendUser) => {
     const { data }: InData<IFriendUserResponse> = await axios.post(
         `users/${userId}/friend`,
     );
