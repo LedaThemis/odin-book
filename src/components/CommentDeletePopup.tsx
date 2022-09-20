@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import deleteComment from '../lib/deleteComment';
 import { IComment } from '../lib/interfaces/Comment';
 import { IPost } from '../lib/interfaces/Post';
-import PopupBase from './buttons/PopupBase';
+import TextPopupBase from './bases/TextPopupBase';
 
 interface CommentDeletePopupProps {
     post: IPost;
@@ -28,7 +28,7 @@ const CommentDeletePopup = ({
     );
 
     return (
-        <PopupBase
+        <TextPopupBase
             title="Delete Comment?"
             content="Are you sure you want to delete this comment?"
             submitButtonText="Delete"

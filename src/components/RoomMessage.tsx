@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import deleteRoomMessage from '../lib/deleteRoomMessage';
 import { IMessage } from '../lib/interfaces/Message';
-import PopupBase from './buttons/PopupBase';
+import TextPopupBase from './bases/TextPopupBase';
 import UserIcon from './icons/UserIcon';
 
 interface IRoomMessageDeletePopup {
@@ -18,7 +18,7 @@ const RoomMessageDeletePopup = ({
     hidePopup,
 }: IRoomMessageDeletePopup) => {
     return (
-        <PopupBase
+        <TextPopupBase
             title="Remove for everyone?"
             content="This message will be removed for everyone."
             cancelButtonText="Cancel"

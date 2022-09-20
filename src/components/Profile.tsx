@@ -20,7 +20,7 @@ import AddFriendButton from './buttons/AddFriendButton';
 import AreFriendsButton from './buttons/AreFriendsButton';
 import CancelFriendRequestButton from './buttons/CancelFriendRequestButton';
 import MessageButton from './buttons/MessageButton';
-import PopupBase from './buttons/PopupBase';
+import TextPopupBase from './bases/TextPopupBase';
 import UserIcon from './icons/UserIcon';
 
 interface ProfileProps {
@@ -142,7 +142,7 @@ const Profile = ({ profileUser }: ProfileProps) => {
                 </StyledUserPostsContainer>
             </StyledFlexRowContainer>
             {isUnfriendUserPopupShown && (
-                <PopupBase
+                <TextPopupBase
                     title={`Unfriend ${profileUser.displayName}?`}
                     content={`Are you sure you want to unfriend ${profileUser.displayName}?`}
                     submitButtonText="Confirm"

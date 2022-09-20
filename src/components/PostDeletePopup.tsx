@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import deletePost from '../lib/deletePost';
 import { IPost } from '../lib/interfaces/Post';
-import PopupBase from './buttons/PopupBase';
+import TextPopupBase from './bases/TextPopupBase';
 
 interface PostDeletePopupProps {
     post: IPost;
@@ -19,7 +19,7 @@ const PostDeletePopup = ({ post, hidePopup }: PostDeletePopupProps) => {
     });
 
     return (
-        <PopupBase
+        <TextPopupBase
             title="Move to your trash?"
             content="Items in your trash will be deleted immediately."
             submitButtonText="Move"
