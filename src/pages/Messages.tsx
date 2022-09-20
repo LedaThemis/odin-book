@@ -43,6 +43,8 @@ const StyledLeftContainer = styled.div`
     box-sizing: border-box;
     width: 360px;
 
+    flex-shrink: 0;
+
     @media screen and (max-width: 900px) {
         width: fit-content;
         text-align: center;

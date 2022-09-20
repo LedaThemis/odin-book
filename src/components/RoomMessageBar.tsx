@@ -191,6 +191,8 @@ const StyledMessageTextArea = styled.textarea`
     font-size: 15px;
     font-family: inherit;
 
+    // Hack to make textarea get its width from flex-grow only
+    width: 0;
     flex-grow: 1;
 
     &:focus {

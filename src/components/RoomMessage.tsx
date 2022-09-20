@@ -171,6 +171,10 @@ const StyledContent = styled.p<{ bySelf: boolean }>`
     @media screen and (max-width: 500px) {
         max-width: 150px;
     }
+
+    @media screen and (max-width: 400px) {
+        max-width: 100px;
+    }
 `;
 
 const StyledAttachments = styled.div`
