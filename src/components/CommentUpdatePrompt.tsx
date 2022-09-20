@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { IComment } from '../lib/interfaces/Comment';
 import updateComment from '../lib/updateComment';
 
-interface ICommentUpdatePrompt {
+interface CommentUpdatePromptProps {
     comment: IComment;
     cancelEditing: () => void;
 }
@@ -13,7 +13,7 @@ interface ICommentUpdatePrompt {
 const CommentUpdatePrompt = ({
     comment,
     cancelEditing,
-}: ICommentUpdatePrompt) => {
+}: CommentUpdatePromptProps) => {
     const queryClient = useQueryClient();
     const mutation = useMutation(
         () => updateComment({ commentId: comment._id, content }),

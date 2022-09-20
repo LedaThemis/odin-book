@@ -1,7 +1,7 @@
 import { VscChromeClose } from 'react-icons/vsc';
 import styled from 'styled-components';
 
-interface IPostImageInputBar {
+interface PostImageInputBarProps {
     currentValue: string;
     handleImageInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleImageInputRemove: () => void;
@@ -11,7 +11,7 @@ const PostImageInputBar = ({
     currentValue,
     handleImageInputChange,
     handleImageInputRemove,
-}: IPostImageInputBar) => {
+}: PostImageInputBarProps) => {
     return (
         <StyledContainer>
             <StyledCloseButtonContainer

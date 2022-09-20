@@ -6,12 +6,12 @@ import createPostComment from '../lib/createPostComment';
 import { IPost } from '../lib/interfaces/Post';
 import UserIcon from './icons/UserIcon';
 
-interface ICommentCreatePrompt {
+interface CommentCreatePromptProps {
     post: IPost;
     className?: string;
 }
 
-const CommentCreatePrompt = ({ post, className }: ICommentCreatePrompt) => {
+const CommentCreatePrompt = ({ post, className }: CommentCreatePromptProps) => {
     const queryClient = useQueryClient();
     const mutation = useMutation(
         () => createPostComment({ postId: post._id, content }),

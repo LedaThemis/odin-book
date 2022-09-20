@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface IProfilePostsSection {
+interface ProfilePostsSectionProps {
     hasPosts: boolean;
     canSeePosts: boolean;
 }
@@ -8,7 +8,7 @@ interface IProfilePostsSection {
 const ProfilePostsSection = ({
     hasPosts,
     canSeePosts,
-}: IProfilePostsSection) => {
+}: ProfilePostsSectionProps) => {
     return (
         <StyledContainer>
             <StyledSectionTitle>Posts</StyledSectionTitle>

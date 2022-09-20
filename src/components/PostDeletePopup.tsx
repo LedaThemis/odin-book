@@ -4,12 +4,12 @@ import deletePost from '../lib/deletePost';
 import { IPost } from '../lib/interfaces/Post';
 import PopupBase from './buttons/PopupBase';
 
-interface IPostDeletePopup {
+interface PostDeletePopupProps {
     post: IPost;
     hidePopup: () => void;
 }
 
-const PostDeletePopup = ({ post, hidePopup }: IPostDeletePopup) => {
+const PostDeletePopup = ({ post, hidePopup }: PostDeletePopupProps) => {
     const queryClient = useQueryClient();
     const mutation = useMutation(() => deletePost({ postId: post._id }), {
         onSuccess: () => {

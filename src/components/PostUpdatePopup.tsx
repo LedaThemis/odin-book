@@ -4,7 +4,7 @@ import { IPost } from '../lib/interfaces/Post';
 import updatePost from '../lib/updatePost';
 import PostManagePopupBase from './bases/PostManagePopupBase';
 
-interface IPostUpdatePopup {
+interface PostUpdatePopupProps {
     originalPost: IPost;
     setIsPopupShown: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -12,7 +12,7 @@ interface IPostUpdatePopup {
 const PostUpdatePopup = ({
     originalPost,
     setIsPopupShown,
-}: IPostUpdatePopup) => {
+}: PostUpdatePopupProps) => {
     const queryClient = useQueryClient();
     const updatePostMutation = useMutation(
         ({ content, photos }: { content: string; photos: string[] }) =>

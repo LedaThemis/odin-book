@@ -7,11 +7,11 @@ import { IMessage } from '../lib/interfaces/Message';
 import sendMessage from '../lib/sendMessage';
 import PostImageInputBar from './PostImageInputBar';
 
-interface IRoomMessageBar {
+interface RoomMessageBarProps {
     roomId: string;
 }
 
-const RoomMessageBar = ({ roomId }: IRoomMessageBar) => {
+const RoomMessageBar = ({ roomId }: RoomMessageBarProps) => {
     const [content, setContent] = useState('');
     const [attachments, setAttachments] = useState<string[]>([]);
 

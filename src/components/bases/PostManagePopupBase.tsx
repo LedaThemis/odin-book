@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { useCurrentUser } from '../../context/UserProvider';
 import { IPost } from '../../lib/interfaces/Post';
 import PostAddMediaBar from '../PostAddMediaBar';
-import PostHeader from '../PostPopupHeader';
 import PostImageInputBar from '../PostImageInputBar';
+import PostPopupHeader from '../PostPopupHeader';
 
 interface IPostBody {
     content: string;
@@ -100,7 +100,7 @@ const PostManagePopupBase = ({
                     </StyledPostManageHeader>
 
                     <StyledLineContainer />
-                    <PostHeader />
+                    <PostPopupHeader />
                     <StyledTextArea
                         value={content}
                         onChange={(e) => setContent(e.target.value)}

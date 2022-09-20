@@ -4,12 +4,12 @@ import { IComment } from '../lib/interfaces/Comment';
 import { IPost } from '../lib/interfaces/Post';
 import PostComment from './PostComment';
 
-interface IPostComments {
+interface PostCommentsProps {
     comments: IComment[];
     post: IPost;
 }
 
-const PostComments = ({ post, comments }: IPostComments) => {
+const PostComments = ({ post, comments }: PostCommentsProps) => {
     return (
         <StyledCommentsContainer>
             {comments.map((comment) => (

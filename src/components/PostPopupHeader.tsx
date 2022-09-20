@@ -5,7 +5,7 @@ import { useCurrentUser } from '../context/UserProvider';
 import getCurrentUserURL from '../lib/getCurrentUserURL';
 import UserIcon from './icons/UserIcon';
 
-const PostHeader = () => {
+const PostPopupHeader = () => {
     const user = useCurrentUser();
 
     return (
@@ -24,4 +24,4 @@ const StyledContainer = styled.div`
     gap: 8px;
 `;
 
-export default PostHeader;
+export default PostPopupHeader;

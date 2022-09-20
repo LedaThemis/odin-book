@@ -1,11 +1,11 @@
 import { IoIosImages } from 'react-icons/io';
 import styled from 'styled-components';
 
-interface IPostAddMediaBar {
+interface PostAddMediaBarProps {
     handleImageAddClick: () => void;
 }
 
-const PostAddMediaBar = ({ handleImageAddClick }: IPostAddMediaBar) => {
+const PostAddMediaBar = ({ handleImageAddClick }: PostAddMediaBarProps) => {
     return (
         <StyledContainer>
             <StyledP>Add to your post</StyledP>

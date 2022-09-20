@@ -6,11 +6,11 @@ import { IChatRoom } from '../lib/interfaces/ChatRoom';
 import { IUser } from '../lib/interfaces/User';
 import UserIcon from './icons/UserIcon';
 
-interface IChatBar {
+interface ChatBarProps {
     room: IChatRoom;
 }
 
-const ChatBar = ({ room }: IChatBar) => {
+const ChatBar = ({ room }: ChatBarProps) => {
     const currentUser = useCurrentUser() as IUser;
     const otherUsers = room.members.filter((u) => u._id !== currentUser._id);
 

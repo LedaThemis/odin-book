@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { IPost } from '../lib/interfaces/Post';
 import Post from './Post';
 
-interface IPostsRender {
+interface PostsProps {
     posts: IPost[];
 }
 
-const PostsRender = ({ posts }: IPostsRender) => {
+const Posts = ({ posts }: PostsProps) => {
     return (
         <StyledPostsContainer>
             {posts.map((post) => (
@@ -25,4 +25,4 @@ const StyledPostsContainer = styled.div`
     width: 100%;
 `;
 
-export default PostsRender;
+export default Posts;

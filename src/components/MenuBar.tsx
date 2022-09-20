@@ -2,13 +2,13 @@ import { IconType } from 'react-icons';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-interface IMenuBar {
+interface MenuBarProps {
     text: string;
     Icon: IconType;
     destination?: string;
     onClick?: () => void;
 }
-const MenuBar = ({ text, Icon, onClick, destination }: IMenuBar) => {
+const MenuBar = ({ text, Icon, onClick, destination }: MenuBarProps) => {
     const navigate = useNavigate();
 
     return (

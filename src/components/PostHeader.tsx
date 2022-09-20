@@ -14,11 +14,11 @@ import PostUpdatePopup from './PostUpdatePopup';
 import UserIcon from './icons/UserIcon';
 import { IPost } from '../lib/interfaces/Post';
 
-type IPostHeader = {
+type PostHeaderProps = {
     post: IPost;
 };
 
-const PostHeader = ({ post }: IPostHeader) => {
+const PostHeader = ({ post }: PostHeaderProps) => {
     const user = useCurrentUser() as IUser;
     const [isActionMenuShown, setIsActionMenuShown] = useState(false);
     const [isPostUpdatePopupShown, setIsPostUpdatePopupShown] = useState(false);

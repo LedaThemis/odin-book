@@ -15,12 +15,12 @@ import CommentDeletePopup from './CommentDeletePopup';
 import CommentUpdatePrompt from './CommentUpdatePrompt';
 import UserIcon from './icons/UserIcon';
 
-interface IPostComment {
+interface PostCommentProps {
     post: IPost;
     comment: IComment;
 }
 
-const PostComment = ({ post, comment }: IPostComment) => {
+const PostComment = ({ post, comment }: PostCommentProps) => {
     const user = useCurrentUser() as IUser;
     const [isActionMenuShown, setIsActionMenuShown] = useState(false);
     const [isUpdatingComment, setIsUpdatingComment] = useState(false);

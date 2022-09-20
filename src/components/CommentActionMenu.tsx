@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-interface ICommentActionMenuBar {
+interface CommentActionBarProps {
     text: string;
     onClick: () => void;
 }
 
-const CommentActionMenuBar = ({ text, onClick }: ICommentActionMenuBar) => {
+const CommentActionMenuBar = ({ text, onClick }: CommentActionBarProps) => {
     return (
         <StyledActionMenuBarContainer onClick={onClick}>
             <StyledMenuTitle>{text}</StyledMenuTitle>
@@ -13,7 +13,7 @@ const CommentActionMenuBar = ({ text, onClick }: ICommentActionMenuBar) => {
     );
 };
 
-interface ICommentActionMenu {
+interface CommentActionMenuProps {
     handleEditComment: () => void;
     handleDeleteComment: () => void;
     showEdit: boolean;
@@ -23,7 +23,7 @@ const CommentActionMenu = ({
     handleEditComment,
     handleDeleteComment,
     showEdit,
-}: ICommentActionMenu) => {
+}: CommentActionMenuProps) => {
     return (
         <StyledActionMenu>
             {showEdit && (

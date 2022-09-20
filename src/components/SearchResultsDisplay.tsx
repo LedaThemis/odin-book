@@ -8,12 +8,12 @@ function isLastItemOfList<T>(arr: T[], index: number) {
     return arr.length - 1 === index;
 }
 
-interface IRenderText {
+interface RenderTextProps {
     isHighlighted: boolean;
     text: string;
 }
 
-const RenderText = ({ isHighlighted, text }: IRenderText) => {
+const RenderText = ({ isHighlighted, text }: RenderTextProps) => {
     return isHighlighted ? (
         <StyledHighlightedText>{text}</StyledHighlightedText>
     ) : (
@@ -21,12 +21,12 @@ const RenderText = ({ isHighlighted, text }: IRenderText) => {
     );
 };
 
-interface ISearchActionMenuBar {
+interface SearchActionMenuBarProps {
     query: string;
     text: string;
 }
 
-const SearchActionMenuBar = ({ text, query }: ISearchActionMenuBar) => {
+const SearchActionMenuBar = ({ text, query }: SearchActionMenuBarProps) => {
     return (
         <StyledActionMenuBarContainer>
             <StyledIconWrapper>{<SearchIcon />}</StyledIconWrapper>
@@ -47,7 +47,7 @@ const SearchActionMenuBar = ({ text, query }: ISearchActionMenuBar) => {
     );
 };
 
-interface ISearchResultsDisplay {
+interface SearchResultsDisplayProps {
     query: string;
     users: IUser[];
     hide: () => void;
@@ -57,7 +57,7 @@ const SearchResultsDisplay = ({
     query,
     users,
     hide,
-}: ISearchResultsDisplay) => {
+}: SearchResultsDisplayProps) => {
     return (
         <StyledSearchResultsDisplay>
             {users.map((user) => (

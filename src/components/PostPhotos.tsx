@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-interface IPostPhotos {
+interface PostPhotosProps {
     photos: string[];
 }
 
-const PostPhotos = ({ photos }: IPostPhotos) => {
+const PostPhotos = ({ photos }: PostPhotosProps) => {
     return (
         <StyledImagesContainer>
             {photos.map((photo, id) => (

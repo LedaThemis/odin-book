@@ -30,13 +30,13 @@ const RoomMessageDeletePopup = ({
     );
 };
 
-interface IRoomMessage {
+interface RoomMessageProps {
     roomId: string;
     message: IMessage;
     bySelf: boolean;
 }
 
-const RoomMessage = ({ roomId, message, bySelf }: IRoomMessage) => {
+const RoomMessage = ({ roomId, message, bySelf }: RoomMessageProps) => {
     const [hovering, setHovering] = useState(false);
     const [isPopupShown, setIsPopupShown] = useState(false);
 

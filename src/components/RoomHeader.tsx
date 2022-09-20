@@ -7,11 +7,11 @@ import { IChatRoom } from '../lib/interfaces/ChatRoom';
 import { IUser } from '../lib/interfaces/User';
 import UserIcon from './icons/UserIcon';
 
-interface IRoomHeader {
+interface RoomHeaderProps {
     room: IChatRoom;
 }
 
-const RoomHeader = ({ room }: IRoomHeader) => {
+const RoomHeader = ({ room }: RoomHeaderProps) => {
     const currentUser = useCurrentUser() as IUser;
     const otherUsers = room.members.filter((u) => u._id !== currentUser._id);
 

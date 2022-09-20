@@ -5,11 +5,13 @@ import getUserURL from '../lib/getUserURL';
 import { IUser } from '../lib/interfaces/User';
 import UserIcon from './icons/UserIcon';
 
-interface IPeopleSearchResultUserBar {
+interface PeopleSearchResultUserBarProps {
     user: IUser;
 }
 
-const PeopleSearchResultUserBar = ({ user }: IPeopleSearchResultUserBar) => {
+const PeopleSearchResultUserBar = ({
+    user,
+}: PeopleSearchResultUserBarProps) => {
     return (
         <StyledFlexWrapper>
             <StyledLink to={getUserURL(user)}>
@@ -20,11 +22,11 @@ const PeopleSearchResultUserBar = ({ user }: IPeopleSearchResultUserBar) => {
     );
 };
 
-interface IPeopleSearchResult {
+interface PeopleSearchResultProps {
     users: IUser[];
 }
 
-const PeopleSearchResult = ({ users }: IPeopleSearchResult) => {
+const PeopleSearchResult = ({ users }: PeopleSearchResultProps) => {
     return (
         <StyledContainer>
             <StyledSectionTitle>People</StyledSectionTitle>

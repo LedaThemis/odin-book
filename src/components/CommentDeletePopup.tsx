@@ -5,7 +5,7 @@ import { IComment } from '../lib/interfaces/Comment';
 import { IPost } from '../lib/interfaces/Post';
 import PopupBase from './buttons/PopupBase';
 
-interface ICommentDeletePopup {
+interface CommentDeletePopupProps {
     post: IPost;
     comment: IComment;
     hidePopup: () => void;
@@ -15,7 +15,7 @@ const CommentDeletePopup = ({
     post,
     comment,
     hidePopup,
-}: ICommentDeletePopup) => {
+}: CommentDeletePopupProps) => {
     const queryClient = useQueryClient();
     const mutation = useMutation(
         () => deleteComment({ postId: post._id, commentId: comment._id }),

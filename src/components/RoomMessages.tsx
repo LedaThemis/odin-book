@@ -8,11 +8,11 @@ import { IUser } from '../lib/interfaces/User';
 import FetchingOverlay from './HOCs/FetchingOverlay';
 import RoomMessage from './RoomMessage';
 
-interface IRoomMessages {
+interface RoomMessagesProps {
     roomId: string;
 }
 
-const RoomMessages = ({ roomId }: IRoomMessages) => {
+const RoomMessages = ({ roomId }: RoomMessagesProps) => {
     const currentUser = useCurrentUser() as IUser;
     const roomMessagesQuery = useChatRoomMessages(roomId);
 

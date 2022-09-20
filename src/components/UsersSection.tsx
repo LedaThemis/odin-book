@@ -9,11 +9,11 @@ import SectionBase from './bases/SectionBase';
 import MessageButton from './buttons/MessageButton';
 import UserIcon from './icons/UserIcon';
 
-interface IUsersSectionBar {
+interface UsersSectionBarProps {
     user: IUser;
 }
 
-const UsersSectionBar = ({ user }: IUsersSectionBar) => {
+const UsersSectionBar = ({ user }: UsersSectionBarProps) => {
     const currentUser = useCurrentUser() as IUser;
 
     return (

@@ -3,13 +3,13 @@ import { HiOutlinePencil } from 'react-icons/hi';
 import { IoTrashOutline } from 'react-icons/io5';
 import styled from 'styled-components';
 
-interface IPostActionMenuBar {
+interface PostActionMenuBarProps {
     Icon: IconType;
     text: string;
     onClick: () => void;
 }
 
-const PostActionMenuBar = ({ Icon, text, onClick }: IPostActionMenuBar) => {
+const PostActionMenuBar = ({ Icon, text, onClick }: PostActionMenuBarProps) => {
     return (
         <StyledActionMenuBarContainer onClick={onClick}>
             <StyledIconWrapper>{<Icon size={'20px'} />}</StyledIconWrapper>{' '}

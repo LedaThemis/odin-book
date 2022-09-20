@@ -23,11 +23,11 @@ import MessageButton from './buttons/MessageButton';
 import PopupBase from './buttons/PopupBase';
 import UserIcon from './icons/UserIcon';
 
-interface IProfile {
+interface ProfileProps {
     profileUser: IPopulatedUser;
 }
 
-const Profile = ({ profileUser }: IProfile) => {
+const Profile = ({ profileUser }: ProfileProps) => {
     const currentUser = useCurrentUser() as IUser;
 
     const isFriend = useMemo(
