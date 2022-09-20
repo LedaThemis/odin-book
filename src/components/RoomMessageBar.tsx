@@ -1,19 +1,29 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { IoIosImages, IoMdSend } from 'react-icons/io';
 import styled from 'styled-components';
 
+import { useCurrentUser } from '../context/UserProvider';
+import areFriends from '../lib/areFriends';
 import { IMessage } from '../lib/interfaces/Message';
+import { IUser } from '../lib/interfaces/User';
 import sendMessage from '../lib/sendMessage';
 import PostImageInputBar from './PostImageInputBar';
 
 interface RoomMessageBarProps {
     roomId: string;
+    members: IUser[];
 }
 
-const RoomMessageBar = ({ roomId }: RoomMessageBarProps) => {
+const RoomMessageBar = ({ roomId, members }: RoomMessageBarProps) => {
+    const currentUser = useCurrentUser() as IUser;
     const [content, setContent] = useState('');
     const [attachments, setAttachments] = useState<string[]>([]);
+
+    const thereAreFriendsInRoom = useMemo(
+        () => members.some((u) => areFriends(u, currentUser)),
+        [members, currentUser],
+    );
 
     const queryClient = useQueryClient();
     const mutation = useMutation(
@@ -78,13 +88,19 @@ const RoomMessageBar = ({ roomId }: RoomMessageBarProps) => {
                 </StyledAttachmentsButton>
                 <StyledForm onSubmit={handleSubmit}>
                     <StyledMessageTextArea
-                        placeholder="Aa"
+                        disabled={!thereAreFriendsInRoom}
+                        placeholder={
+                            thereAreFriendsInRoom
+                                ? 'Aa'
+                                : 'You need to be friends to send messages.'
+                        }
                         value={content}
                         onChange={(e) => {
                             setContent(e.target.value);
                         }}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault(); // Prevent from actually writing the enter
                                 handleSubmit();
                             }
                         }}
@@ -93,7 +109,7 @@ const RoomMessageBar = ({ roomId }: RoomMessageBarProps) => {
                         <IoMdSend
                             size={'24px'}
                             color={
-                                content.length === 0
+                                content.length === 0 || !thereAreFriendsInRoom
                                     ? 'grey'
                                     : 'var(--primary-color)'
                             }

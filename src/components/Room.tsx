@@ -18,7 +18,10 @@ const Room = () => {
                     <>
                         <RoomHeader room={roomQuery.data} />
                         <RoomMessages roomId={roomQuery.data._id} />
-                        <RoomMessageBar roomId={roomQuery.data._id} />
+                        <RoomMessageBar
+                            roomId={roomQuery.data._id}
+                            members={roomQuery.data.members}
+                        />
                     </>
                 )}
             </FetchingOverlay>
