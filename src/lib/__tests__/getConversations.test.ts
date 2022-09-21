@@ -1,5 +1,5 @@
 import axios from '../axiosInstance';
-import getChatRoom from '../getChatRoom';
+import getConversations from '../getConversations';
 
 jest.mock('../axiosInstance', () => ({
     get: (route: string, data: unknown) => ({
@@ -10,12 +10,10 @@ jest.mock('../axiosInstance', () => ({
 }));
 
 test('should call axios get with correct arguments', async () => {
-    const roomId = '1';
-
     const spy = jest.spyOn(axios, 'get');
 
-    await getChatRoom({ roomId });
+    await getConversations();
 
     expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`chat/rooms/${roomId}`);
+    expect(spy).toHaveBeenCalledWith('chat/conversations');
 });
