@@ -8,7 +8,7 @@ interface IGetGuestUsersResponse {
 }
 
 const getGuestUsers = async () => {
-    const { data }: InData<IGetGuestUsersResponse> = await axios.get('/guests');
+    const { data }: InData<IGetGuestUsersResponse> = await axios.get('guests');
 
     return data.users;
 };
