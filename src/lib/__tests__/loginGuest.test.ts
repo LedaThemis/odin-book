@@ -3,9 +3,7 @@ import loginGuest from '../loginGuest';
 
 jest.mock('../axiosInstance', () => ({
     post: (route: string, data: unknown) => ({
-        data: {
-            post: data,
-        },
+        data,
     }),
 }));
 
