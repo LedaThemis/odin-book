@@ -4,7 +4,7 @@ import getUserPeople from '../getUserPeople';
 jest.mock('../axiosInstance', () => ({
     get: (route: string, data: unknown) => ({
         data: {
-            posts: data,
+            users: data,
         },
     }),
 }));
