@@ -9,7 +9,7 @@ jest.mock('../axiosInstance', () => ({
     }),
 }));
 
-test('should create post', async () => {
+test('should call axios post with correct arguments', async () => {
     const postData = {
         content: 'Post Content',
         photos: [],
