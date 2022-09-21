@@ -1,5 +1,5 @@
 import axios from '../axiosInstance';
-import getUserIncomingFriendRequests from '../getUserIncomingFriendRequests';
+import getUserIncomingFriendRequests from '../getIncomingFriendRequests';
 
 jest.mock('../axiosInstance', () => ({
     get: (route: string, data: unknown) => ({

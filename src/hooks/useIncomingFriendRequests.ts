@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import getUserIncomingFriendRequests from '../lib/getUserIncomingFriendRequests';
+import getUserIncomingFriendRequests from '../lib/getIncomingFriendRequests';
 
 const useIncomingFriendRequests = () =>
     useQuery(['incoming'], getUserIncomingFriendRequests);
