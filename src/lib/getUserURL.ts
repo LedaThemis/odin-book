@@ -1,6 +1,6 @@
-import { IUser } from './interfaces/User';
+import { IAnyUser } from './interfaces/User';
 
-const getUserURL = (user: IUser) => {
+const getUserURL = (user: IAnyUser) => {
     return `/users/${user._id}`;
 };
 
