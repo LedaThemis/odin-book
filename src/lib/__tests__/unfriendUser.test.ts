@@ -9,7 +9,7 @@ jest.mock('../axiosInstance', () => ({
     }),
 }));
 
-test('should call axios post with correct arguments', async () => {
+test('should call axios delete with correct arguments', async () => {
     const userId = '1';
 
     const spy = jest.spyOn(axios, 'delete');
