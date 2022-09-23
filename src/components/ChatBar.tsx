@@ -17,7 +17,7 @@ const ChatBar = ({ room }: ChatBarProps) => {
     const params = useParams();
 
     return (
-        <StyledChatBar to={room._id} isSelected={params.roomId === room._id}>
+        <StyledChatBar to={room._id} $isSelected={params.roomId === room._id}>
             <UserIcon user={otherUsers[0]} size={'56px'} />
             <StyledUsername>
                 {otherUsers.map((u) => u.displayName).join('&')}
@@ -26,21 +26,21 @@ const ChatBar = ({ room }: ChatBarProps) => {
     );
 };
 
-const StyledChatBar = styled(Link)<{ isSelected: boolean }>`
+const StyledChatBar = styled(Link)<{ $isSelected: boolean }>`
     display: flex;
     align-items: center;
     gap: 12px;
     text-decoration: none;
 
     background-color: ${(props) =>
-        props.isSelected ? 'var(--secondary-highlight-background-color)' : ''};
+        props.$isSelected ? 'var(--secondary-highlight-background-color)' : ''};
 
     padding: 8px;
     border-radius: 8px;
 
     &:hover {
         background-color: ${(props) =>
-            !props.isSelected ? 'var(--hover-background-color)' : ''};
+            !props.$isSelected ? 'var(--hover-background-color)' : ''};
     }
 `;
 
