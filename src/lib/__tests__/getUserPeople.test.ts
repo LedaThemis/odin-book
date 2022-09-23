@@ -1,34 +1,21 @@
-import axios from '../axiosInstance';
 import getUserPeople from '../getUserPeople';
 
-jest.mock('../axiosInstance', () => ({
-    get: (route: string, data: unknown) => ({
-        data: {
-            users: data,
-        },
-    }),
-}));
+test('should call endpoint with correct arguments if pageParam is not specified', async () => {
+    const response = await getUserPeople({});
 
-afterEach(() => {
-    // resetting jest.spyOn
-    jest.restoreAllMocks();
+    expect(response).toMatchObject({
+        users: [],
+        nextCursor: '',
+    });
 });
 
-test('should call axios get with correct arguments if pageParam is not specified', async () => {
-    const spy = jest.spyOn(axios, 'get');
-
-    await getUserPeople({});
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith('people?cursor=');
-});
-
-test('should call axios get with correct arguments if pageParam is specified', async () => {
+test('should call endpoint with correct arguments if pageParam is specified', async () => {
     const pageParam = '1';
-    const spy = jest.spyOn(axios, 'get');
 
-    await getUserPeople({ pageParam });
+    const response = await getUserPeople({ pageParam });
 
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`people?cursor=${pageParam}`);
+    expect(response).toMatchObject({
+        users: [],
+        nextCursor: pageParam,
+    });
 });

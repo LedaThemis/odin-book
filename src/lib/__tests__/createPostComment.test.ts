@@ -1,22 +1,17 @@
-import axios from '../axiosInstance';
 import createPostComment from '../createPostComment';
 
-jest.mock('../axiosInstance', () => ({
-    post: (route: string, data: unknown) => ({
-        data: {
-            post: data,
-        },
-    }),
-}));
-
-test('should call axios post with correct arguments', async () => {
+test('should call endpoint with correct arguments', async () => {
     const postId = '1';
     const content = 'Comment Content';
 
-    const spy = jest.spyOn(axios, 'post');
+    const response = await createPostComment({ postId, content });
 
-    await createPostComment({ postId, content });
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`posts/${postId}/comments`, { content });
+    expect(response).toMatchObject({
+        _id: postId,
+        comments: [
+            {
+                content,
+            },
+        ],
+    });
 });

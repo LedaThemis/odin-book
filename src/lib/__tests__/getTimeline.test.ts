@@ -1,34 +1,21 @@
-import axios from '../axiosInstance';
 import getTimeline from '../getTimeline';
 
-jest.mock('../axiosInstance', () => ({
-    get: (route: string, data: unknown) => ({
-        data: {
-            posts: data,
-        },
-    }),
-}));
+test('should call endpoint with correct arguments if pageParam is not specified', async () => {
+    const response = await getTimeline({});
 
-afterEach(() => {
-    // resetting jest.spyOn
-    jest.restoreAllMocks();
+    expect(response).toMatchObject({
+        posts: [],
+        nextCursor: '',
+    });
 });
 
-test('should call axios get with correct arguments if pageParam is not specified', async () => {
-    const spy = jest.spyOn(axios, 'get');
-
-    await getTimeline({});
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith('timeline?cursor=');
-});
-
-test('should call axios get with correct arguments if pageParam is specified', async () => {
+test('should call endpoint with correct arguments if pageParam is specified', async () => {
     const pageParam = '1';
-    const spy = jest.spyOn(axios, 'get');
 
-    await getTimeline({ pageParam });
+    const response = await getTimeline({ pageParam });
 
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`timeline?cursor=${pageParam}`);
+    expect(response).toMatchObject({
+        posts: [],
+        nextCursor: pageParam,
+    });
 });

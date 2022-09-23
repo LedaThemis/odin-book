@@ -1,24 +1,12 @@
-import axios from '../axiosInstance';
 import deleteComment from '../deleteComment';
 
-jest.mock('../axiosInstance', () => ({
-    delete: (route: string, data: unknown) => {
-        return {
-            data: {
-                post: data,
-            },
-        };
-    },
-}));
-
-test('should call axios delete with correct arguments', async () => {
+test('should call endpoint with correct arguments', async () => {
     const postId = '1';
     const commentId = '1';
 
-    const spy = jest.spyOn(axios, 'delete');
+    const response = await deleteComment({ postId, commentId });
 
-    await deleteComment({ postId, commentId });
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`posts/${postId}/comments/${commentId}`);
+    expect(response).toMatchObject({
+        _id: postId,
+    });
 });

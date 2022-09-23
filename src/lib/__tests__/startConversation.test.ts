@@ -1,23 +1,15 @@
-import axios from '../axiosInstance';
 import startConversation from '../startConversation';
 
-jest.mock('../axiosInstance', () => ({
-    post: (route: string, data: unknown) => ({
-        data: {
-            room: data,
-        },
-    }),
-}));
-
-test('should call axios post with correct arguments', async () => {
+test('should call endpoint with correct arguments', async () => {
     const userId = '1';
 
-    const spy = jest.spyOn(axios, 'post');
+    const response = await startConversation({ userId });
 
-    await startConversation({ userId });
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith('chat/conversations', {
-        userId,
+    expect(response).toMatchObject({
+        members: [
+            {
+                _id: userId,
+            },
+        ],
     });
 });

@@ -1,19 +1,29 @@
-import axios from '../axiosInstance';
+import { rest } from 'msw';
+
+import { server } from '../../setupTests';
 import getCurrentUser from '../getCurrentUser';
 
-jest.mock('../axiosInstance', () => ({
-    get: (route: string, data: unknown) => ({
-        data: {
-            user: data,
-        },
-    }),
-}));
+test('should return current user if exist', async () => {
+    const response = await getCurrentUser();
 
-test('should call axios get with correct arguments', async () => {
-    const spy = jest.spyOn(axios, 'get');
+    // defined in handlers.ts
+    expect(response).toMatchObject({
+        displayName: 'Current User',
+    });
+});
 
-    await getCurrentUser();
+test('should return null if current user does not exist', async () => {
+    server.use(
+        rest.get('me', (req, res, ctx) => {
+            return res(
+                ctx.json({
+                    user: undefined,
+                }),
+            );
+        }),
+    );
 
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith('me');
+    const response = await getCurrentUser();
+
+    expect(response).toBe(null);
 });

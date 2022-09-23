@@ -14,7 +14,6 @@ interface IGetUserPeopleResponse {
 
 /**
  * Get people user might know
- * @returns List of users
  */
 const getUserPeople = async ({ pageParam = '' }: IGetUserPeople) => {
     const { data }: InData<IGetUserPeopleResponse> = await axios.get(

@@ -1,20 +1,11 @@
-import axios from '../axiosInstance';
 import likePost from '../likePost';
 
-jest.mock('../axiosInstance', () => ({
-    post: (route: string, data: unknown) => ({
-        data: {
-            post: data,
-        },
-    }),
-}));
-
-test('should call axios post with correct arguments', async () => {
+test('should call endpoint with correct arguments', async () => {
     const postId = '1';
-    const spy = jest.spyOn(axios, 'post');
 
-    await likePost({ postId });
+    const response = await likePost({ postId });
 
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`posts/${postId}/like`);
+    expect(response).toMatchObject({
+        _id: postId,
+    });
 });

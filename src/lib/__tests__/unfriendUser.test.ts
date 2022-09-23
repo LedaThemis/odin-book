@@ -1,21 +1,12 @@
-import axios from '../axiosInstance';
 import unfriendUser from '../unfriendUser';
 
-jest.mock('../axiosInstance', () => ({
-    delete: (route: string, data: unknown) => ({
-        data: {
-            user: data,
-        },
-    }),
-}));
-
-test('should call axios delete with correct arguments', async () => {
+test('should call endpoint with correct arguments', async () => {
     const userId = '1';
 
-    const spy = jest.spyOn(axios, 'delete');
+    const response = await unfriendUser({ userId });
 
-    await unfriendUser({ userId });
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith(`users/${userId}/friend`);
+    // User ID should not be in friends
+    expect(response).not.toMatchObject({
+        friends: [{ _id: userId }],
+    });
 });
