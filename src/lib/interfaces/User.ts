@@ -7,8 +7,8 @@ interface IBaseUser {
     custom: {
         photoURL: string;
     };
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface IUser extends IBaseUser {

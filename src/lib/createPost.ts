@@ -2,7 +2,7 @@ import axios from './axiosInstance';
 import { IPost } from './interfaces/Post';
 import { InData } from './interfaces/Response';
 
-export interface ICreatePost {
+interface ICreatePost {
     content: string;
     photos: string[];
 }

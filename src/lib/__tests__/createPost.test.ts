@@ -1,25 +1,12 @@
-import axios from '../axiosInstance';
-import createPost, { ICreatePost } from '../createPost';
+import createPost from '../createPost';
 
-jest.mock('../axiosInstance', () => ({
-    post: (route: string, data: ICreatePost) => ({
-        data: {
-            post: data,
-        },
-    }),
-}));
-
-test('should call axios post with correct arguments', async () => {
+test('should call posts endpoint with correct arguments', async () => {
     const postData = {
         content: 'Post Content',
         photos: [],
     };
 
-    const spy = jest.spyOn(axios, 'post');
-
     const response = await createPost(postData);
 
-    expect(response).toEqual<ICreatePost>(postData);
-    expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith('posts', postData);
+    expect(response).toMatchObject(postData);
 });
