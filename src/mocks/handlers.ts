@@ -36,7 +36,7 @@ export const genericPost: IPost = {
     updatedAt: new Date('2000-01-01').toLocaleString(),
 };
 
-const genericComment: IComment = {
+export const genericComment: IComment = {
     _id: '0',
     author: genericUser,
     content: 'This is a generic comment',
