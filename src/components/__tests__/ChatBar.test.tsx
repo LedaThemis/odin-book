@@ -1,4 +1,4 @@
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -6,9 +6,16 @@ import { AuthProvider } from '../../context/AuthProvider';
 import { UserProvider } from '../../context/UserProvider';
 import { genericChatRoom, genericUser } from '../../mocks/handlers';
 import ChatBar from '../ChatBar';
-import { queryClient } from './utils';
 
 test('should render with member username', async () => {
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                retry: false,
+            },
+        },
+    });
+
     const room = {
         ...genericChatRoom,
         members: [{ ...genericUser, _id: '1' }], // id should be different than current user
@@ -30,6 +37,14 @@ test('should render with member username', async () => {
 });
 
 test('should render image with member photoURL', async () => {
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                retry: false,
+            },
+        },
+    });
+
     const photoURL = 'http://example.com/';
 
     const room = {
