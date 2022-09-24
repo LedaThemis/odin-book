@@ -25,7 +25,7 @@ const genericCurrentUser: IUser = {
     displayName: 'Current User',
 };
 
-const genericPost: IPost = {
+export const genericPost: IPost = {
     _id: '0',
     content: 'This is a generic post',
     photos: [],
