@@ -6,7 +6,7 @@ import { IMessage } from '../lib/interfaces/Message';
 import { IPost } from '../lib/interfaces/Post';
 import { IUser } from '../lib/interfaces/User';
 
-const genericUser: IUser = {
+export const genericUser: IUser = {
     _id: '0',
     id: '0',
     displayName: 'Generic User',
@@ -44,7 +44,7 @@ const genericComment: IComment = {
     updatedAt: new Date('2000-01-01').toLocaleString(),
 };
 
-const genericChatRoom: IChatRoom = {
+export const genericChatRoom: IChatRoom = {
     _id: '0',
     messages: [],
     members: [],
