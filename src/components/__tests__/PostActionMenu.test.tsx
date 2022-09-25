@@ -78,3 +78,29 @@ test('should not call handleDeletePost on edit button click', async () => {
 
     expect(handleDeletePost).not.toBeCalled();
 });
+
+test('should not call handleEditPost on render', () => {
+    const handleEditPost = jest.fn();
+
+    render(
+        <PostActionMenu
+            handleEditPost={handleEditPost}
+            handleDeletePost={() => ({})}
+        />,
+    );
+
+    expect(handleEditPost).not.toBeCalled();
+});
+
+test('should not call handleDeletePost on render', () => {
+    const handleDeletePost = jest.fn();
+
+    render(
+        <PostActionMenu
+            handleEditPost={() => ({})}
+            handleDeletePost={handleDeletePost}
+        />,
+    );
+
+    expect(handleDeletePost).not.toBeCalled();
+});
