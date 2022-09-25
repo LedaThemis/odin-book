@@ -20,7 +20,7 @@ export const genericUser: IUser = {
     updatedAt: new Date('2000-01-01').toLocaleString(),
 };
 
-const genericCurrentUser: IUser = {
+export const genericCurrentUser: IUser = {
     ...genericUser,
     displayName: 'Current User',
 };
