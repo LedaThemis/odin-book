@@ -9,6 +9,7 @@ interface IUserIcon {
     size?: string;
     className?: string;
     onClick?: () => void;
+    alt?: string;
 }
 
 const UserIcon = ({
@@ -16,6 +17,7 @@ const UserIcon = ({
     size = '40px',
     className,
     onClick,
+    alt,
 }: IUserIcon) => {
     return (
         <StyledImg
@@ -23,6 +25,7 @@ const UserIcon = ({
             className={className}
             onClick={onClick}
             src={getOverrideField(user, 'photoURL')}
+            alt={alt}
             referrerPolicy="no-referrer"
         />
     );

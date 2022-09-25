@@ -67,6 +67,7 @@ const Navbar = () => {
                     </li>
                     <li>
                         <UserIcon
+                            alt="Profile Avatar"
                             onClick={() =>
                                 setUserMenuShown((prevState) => !prevState)
                             }
