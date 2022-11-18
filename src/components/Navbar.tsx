@@ -122,7 +122,7 @@ const StyledLeftList = styled(StyledHighZIndexList)`
 
 const StyledMiddleListContainer = styled.div`
     display: flex;
-    width: 100vw;
+    width: 100%;
     left: 0;
     justify-content: center;
     position: absolute;
