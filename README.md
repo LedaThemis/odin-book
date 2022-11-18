@@ -1,4 +1,4 @@
-# [Odin | Odinbook (Frontend)](https://leda-odin-book.web.app/)
+# [Odin | Odinbook (Frontend)](https://odinbook.leda.dev/)
 
 Technologies used:
 
